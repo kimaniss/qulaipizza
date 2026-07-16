@@ -84,15 +84,15 @@
 </head>
 <body class="bg-[#FFFFFF] text-neutralDark font-sans selection:bg-accent selection:text-darkRed">
 
-    <!-- Wrapper Laman Utama Utama (Main Page SPA Container) -->
+<!-- Wrapper Laman Utama Utama (Main Page SPA Container) -->
     <div id="main-wrapper" class="block">
-        
-        <!-- NAVIGATION BAR -->
+
+<!-- NAVIGATION BAR -->
         <header class="sticky top-0 z-50 bg-white/95 backdrop-blur-md border-b border-gray-100 transition-all duration-300">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="flex items-center justify-between h-20">
                     <!-- Logo -->
-                    <a href="#home" class="flex items-center space-x-3 group">
+                    <a href="#home" onclick="showSPASection('main')" class="flex items-center space-x-3 group">
                         <div class="w-12 h-12 rounded-btn overflow-hidden bg-white flex items-center justify-center shadow-lg border border-gray-100 transition-transform duration-300 group-hover:scale-105">
                             <img src="https://arleta.site/interactivelink/118/logoqulai.png" alt="Qulai Pizza Logo" class="w-full h-full object-cover" onerror="this.onerror=null; this.src='https://placehold.co/100x100/A52A1A/FFC247?text=QP'">
                         </div>
@@ -102,25 +102,25 @@
                         </div>
                     </a>
 
-                    <!-- Desktop Navigation Links -->
+<!-- Desktop Navigation Links -->
                     <nav class="hidden md:flex space-x-8 font-medium">
-                        <a href="#home" class="text-neutralDark hover:text-primary transition-colors py-2">Home</a>
-                        <a href="#about" class="text-neutralDark hover:text-primary transition-colors py-2">Tentang Kami</a>
-                        <a href="#menu" class="text-neutralDark hover:text-primary transition-colors py-2">Menu</a>
-                        <a href="#packages" class="text-neutralDark hover:text-primary transition-colors py-2">Pakej Aktiviti</a>
-                        <a href="#gallery" class="text-neutralDark hover:text-primary transition-colors py-2">Galeri</a>
-                        <a href="#contact" class="text-neutralDark hover:text-primary transition-colors py-2">Hubungi</a>
+                        <a href="#home" onclick="showSPASection('main')" class="text-neutralDark hover:text-primary transition-colors py-2">Home</a>
+                        <a href="#about" onclick="showSPASection('main')" class="text-neutralDark hover:text-primary transition-colors py-2">Tentang Kami</a>
+                        <a href="#menu" onclick="showSPASection('main')" class="text-neutralDark hover:text-primary transition-colors py-2">Menu</a>
+                        <a href="#packages" onclick="showSPASection('main')" class="text-neutralDark hover:text-primary transition-colors py-2">Pakej Aktiviti</a>
+                        <a href="#gallery" onclick="showSPASection('main')" class="text-neutralDark hover:text-primary transition-colors py-2">Galeri</a>
+                        <a href="#contact" onclick="showSPASection('main')" class="text-neutralDark hover:text-primary transition-colors py-2">Hubungi</a>
                     </nav>
 
-                    <!-- CTA Button -->
+<!-- CTA Button -->
                     <div class="hidden md:block">
-                        <a href="#booking" class="bg-primary hover:bg-darkRed text-white font-semibold px-6 py-3 rounded-btn transition-all shadow-md hover:shadow-lg inline-flex items-center gap-2 group transform hover:scale-105 duration-200">
+                        <a href="#booking" onclick="showSPASection('main')" class="bg-primary hover:bg-darkRed text-white font-semibold px-6 py-3 rounded-btn transition-all shadow-md hover:shadow-lg inline-flex items-center gap-2 group transform hover:scale-105 duration-200">
                             <span>Tempah Slot</span>
                             <svg class="w-4 h-4 transform group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
                         </a>
                     </div>
 
-                    <!-- Mobile menu button -->
+<!-- Mobile menu button -->
                     <div class="md:hidden">
                         <button id="mobile-menu-btn" class="text-neutralDark hover:text-primary focus:outline-none p-2" aria-label="Toggle Menu">
                             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path id="menu-icon" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
@@ -129,28 +129,28 @@
                 </div>
             </div>
 
-            <!-- Mobile Menu (Hidden by default) -->
+<!-- Mobile Menu (Hidden by default) -->
             <div id="mobile-menu" class="hidden md:hidden bg-white border-b border-gray-100 transition-all duration-300 ease-in-out">
                 <div class="px-4 pt-2 pb-6 space-y-3 font-medium">
-                    <a href="#home" class="block text-neutralDark hover:text-primary py-2 border-b border-gray-50">Home</a>
-                    <a href="#about" class="block text-neutralDark hover:text-primary py-2 border-b border-gray-50">Tentang Kami</a>
-                    <a href="#menu" class="block text-neutralDark hover:text-primary py-2 border-b border-gray-50">Menu</a>
-                    <a href="#packages" class="block text-neutralDark hover:text-primary py-2 border-b border-gray-50">Pakej Aktiviti</a>
-                    <a href="#gallery" class="block text-neutralDark hover:text-primary py-2 border-b border-gray-50">Galeri</a>
-                    <a href="#contact" class="block text-neutralDark hover:text-primary py-2 border-b border-gray-50">Hubungi</a>
-                    <a href="#booking" class="block bg-primary text-white text-center py-3 rounded-btn font-semibold mt-4">Tempah Slot Sekarang</a>
+                    <a href="#home" onclick="showSPASection('main'); toggleMobileMenu()" class="block text-neutralDark hover:text-primary py-2 border-b border-gray-50">Home</a>
+                    <a href="#about" onclick="showSPASection('main'); toggleMobileMenu()" class="block text-neutralDark hover:text-primary py-2 border-b border-gray-50">Tentang Kami</a>
+                    <a href="#menu" onclick="showSPASection('main'); toggleMobileMenu()" class="block text-neutralDark hover:text-primary py-2 border-b border-gray-50">Menu</a>
+                    <a href="#packages" onclick="showSPASection('main'); toggleMobileMenu()" class="block text-neutralDark hover:text-primary py-2 border-b border-gray-50">Pakej Aktiviti</a>
+                    <a href="#gallery" onclick="showSPASection('main'); toggleMobileMenu()" class="block text-neutralDark hover:text-primary py-2 border-b border-gray-50">Galeri</a>
+                    <a href="#contact" onclick="showSPASection('main'); toggleMobileMenu()" class="block text-neutralDark hover:text-primary py-2 border-b border-gray-50">Hubungi</a>
+                    <a href="#booking" onclick="showSPASection('main'); toggleMobileMenu()" class="block bg-primary text-white text-center py-3 rounded-btn font-semibold mt-4">Tempah Slot Sekarang</a>
                 </div>
             </div>
         </header>
 
-        <!-- 1. HERO SECTION -->
+<!-- 1. HERO SECTION -->
         <section id="home" class="relative min-h-[90vh] flex items-center justify-center bg-neutralBg py-12 overflow-hidden">
             <!-- Background Elements / Rustic Wood Texture Overlay -->
             <div class="absolute inset-0 z-0 opacity-10" style="background-image: url('data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%2280%22 height=%2280%22 viewBox=%220 0 80 80%22%3E%3Cpath d=%22M0 0h80v80H0z%22 fill=%22none%22/%3E%3Cpath d=%22M0 10c20 0 20 10 40 10s20-10 40-10M0 30c20 0 20 10 40 10s20-10 40-10M0 50c20 0 20 10 40 10s20-10 40-10M0 70c20 0 20 10 40 10s20-10 40-10%22 stroke=%22%236E3B22%22 stroke-width=%221.5%22 fill=%22none%22 opacity=%220.3%22/%3E%3C/svg%3E');"></div>
             <div class="absolute -top-40 -right-40 w-96 h-96 rounded-full bg-accent/20 blur-3xl"></div>
             <div class="absolute -bottom-40 -left-40 w-96 h-96 rounded-full bg-primary/10 blur-3xl"></div>
 
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
                 <!-- Text Content -->
                 <div class="lg:col-span-7 text-center lg:text-left space-y-6 animate-slide-up">
                     <span class="inline-flex items-center gap-2 bg-primary/10 text-primary font-semibold px-4 py-2 rounded-full text-sm">
@@ -189,7 +189,7 @@
                     </div>
                 </div>
 
-                <!-- Visual Content (Responsive Video Container) -->
+<!-- Visual Content (Responsive Video Container) -->
                 <div class="lg:col-span-5 relative w-full animate-zoom">
                     <!-- Video Container (Width 100% with premium shadow, border & hover effects) -->
                     <div class="relative w-full overflow-hidden rounded-card shadow-2xl border-4 border-accent/40 group hover-lift transition-all duration-300">
@@ -198,8 +198,8 @@
                             <source src="https://arleta.site/interactivelink/118/Pizza_baking_in_brick_oven.mp4" type="video/mp4">
                             Maaf, pelayar web anda tidak menyokong elemen video HTML5.
                         </video>
-                        
-                        <!-- Dark Gradient Overlay with Info Badge -->
+
+<!-- Dark Gradient Overlay with Info Badge -->
                         <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-90 group-hover:opacity-95 transition-opacity duration-300 flex flex-col justify-end p-6">
                             <span class="inline-flex items-center gap-1.5 bg-accent text-darkRed font-extrabold px-3 py-1 rounded-full text-xs self-start mb-2">
                                 <span class="w-2.5 h-2.5 rounded-full bg-primary animate-ping"></span>
@@ -213,53 +213,97 @@
             </div>
         </section>
 
-        <!-- 2. ABOUT US -->
-        <section id="about" class="py-24 bg-white">
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div class="text-center max-w-3xl mx-auto mb-16">
-                    <span class="text-primary font-bold tracking-widest uppercase text-sm">Warisan & Seni Kami</span>
-                    <h2 class="text-3xl sm:text-4xl font-extrabold font-poppins text-neutralDark mt-2">Kisah di Sebalik Setiap Kepingan Pizza</h2>
-                    <p class="text-gray-500 mt-4">Di Qulai Pizza, kami memelihara tradisi lama dengan sentuhan cinta yang mendalam.</p>
-                </div>
+<!-- 2. ABOUT US -->
+        <section id="about" class="py-24 bg-white relative overflow-hidden">
+            <!-- Decorative Background Elements -->
+            <div class="absolute top-1/2 left-0 w-72 h-72 rounded-full bg-secondary/5 blur-3xl -z-10"></div>
 
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                    <!-- Sejarah -->
-                    <div class="bg-neutralBg p-8 rounded-card border-t-4 border-primary hover-lift">
-                        <div class="w-12 h-12 bg-primary/10 rounded-btn flex items-center justify-center text-primary mb-6">
-                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-16 items-start">
+
+<!-- Left Side: Narrative Story -->
+                    <div class="lg:col-span-6 space-y-6 animate-slide-up">
+                        <span class="text-primary font-bold tracking-widest uppercase text-sm block">Warisan & Seni Kami</span>
+                        <h2 class="text-3xl sm:text-4xl font-extrabold font-poppins text-neutralDark leading-tight">
+                            Kisah di Sebalik Setiap <br>
+                            <span class="text-transparent bg-clip-text bg-gradient-to-r from-primary to-secondary">Piza Kayu Api Kami</span>
+                        </h2>
+
+<div class="space-y-4 text-gray-600 leading-relaxed text-sm sm:text-base">
+                            <p>
+                                <strong class="text-neutralDark font-semibold">Qulai Pizza Kayu Api</strong> telah diasaskan oleh <span class="text-primary font-bold">Mohd Shahril Aman</span> pada <strong class="text-neutralDark font-semibold">8 Ogos 2020</strong> di Kulai, Johor. Bermula ketika negara berdepan cabaran pandemik COVID-19, restoran ini lahir daripada semangat yang membara untuk memperkenalkan hidangan piza tradisional yang dimasak segar dengan kualiti rasa yang tiada tandingan.
+                            </p>
+                            <p>
+                                Nama <span class="text-secondary font-bold">"Qulai"</span> dipilih secara khusus bagi mengangkat identiti daerah Kulai, Johor. Kami berhasrat tinggi untuk memperkenalkan keunikan tempatan ke persada gastronomi yang lebih luas menerusi pengalaman rasa yang sepenuhnya autentik.
+                            </p>
+                            <p>
+                                Beroperasi dalam suasana kampung yang tenang dan damai, kami menawarkan pengalaman menjamu selera yang sangat selesa, relaks, dan jauh berbeza daripada restoran piza komersial biasa yang lain.
+                            </p>
                         </div>
-                        <h3 class="text-xl font-bold font-poppins text-neutralDark mb-3">Sejarah Qulai Pizza</h3>
-                        <p class="text-gray-600 leading-relaxed text-sm">
-                            Bermula dengan visi untuk menyajikan pizza kayu api premium yang autentik di Kulai, Johor. Kami menggabungkan resipi doh rahsia yang melalui proses penapaian perlahan bagi menjamin tekstur kerak yang unggul dan mudah dihadam.
-                        </p>
+
+<!-- Founder & Timeline Card Info -->
+                        <div class="p-6 rounded-card bg-[#F5F5F5] border-l-4 border-primary flex items-center gap-4 shadow-sm hover:shadow-md transition-shadow">
+                            <div class="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center text-primary font-bold font-poppins text-lg shrink-0">MS</div>
+                            <div>
+                                <h4 class="font-bold text-neutralDark font-poppins text-sm">Mohd Shahril Aman</h4>
+                                <p class="text-xs text-gray-500">Pengasas Qulai Pizza • Ditubuhkan 8 Ogos 2020</p>
+                            </div>
+                        </div>
                     </div>
 
-                    <!-- Keunikan Oven -->
-                    <div class="bg-neutralBg p-8 rounded-card border-t-4 border-secondary hover-lift">
-                        <div class="w-12 h-12 bg-secondary/10 rounded-btn flex items-center justify-center text-secondary mb-6">
-                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+<!-- Right Side: Beautiful Modern Uniqueness Pillars -->
+                    <div class="lg:col-span-6 space-y-6">
+                        <!-- Pillar 1 -->
+                        <div class="p-6 bg-neutralBg rounded-card border border-gray-100 flex gap-5 hover-lift transition-all">
+                            <div class="w-12 h-12 bg-primary/10 rounded-btn flex items-center justify-center text-primary shrink-0">
+                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zM7 10a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/>
+                                </svg>
+                            </div>
+                            <div class="space-y-1">
+                                <h3 class="text-lg font-bold font-poppins text-neutralDark">Oven Bata Tradisional & Kayu Api Asli</h3>
+                                <p class="text-gray-600 text-xs sm:text-sm leading-relaxed">
+                                    Membakar piza pada suhu optimum menggunakan kayu api terpilih untuk menghasilkan tekstur kerak yang garing di luar, lembut di dalam, serta beraroma smoky asli yang tersendiri.
+                                </p>
+                            </div>
                         </div>
-                        <h3 class="text-xl font-bold font-poppins text-neutralDark mb-3">Oven Bata Tradisional</h3>
-                        <p class="text-gray-600 leading-relaxed text-sm">
-                            Oven bata kami dibina secara buatan tangan untuk mengekalkan haba konsisten setinggi 400°C - 450°C. Pembakaran menggunakan kayu api asli terpilih memberikan kesan aromatik "smoky" yang tidak boleh ditiru oleh ketuhar gas atau elektrik moden.
-                        </p>
+
+<!-- Pillar 2 -->
+                        <div class="p-6 bg-neutralBg rounded-card border border-gray-100 flex gap-5 hover-lift transition-all">
+                            <div class="w-12 h-12 bg-secondary/10 rounded-btn flex items-center justify-center text-secondary shrink-0">
+                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
+                                </svg>
+                            </div>
+                            <div class="space-y-1">
+                                <h3 class="text-lg font-bold font-poppins text-neutralDark">Bakar Cepat Bawah 3 Minit 🔥</h3>
+                                <p class="text-gray-600 text-xs sm:text-sm leading-relaxed">
+                                    Suhu ketuhar batu kami yang tinggi membolehkan setiap keping piza dibakar sempurna dalam tempoh kurang dari tiga minit bagi mengekalkan rasa segar, kelazatan ramuan dan kualiti optimumnya.
+                                </p>
+                            </div>
+                        </div>
+
+<!-- Pillar 3 -->
+                        <div class="p-6 bg-neutralBg rounded-card border border-gray-100 flex gap-5 hover-lift transition-all">
+                            <div class="w-12 h-12 bg-accent/10 rounded-btn flex items-center justify-center text-wood shrink-0">
+                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/>
+                                </svg>
+                            </div>
+                            <div class="space-y-1">
+                                <h3 class="text-lg font-bold font-poppins text-neutralDark">Inovasi Menu Tempatan Johor</h3>
+                                <p class="text-gray-600 text-xs sm:text-sm leading-relaxed">
+                                    Kami sentiasa berkembang kreatif dengan memperkenalkan piza bercita rasa unik seperti Pizza Asam Pedas dan Pizza Otak-Otak bagi menghargai gastronomi warisan tradisi negeri Johor.
+                                </p>
+                            </div>
+                        </div>
                     </div>
 
-                    <!-- Gastronomi Pelancongan -->
-                    <div class="bg-neutralBg p-8 rounded-card border-t-4 border-accent hover-lift">
-                        <div class="w-12 h-12 bg-accent/10 rounded-btn flex items-center justify-center text-wood mb-6">
-                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
-                        </div>
-                        <h3 class="text-xl font-bold font-poppins text-neutralDark mb-3">Pelancongan Gastronomi</h3>
-                        <p class="text-gray-600 leading-relaxed text-sm">
-                            Kami bukan sekadar restoran makan, malah merupakan hub gastronomi pelancongan di mana pengunjung boleh melihat proses pembakaran secara dekat, menikmati suasana santai, dan mencuba sendiri aktiviti membuat pizza mereka.
-                        </p>
-                    </div>
-                </div>
+</div>
             </div>
         </section>
 
-        <!-- 3. MENU SECTION -->
+<!-- 3. MENU SECTION -->
         <section id="menu" class="py-24 bg-neutralBg">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="text-center max-w-3xl mx-auto mb-12">
@@ -268,7 +312,7 @@
                     <p class="text-gray-500 mt-4">Setiap hidangan dimasak segar mengikut pesanan anda.</p>
                 </div>
 
-                <!-- Menu Category Filter Buttons -->
+<!-- Menu Category Filter Buttons -->
                 <div class="flex flex-wrap justify-center gap-3 mb-12">
                     <button onclick="filterMenu('all')" class="menu-tab-btn active bg-primary text-white font-semibold px-6 py-3 rounded-btn transition-all text-sm shadow-sm" id="tab-all">Semua Menu</button>
                     <button onclick="filterMenu('pizza')" class="menu-tab-btn bg-white hover:bg-gray-100 text-gray-700 font-semibold px-6 py-3 rounded-btn transition-all text-sm" id="tab-pizza">🍕 Pizza Kayu Api</button>
@@ -278,14 +322,14 @@
                     <button onclick="filterMenu('drinks')" class="menu-tab-btn bg-white hover:bg-gray-100 text-gray-700 font-semibold px-6 py-3 rounded-btn transition-all text-sm" id="tab-drinks">🍹 Minuman</button>
                 </div>
 
-                <!-- Menu Items Grid -->
+<!-- Menu Items Grid -->
                 <div id="menu-items-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                     <!-- Items will be dynamically rendered here via JavaScript -->
                 </div>
             </div>
         </section>
 
-        <!-- 4. EXPERIENCE PACKAGES -->
+<!-- 4. EXPERIENCE PACKAGES -->
         <section id="packages" class="py-24 bg-white">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="text-center max-w-3xl mx-auto mb-16">
@@ -294,7 +338,7 @@
                     <p class="text-gray-500 mt-4">Cipta memori indah bersama keluarga dan rakan-rakan melalui aktiviti kulinari kami.</p>
                 </div>
 
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+<div class="grid grid-cols-1 md:grid-cols-3 gap-8">
                     <!-- Package 1 -->
                     <div class="bg-neutralBg rounded-card overflow-hidden shadow-sm hover:shadow-lg border border-gray-100 flex flex-col justify-between hover-lift">
                         <div class="p-8">
@@ -316,7 +360,7 @@
                         </div>
                     </div>
 
-                    <!-- Package 2 -->
+<!-- Package 2 -->
                     <div class="bg-neutralBg rounded-card overflow-hidden shadow-sm hover:shadow-lg border border-gray-100 flex flex-col justify-between hover-lift">
                         <div class="p-8">
                             <div class="text-secondary text-3xl mb-4">👪</div>
@@ -337,7 +381,7 @@
                         </div>
                     </div>
 
-                    <!-- Package 3 -->
+<!-- Package 3 -->
                     <div class="bg-neutralBg rounded-card overflow-hidden shadow-sm hover:shadow-lg border border-gray-100 flex flex-col justify-between hover-lift">
                         <div class="p-8">
                             <div class="text-primary text-3xl mb-4">🎉</div>
@@ -361,12 +405,12 @@
             </div>
         </section>
 
-        <!-- 5. ONLINE BOOKING SECTION -->
+<!-- 5. ONLINE BOOKING SECTION -->
         <section id="booking" class="py-24 bg-neutralBg relative">
             <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
                 <div class="bg-white rounded-card shadow-xl overflow-hidden border border-gray-100 grid grid-cols-1 lg:grid-cols-12">
-                    
-                    <!-- Left Details Banner (Rustic design) -->
+
+<!-- Left Details Banner (Rustic design) -->
                     <div class="lg:col-span-5 wood-gradient text-white p-8 sm:p-12 flex flex-col justify-between">
                         <div>
                             <span class="text-accent font-semibold tracking-wider uppercase text-xs">Sistem Tempahan Pintar</span>
@@ -376,7 +420,7 @@
                             </p>
                         </div>
 
-                        <div class="space-y-4">
+<div class="space-y-4">
                             <div class="flex items-start gap-3">
                                 <span class="text-accent mt-1">📌</span>
                                 <p class="text-xs text-orange-50">Sila pastikan tempahan dibuat sekurang-kurangnya 24 jam sebelum tarikh kunjungan.</p>
@@ -392,23 +436,23 @@
                         </div>
                     </div>
 
-                    <!-- Right Form Input -->
+<!-- Right Form Input -->
                     <div class="lg:col-span-7 p-8 sm:p-12">
                         <form id="booking-form" onsubmit="handleFormSubmit(event)" class="space-y-5">
-                            
-                            <!-- Name Input -->
+
+<!-- Name Input -->
                             <div>
                                 <label for="pax-name" class="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-2">Nama Penuh</label>
                                 <input type="text" id="pax-name" required class="w-full px-4 py-3 rounded-btn border border-gray-200 focus:ring-2 focus:ring-primary focus:border-primary outline-none transition-all text-sm" placeholder="Masukkan nama penuh anda">
                             </div>
 
-                            <!-- Phone Number Input -->
+<!-- Phone Number Input -->
                             <div>
                                 <label for="pax-phone" class="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-2">Nombor Telefon (WhatsApp)</label>
                                 <input type="tel" id="pax-phone" required class="w-full px-4 py-3 rounded-btn border border-gray-200 focus:ring-2 focus:ring-primary focus:border-primary outline-none transition-all text-sm" placeholder="Contoh: 0123456789">
                             </div>
 
-                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                                 <!-- Date Selection -->
                                 <div>
                                     <label for="pax-date" class="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-2">Tarikh Kunjungan</label>
@@ -416,7 +460,7 @@
                                     <span id="monday-warn" class="text-xs text-red-500 font-medium mt-1 hidden">Maaf, kami tutup pada hari Isnin!</span>
                                 </div>
 
-                                <!-- Time Selection -->
+<!-- Time Selection -->
                                 <div>
                                     <label for="pax-time" class="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-2">Masa</label>
                                     <select id="pax-time" required class="w-full px-4 py-3 rounded-btn border border-gray-200 focus:ring-2 focus:ring-primary focus:border-primary outline-none transition-all text-sm">
@@ -434,14 +478,14 @@
                                 </div>
                             </div>
 
-                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                                 <!-- Number of Pax -->
                                 <div>
                                     <label for="pax-count" class="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-2">Bilangan Orang (Pax)</label>
                                     <input type="number" id="pax-count" min="1" max="50" required class="w-full px-4 py-3 rounded-btn border border-gray-200 focus:ring-2 focus:ring-primary focus:border-primary outline-none transition-all text-sm" placeholder="Bilangan tetamu">
                                 </div>
 
-                                <!-- Package Selection -->
+<!-- Package Selection -->
                                 <div>
                                     <label for="booking-package" class="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-2">Pilihan Pakej / Meja</label>
                                     <select id="booking-package" required class="w-full px-4 py-3 rounded-btn border border-gray-200 focus:ring-2 focus:ring-primary focus:border-primary outline-none transition-all text-sm">
@@ -453,13 +497,13 @@
                                 </div>
                             </div>
 
-                            <!-- Special Request / Note -->
+<!-- Special Request / Note -->
                             <div>
                                 <label for="pax-note" class="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-2">Catatan Tambahan (Optional)</label>
                                 <textarea id="pax-note" rows="3" class="w-full px-4 py-3 rounded-btn border border-gray-200 focus:ring-2 focus:ring-primary focus:border-primary outline-none transition-all text-sm" placeholder="Tulis permintaan khas seperti alahan, kerusi bayi dsb."></textarea>
                             </div>
 
-                            <!-- Submit Button -->
+<!-- Submit Button -->
                             <button type="submit" id="submit-btn" class="w-full bg-primary hover:bg-darkRed text-white font-bold py-4 px-6 rounded-btn transition-colors flex items-center justify-center gap-2 shadow-md">
                                 <span>Sahkan & Hantar Tempahan</span>
                                 <svg class="w-5 h-5 fill-current text-white" viewBox="0 0 24 24">
@@ -472,7 +516,7 @@
             </div>
         </section>
 
-        <!-- 6. GALLERY SECTION -->
+<!-- 6. GALLERY SECTION -->
         <section id="gallery" class="py-24 bg-white">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="text-center max-w-3xl mx-auto mb-16">
@@ -481,7 +525,7 @@
                     <p class="text-gray-500 mt-4">Kompilasi suasana restoran kami, oven bata tradisi, serta aktiviti interaktif kami.</p>
                 </div>
 
-                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
                     <!-- Gallery Item 1 (Oven Kayu Api) -->
                     <div class="group relative rounded-card overflow-hidden shadow-sm aspect-video bg-amber-900 flex items-center justify-center cursor-pointer hover-lift" onclick="openGalleryModal('Oven Bata Tradisional', 'Suhu yang memuncak melebih 400°C menghasilkan kerak pembakaran yang unik beraroma kayu api.')">
                         <div class="absolute inset-0 bg-cover bg-center mix-blend-overlay opacity-30" style="background-image: url('data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22100%22 height=%22100%22 viewBox=%220 0 100 100%22%3E%3Cpath d=%22M50 0L0 100h100z%22 fill=%22%23F47C20%22/%3E%3C/svg%3E')"></div>
@@ -495,7 +539,7 @@
                         </div>
                     </div>
 
-                    <!-- Gallery Item 2 (Restoran Suasana Rustic) -->
+<!-- Gallery Item 2 (Restoran Suasana Rustic) -->
                     <div class="group relative rounded-card overflow-hidden shadow-sm aspect-video bg-orange-950 flex items-center justify-center cursor-pointer hover-lift" onclick="openGalleryModal('Suasana Restoran Rustic', 'Konsep kedai bertemakan kayu moden yang hangat dan selesa untuk dinikmati seisi keluarga.')">
                         <div class="absolute inset-0 bg-cover bg-center mix-blend-overlay opacity-30" style="background-image: url('data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22100%22 height=%22100%22 viewBox=%220 0 100 100%22%3E%3Crect width=%22100%22 height=%22100%22 fill=%22%23A52A1A%22/%3E%3C/svg%3E')"></div>
                         <div class="z-10 text-center px-4">
@@ -508,7 +552,7 @@
                         </div>
                     </div>
 
-                    <!-- Gallery Item 3 (Aktiviti DIY Pizza) -->
+<!-- Gallery Item 3 (Aktiviti DIY Pizza) -->
                     <div class="group relative rounded-card overflow-hidden shadow-sm aspect-video bg-red-950 flex items-center justify-center cursor-pointer hover-lift" onclick="openGalleryModal('Aktiviti DIY Pizza', 'Pengunjung gembira membentuk pizza sendiri sebelum ia dibakar segar dalam oven.')">
                         <div class="absolute inset-0 bg-cover bg-center mix-blend-overlay opacity-30" style="background-image: url('data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22100%22 height=%22100%22 viewBox=%220 0 100 100%22%3E%3Ccircle cx=%2250%22 cy=%2250%22 r=%2240%22 fill=%22%23FFC247%22/%3E%3C/svg%3E')"></div>
                         <div class="z-10 text-center px-4">
@@ -524,12 +568,12 @@
             </div>
         </section>
 
-        <!-- 7. CONTACT US & INFO SECTION -->
+<!-- 7. CONTACT US & INFO SECTION -->
         <section id="contact" class="py-24 bg-neutralBg relative overflow-hidden">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
                 <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
-                    
-                    <!-- Contact Details -->
+
+<!-- Contact Details -->
                     <div class="lg:col-span-5 space-y-8">
                         <div>
                             <span class="text-primary font-bold tracking-widest uppercase text-sm">Hubungi Kami</span>
@@ -537,7 +581,7 @@
                             <p class="text-gray-500 mt-3">Kunjungi kami di cawangan utama atau hubungi kami pada bila-bila masa melalui saluran pilihan anda.</p>
                         </div>
 
-                        <div class="space-y-6">
+<div class="space-y-6">
                             <div class="flex items-start gap-4">
                                 <div class="w-10 h-10 bg-white shadow-sm rounded-btn flex items-center justify-center text-primary shrink-0 mt-1">
                                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
@@ -548,7 +592,7 @@
                                 </div>
                             </div>
 
-                            <div class="flex items-start gap-4">
+<div class="flex items-start gap-4">
                                 <div class="w-10 h-10 bg-white shadow-sm rounded-btn flex items-center justify-center text-primary shrink-0 mt-1">
                                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.94.725l.548 2.2a1 1 0 01-.321.988l-1.305.98a10.582 10.582 0 004.872 4.872l.98-1.305a1 1 0 01.988-.321l2.2.548a1 1 0 01.725.94V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/></svg>
                                 </div>
@@ -558,7 +602,7 @@
                                 </div>
                             </div>
 
-                            <div class="flex items-start gap-4">
+<div class="flex items-start gap-4">
                                 <div class="w-10 h-10 bg-white shadow-sm rounded-btn flex items-center justify-center text-primary shrink-0 mt-1">
                                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
                                 </div>
@@ -568,7 +612,7 @@
                                 </div>
                             </div>
 
-                            <div class="flex items-start gap-4">
+<div class="flex items-start gap-4">
                                 <div class="w-10 h-10 bg-white shadow-sm rounded-btn flex items-center justify-center text-primary shrink-0 mt-1">
                                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
                                 </div>
@@ -588,7 +632,7 @@
                         </div>
                     </div>
 
-                    <!-- Google Maps Embed -->
+<!-- Google Maps Embed -->
                     <div class="lg:col-span-7 space-y-6">
                         <div class="bg-white p-4 rounded-card shadow-md border border-gray-100 overflow-hidden">
                             <h4 class="font-bold text-neutralDark font-poppins px-2 mb-3">Peta Lokasi</h4>
@@ -608,11 +652,11 @@
             </div>
         </section>
 
-        <!-- FOOTER -->
+<!-- FOOTER -->
         <footer class="bg-neutralDark text-white pt-16 pb-8 border-t border-gray-800">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 md:grid-cols-4 gap-12 mb-12">
-                
-                <!-- Company Info -->
+
+<!-- Company Info -->
                 <div class="space-y-4">
                     <div class="flex items-center space-x-3">
                         <div class="w-10 h-10 rounded-btn overflow-hidden bg-white flex items-center justify-center border border-gray-800">
@@ -625,18 +669,18 @@
                     </p>
                 </div>
 
-                <!-- Quick Links -->
+<!-- Quick Links -->
                 <div>
                     <h4 class="font-bold font-poppins text-sm uppercase tracking-wider text-accent mb-4">Pautan Pantas</h4>
                     <ul class="space-y-2 text-xs text-gray-400">
-                        <li><a href="#home" class="hover:text-primary transition-colors">Utama</a></li>
-                        <li><a href="#about" class="hover:text-primary transition-colors">Tentang Kami</a></li>
-                        <li><a href="#menu" class="hover:text-primary transition-colors">Senarai Menu</a></li>
-                        <li><a href="#packages" class="hover:text-primary transition-colors">Pakej Pengalaman</a></li>
+                        <li><a href="#home" onclick="showSPASection('main')" class="hover:text-primary transition-colors">Utama</a></li>
+                        <li><a href="#about" onclick="showSPASection('main')" class="hover:text-primary transition-colors">Tentang Kami</a></li>
+                        <li><a href="#menu" onclick="showSPASection('main')" class="hover:text-primary transition-colors">Senarai Menu</a></li>
+                        <li><a href="#packages" onclick="showSPASection('main')" class="hover:text-primary transition-colors">Pakej Pengalaman</a></li>
                     </ul>
                 </div>
 
-                <!-- Social Media -->
+<!-- Social Media -->
                 <div>
                     <h4 class="font-bold font-poppins text-sm uppercase tracking-wider text-accent mb-4">Ikuti Kami</h4>
                     <ul class="space-y-3 text-xs text-gray-400">
@@ -659,7 +703,7 @@
                     </ul>
                 </div>
 
-                <!-- Location -->
+<!-- Location -->
                 <div class="space-y-2">
                     <h4 class="font-bold font-poppins text-sm uppercase tracking-wider text-accent mb-4">Lokasi Kami</h4>
                     <p class="text-xs text-gray-400">
@@ -669,9 +713,9 @@
                 </div>
             </div>
 
-            <!-- Bottom Disclaimer & Dynamic SPA Triggers -->
+<!-- Bottom Disclaimer & Dynamic SPA Triggers -->
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 border-t border-gray-800 text-center text-xs text-gray-500 flex flex-col sm:flex-row items-center justify-between gap-4">
-                <span>&copy; 2026 Qulai Pizza - Pizza Kayu Api. Hak Cipta Terpelihara.</span>
+                <span>© 2026 Qulai Pizza - Pizza Kayu Api. Hak Cipta Terpelihara.</span>
                 <div class="flex gap-4">
                     <a href="javascript:void(0)" onclick="showSPASection('privacy-policy-page')" class="hover:underline text-gray-400 hover:text-white transition-colors">Polisi Privasi</a>
                     <a href="javascript:void(0)" onclick="showSPASection('terms-conditions-page')" class="hover:underline text-gray-400 hover:text-white transition-colors">Terma & Syarat</a>
@@ -680,8 +724,7 @@
         </footer>
     </div>
 
-
-    <!-- PRIVACY POLICY STANDALONE PAGE (Hidden by default) -->
+<!-- PRIVACY POLICY STANDALONE PAGE (Hidden by default) -->
     <div id="privacy-policy-page" class="hidden min-h-screen bg-neutralBg py-12 sm:py-20 px-4 sm:px-6 lg:px-8">
         <div class="max-w-4xl mx-auto bg-white rounded-card shadow-lg overflow-hidden border border-gray-100">
             <!-- Header Banner -->
@@ -702,7 +745,7 @@
                 </div>
             </div>
 
-            <!-- Content -->
+<!-- Content -->
             <div class="p-8 sm:p-12 space-y-8 text-sm sm:text-base text-gray-700 leading-relaxed">
                 <div>
                     <h2 class="text-xl font-bold font-poppins text-neutralDark border-b border-gray-100 pb-2 mb-2">Polisi Privasi Qulai Pizza</h2>
@@ -712,7 +755,7 @@
                     </p>
                 </div>
 
-                <div class="space-y-4">
+<div class="space-y-4">
                     <h3 class="text-lg font-bold font-poppins text-neutralDark">1. Maklumat Yang Dikumpulkan</h3>
                     <p>Kami mungkin mengumpulkan maklumat berikut apabila anda membuat tempahan:</p>
                     <ul class="list-disc pl-6 space-y-1 text-gray-600">
@@ -725,7 +768,7 @@
                     </ul>
                 </div>
 
-                <div class="space-y-4">
+<div class="space-y-4">
                     <h3 class="text-lg font-bold font-poppins text-neutralDark">2. Tujuan Penggunaan Maklumat</h3>
                     <p>Maklumat anda digunakan untuk:</p>
                     <ul class="list-disc pl-6 space-y-1 text-gray-600">
@@ -737,35 +780,35 @@
                     <p class="font-medium text-neutralDark mt-2">Kami tidak akan menjual atau menyewakan maklumat peribadi anda kepada mana-mana pihak.</p>
                 </div>
 
-                <div class="space-y-4">
+<div class="space-y-4">
                     <h3 class="text-lg font-bold font-poppins text-neutralDark">3. WhatsApp</h3>
                     <p>
                         Apabila anda menghantar tempahan melalui WhatsApp, anda akan berurusan terus melalui platform WhatsApp. Sebarang penggunaan data selepas mesej dihantar adalah tertakluk kepada Polisi Privasi WhatsApp.
                     </p>
                 </div>
 
-                <div class="space-y-4">
+<div class="space-y-4">
                     <h3 class="text-lg font-bold font-poppins text-neutralDark">4. Keselamatan Maklumat</h3>
                     <p>
                         Kami mengambil langkah yang munasabah untuk memastikan maklumat pelanggan dilindungi daripada akses yang tidak dibenarkan, kehilangan atau penyalahgunaan.
                     </p>
                 </div>
 
-                <div class="space-y-4">
+<div class="space-y-4">
                     <h3 class="text-lg font-bold font-poppins text-neutralDark">5. Cookies</h3>
                     <p>
                         Laman web ini mungkin menggunakan cookies untuk meningkatkan pengalaman pengguna serta tujuan analitik. Anda boleh memadam atau menyahaktifkan cookies melalui tetapan pelayar anda.
                     </p>
                 </div>
 
-                <div class="space-y-4">
+<div class="space-y-4">
                     <h3 class="text-lg font-bold font-poppins text-neutralDark">6. Pautan Pihak Ketiga</h3>
                     <p>
                         Laman web kami mungkin mengandungi pautan ke Google Maps, WhatsApp, Facebook atau Instagram. Kami tidak bertanggungjawab terhadap kandungan atau polisi privasi laman web pihak ketiga tersebut.
                     </p>
                 </div>
 
-                <div class="space-y-4">
+<div class="space-y-4">
                     <h3 class="text-lg font-bold font-poppins text-neutralDark">7. Hak Pengguna</h3>
                     <p>Anda boleh meminta untuk:</p>
                     <ul class="list-disc pl-6 space-y-1 text-gray-600">
@@ -775,14 +818,14 @@
                     </ul>
                 </div>
 
-                <div class="space-y-4">
+<div class="space-y-4">
                     <h3 class="text-lg font-bold font-poppins text-neutralDark">8. Perubahan Polisi</h3>
                     <p>
                         Kami berhak mengemas kini Polisi Privasi ini pada bila-bila masa. Sebarang perubahan akan dipaparkan di laman web ini.
                     </p>
                 </div>
 
-                <div class="space-y-4">
+<div class="space-y-4">
                     <h3 class="text-lg font-bold font-poppins text-neutralDark">9. Hubungi Kami</h3>
                     <p>Sekiranya anda mempunyai pertanyaan berkaitan privasi, sila hubungi:</p>
                     <div class="bg-neutralBg p-6 rounded-btn text-sm space-y-2 text-gray-700 border border-gray-100">
@@ -792,7 +835,7 @@
                     </div>
                 </div>
 
-                <!-- Back Action -->
+<!-- Back Action -->
                 <div class="pt-8 border-t border-gray-100 flex justify-center">
                     <button onclick="showSPASection('main')" class="bg-primary hover:bg-darkRed text-white font-bold px-8 py-3.5 rounded-btn text-sm transition-all hover-lift">
                         Kembali ke Laman Utama
@@ -802,8 +845,7 @@
         </div>
     </div>
 
-
-    <!-- TERMS & CONDITIONS STANDALONE PAGE (Hidden by default) -->
+<!-- TERMS & CONDITIONS STANDALONE PAGE (Hidden by default) -->
     <div id="terms-conditions-page" class="hidden min-h-screen bg-neutralBg py-12 sm:py-20 px-4 sm:px-6 lg:px-8">
         <div class="max-w-4xl mx-auto bg-white rounded-card shadow-lg overflow-hidden border border-gray-100">
             <!-- Header Banner -->
@@ -824,7 +866,7 @@
                 </div>
             </div>
 
-            <!-- Content -->
+<!-- Content -->
             <div class="p-8 sm:p-12 space-y-8 text-sm sm:text-base text-gray-700 leading-relaxed">
                 <div>
                     <h2 class="text-xl font-bold font-poppins text-neutralDark border-b border-gray-100 pb-2 mb-2">Terma & Syarat Penggunaan</h2>
@@ -834,7 +876,7 @@
                     </p>
                 </div>
 
-                <div class="space-y-4">
+<div class="space-y-4">
                     <h3 class="text-lg font-bold font-poppins text-neutralDark">1. Tempahan</h3>
                     <ul class="list-disc pl-6 space-y-1.5 text-gray-600">
                         <li>Semua tempahan adalah tertakluk kepada kekosongan.</li>
@@ -843,7 +885,7 @@
                     </ul>
                 </div>
 
-                <div class="space-y-4">
+<div class="space-y-4">
                     <h3 class="text-lg font-bold font-poppins text-neutralDark">2. Ketibaan</h3>
                     <ul class="list-disc pl-6 space-y-1.5 text-gray-600">
                         <li>Pelanggan disarankan hadir sekurang-kurangnya 10 minit lebih awal daripada waktu tempahan.</li>
@@ -851,14 +893,14 @@
                     </ul>
                 </div>
 
-                <div class="space-y-4">
+<div class="space-y-4">
                     <h3 class="text-lg font-bold font-poppins text-neutralDark">3. Pembatalan</h3>
                     <p>
                         Sekiranya anda ingin membatalkan atau menukar tempahan, sila maklumkan kepada kami seawal mungkin melalui WhatsApp atau telefon.
                     </p>
                 </div>
 
-                <div class="space-y-4">
+<div class="space-y-4">
                     <h3 class="text-lg font-bold font-poppins text-neutralDark">4. Harga</h3>
                     <ul class="list-disc pl-6 space-y-1.5 text-gray-600">
                         <li>Semua harga yang dipaparkan adalah dalam Ringgit Malaysia (RM).</li>
@@ -866,7 +908,7 @@
                     </ul>
                 </div>
 
-                <div class="space-y-4">
+<div class="space-y-4">
                     <h3 class="text-lg font-bold font-poppins text-neutralDark">5. Pakej Aktiviti</h3>
                     <p>Bagi aktiviti seperti:</p>
                     <ul class="list-disc pl-6 space-y-1.5 text-gray-600">
@@ -877,14 +919,14 @@
                     <p class="mt-2">Tarikh dan masa adalah tertakluk kepada kekosongan slot.</p>
                 </div>
 
-                <div class="space-y-4">
+<div class="space-y-4">
                     <h3 class="text-lg font-bold font-poppins text-neutralDark">6. Makanan</h3>
                     <p>
                         Walaupun kami sentiasa menjaga standard penyediaan makanan, pelanggan yang mempunyai alahan makanan hendaklah memaklumkan kepada kami sebelum membuat pesanan.
                     </p>
                 </div>
 
-                <div class="space-y-4">
+<div class="space-y-4">
                     <h3 class="text-lg font-bold font-poppins text-neutralDark">7. Liabiliti</h3>
                     <p>Qulai Pizza tidak bertanggungjawab terhadap:</p>
                     <ul class="list-disc pl-6 space-y-1.5 text-gray-600">
@@ -894,7 +936,7 @@
                     </ul>
                 </div>
 
-                <div class="space-y-4">
+<div class="space-y-4">
                     <h3 class="text-lg font-bold font-poppins text-neutralDark">8. Hak Cipta</h3>
                     <p>Semua kandungan di laman web ini termasuk:</p>
                     <ul class="list-disc pl-6 space-y-1.5 text-gray-600">
@@ -904,17 +946,17 @@
                         <li>Teks</li>
                         <li>Grafik</li>
                     </ul>
-                    <p class="mt-2">adalah hak milik Qulai Pizza dan tidak boleh digunakan tanpa kebenaran bertulis.</p>
+                    <p class="mt-2">adalah hak milik Qulai Pizza and tidak boleh digunakan tanpa kebenaran bertulis.</p>
                 </div>
 
-                <div class="space-y-4">
+<div class="space-y-4">
                     <h3 class="text-lg font-bold font-poppins text-neutralDark">9. Perubahan Terma</h3>
                     <p>
                         Qulai Pizza berhak mengubah Terma & Syarat ini pada bila-bila masa tanpa notis terlebih dahulu.
                     </p>
                 </div>
 
-                <!-- Back Action -->
+<!-- Back Action -->
                 <div class="pt-8 border-t border-gray-100 flex justify-center">
                     <button onclick="showSPASection('main')" class="bg-primary hover:bg-darkRed text-white font-bold px-8 py-3.5 rounded-btn text-sm transition-all hover-lift">
                         Kembali ke Laman Utama
@@ -924,11 +966,10 @@
         </div>
     </div>
 
-
-    <!-- INTERACTIVE GALLERY DETAIL MODAL -->
+<!-- INTERACTIVE GALLERY DETAIL MODAL -->
     <div id="gallery-modal" class="hidden fixed inset-0 z-50 bg-black/80 flex items-center justify-center p-4">
         <div class="bg-white rounded-card max-w-lg w-full overflow-hidden shadow-2xl relative animate-fade">
-            <button onclick="closeGalleryModal()" class="absolute top-4 right-4 text-gray-500 hover:text-black focus:outline-none text-2xl font-bold">&times;</button>
+            <button onclick="closeGalleryModal()" class="absolute top-4 right-4 text-gray-500 hover:text-black focus:outline-none text-2xl font-bold">×</button>
             <div class="p-8 space-y-4">
                 <div id="modal-decor" class="w-12 h-12 bg-primary/10 rounded-btn flex items-center justify-center text-primary text-xl">🍕</div>
                 <h3 id="modal-title" class="text-2xl font-bold font-poppins text-neutralDark">Meneroka Detail</h3>
@@ -940,7 +981,7 @@
         </div>
     </div>
 
-    <!-- BOOKING SUCCESS CONFIRMATION MODAL -->
+<!-- BOOKING SUCCESS CONFIRMATION MODAL -->
     <div id="success-modal" class="hidden fixed inset-0 z-50 bg-black/80 flex items-center justify-center p-4">
         <div class="bg-white rounded-card max-w-lg w-full overflow-hidden shadow-2xl relative animate-fade">
             <div class="p-8 text-center space-y-4">
@@ -949,8 +990,8 @@
                 <p class="text-gray-600 text-sm leading-relaxed">
                     Sistem telah memformatkan butiran tempahan anda. Sila klik butang di bawah untuk menghantar borang secara terus ke WhatsApp rasmi Qulai Pizza.
                 </p>
-                
-                <!-- Display parameters -->
+
+<!-- Display parameters -->
                 <div class="bg-neutralBg p-4 rounded-btn text-left text-xs space-y-2 text-gray-700">
                     <div><strong>Nama:</strong> <span id="summary-name"></span></div>
                     <div><strong>No Telefon:</strong> <span id="summary-phone"></span></div>
@@ -959,7 +1000,7 @@
                     <div><strong>Pakej:</strong> <span id="summary-package"></span></div>
                 </div>
 
-                <div class="flex flex-col sm:flex-row gap-3 pt-4">
+<div class="flex flex-col sm:flex-row gap-3 pt-4">
                     <button onclick="closeSuccessModal()" class="w-full sm:w-1/2 bg-gray-150 hover:bg-gray-200 text-gray-700 font-semibold px-6 py-3 rounded-btn text-xs transition-colors">Tukar Detail</button>
                     <a id="whatsapp-trigger-btn" target="_blank" rel="noopener" class="w-full sm:w-1/2 bg-primary hover:bg-darkRed text-white font-bold px-6 py-3 rounded-btn text-xs transition-all flex items-center justify-center gap-1.5">
                         <span>Hantar Ke WhatsApp</span>
@@ -969,8 +1010,7 @@
         </div>
     </div>
 
-
-    <!-- JAVASCRIPT LOGIC -->
+<!-- JAVASCRIPT LOGIC -->
     <script>
         // Full Menu Dataset Extracted from User uploaded images (menu1.jpeg, menu2.jpeg, menu3.jpeg)
         const fullMenu = [
@@ -1039,16 +1079,22 @@
             const menuIcon = document.getElementById('menu-icon');
 
             mobileMenuBtn.addEventListener('click', () => {
-                const isHidden = mobileMenu.classList.contains('hidden');
-                if (isHidden) {
-                    mobileMenu.classList.remove('hidden');
-                    menuIcon.setAttribute('d', 'M6 18L18 6M6 6l12 12');
-                } else {
-                    mobileMenu.classList.add('hidden');
-                    menuIcon.setAttribute('d', 'M4 6h16M4 12h16M4 18h16');
-                }
+                toggleMobileMenu();
             });
         });
+
+        function toggleMobileMenu() {
+            const mobileMenu = document.getElementById('mobile-menu');
+            const menuIcon = document.getElementById('menu-icon');
+            const isHidden = mobileMenu.classList.contains('hidden');
+            if (isHidden) {
+                mobileMenu.classList.remove('hidden');
+                menuIcon.setAttribute('d', 'M6 18L18 6M6 6l12 12');
+            } else {
+                mobileMenu.classList.add('hidden');
+                menuIcon.setAttribute('d', 'M4 6h16M4 12h16M4 18h16');
+            }
+        }
 
         // Function to render Menu Items
         function renderMenuItems(items) {
