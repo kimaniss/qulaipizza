@@ -95,7 +95,7 @@
                     </div>
                     <div>
                         <span class="block text-xl font-bold font-poppins text-primary opacity-100 leading-none tracking-tight">QULAI PIZZA</span>
-                        <span class="block text-xs font-semibold text-secondary tracking-widest uppercase">Pizza Kayu Api</span>
+                        <span class="block text-[10px] font-extrabold text-secondary tracking-wider uppercase mt-0.5">Pride of Kulai</span>
                     </div>
                 </a>
 
@@ -149,16 +149,16 @@
 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
                 <!-- Text Content -->
                 <div class="lg:col-span-7 text-center lg:text-left space-y-6 animate-slide-up">
-                    <span class="inline-flex items-center gap-2 bg-primary/10 text-primary font-semibold px-4 py-2 rounded-full text-sm">
+                    <span class="inline-flex items-center gap-2 bg-primary/10 text-primary font-bold px-4 py-2 rounded-full text-sm">
                         <span class="w-2 h-2 rounded-full bg-secondary animate-ping"></span>
-                        Autentik & Tradisional di Kulai
+                        Pride of Kulai • Autentik & Tradisional
                     </span>
                     <h1 class="text-4xl sm:text-5xl md:text-6xl font-extrabold font-poppins text-neutralDark leading-tight">
                         Keenakan Autentik <br>
                         <span class="text-transparent bg-clip-text bg-gradient-to-r from-primary to-secondary">Pizza Kayu Api</span>
                     </h1>
                     <p class="text-lg text-gray-600 max-w-xl mx-auto lg:mx-0">
-                        Nikmati sensasi kerak pizza rangup beraroma asap dari ketuhar bata tradisional kami. Diadun segar menggunakan resipi warisan istimewa.
+                        Nikmati sensasi kerak pizza rangup beraroma asap dari ketuhar bata tradisional kami. Diadun segar menggunakan resipi warisan istimewa daerah Kulai.
                     </p>
                     <div class="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4 pt-4">
                         <a href="javascript:void(0)" onclick="scrollToMenuSection()" class="w-full sm:w-auto bg-primary hover:bg-darkRed text-white text-center font-bold px-8 py-4 rounded-btn transition-all shadow-lg hover:shadow-xl hover-lift">
@@ -179,7 +179,7 @@
                             <span class="text-xs text-gray-500">Variasi Pizza</span>
                         </div>
                         <div class="text-center lg:text-left">
-                            <span class="block text-2xl font-bold font-poppins text-primary">4.5★</span>
+                            <span class="block text-2xl font-bold font-poppins text-primary">4.8★</span>
                             <span class="text-xs text-gray-500">Review Pelanggan</span>
                         </div>
                     </div>
@@ -300,12 +300,12 @@
                             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                                 <div>
                                     <label for="pax-date" class="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-2">Tarikh Pesanan</label>
-                                    <input type="date" id="pax-date" required onchange="checkMonday(this)" class="w-full px-4 py-3 rounded-btn border border-gray-200 focus:ring-2 focus:ring-primary focus:border-primary outline-none transition-all text-sm">
+                                    <input type="date" id="pax-date" required onchange="checkMonday(this); checkDineInCapacity();" class="w-full px-4 py-3 rounded-btn border border-gray-200 focus:ring-2 focus:ring-primary focus:border-primary outline-none transition-all text-sm">
                                     <span id="monday-warn" class="text-xs text-red-500 font-medium mt-1 hidden">Maaf, kami tutup pada hari Isnin!</span>
                                 </div>
                                 <div>
                                     <label for="pax-time" class="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-2">Masa</label>
-                                    <select id="pax-time" required class="w-full px-4 py-3 rounded-btn border border-gray-200 focus:ring-2 focus:ring-primary focus:border-primary outline-none transition-all text-sm">
+                                    <select id="pax-time" required onchange="checkDineInCapacity();" class="w-full px-4 py-3 rounded-btn border border-gray-200 focus:ring-2 focus:ring-primary focus:border-primary outline-none transition-all text-sm">
                                         <option value="" disabled selected>Pilih waktu</option>
                                         <option value="14:00">02:00 PM</option>
                                         <option value="15:00">03:00 PM</option>
@@ -321,22 +321,26 @@
                             </div>
                             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                                 <div>
-                                    <label for="pax-count" class="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-2">Bilangan Orang (Pax)</label>
-                                    <input type="number" id="pax-count" min="1" max="50" required class="w-full px-4 py-3 rounded-btn border border-gray-200 focus:ring-2 focus:ring-primary focus:border-primary outline-none transition-all text-sm" placeholder="Bilangan tetamu">
-                                </div>
-                                <div>
                                     <label for="booking-package" class="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-2">Pilihan Jenis Order</label>
-                                    <select id="booking-package" required class="w-full px-4 py-3 rounded-btn border border-gray-200 focus:ring-2 focus:ring-primary focus:border-primary outline-none transition-all text-sm">
+                                    <select id="booking-package" onchange="handleOrderTypeChange(this); checkDineInCapacity();" required class="w-full px-4 py-3 rounded-btn border border-gray-200 focus:ring-2 focus:ring-primary focus:border-primary outline-none transition-all text-sm">
                                         <option value="Dine In" selected>Makan di Kedai (Dine In)</option>
                                         <option value="Take Away">Bawa Pulang (Take Away)</option>
                                     </select>
                                 </div>
+                                <div>
+                                    <label id="pax-count-label" for="pax-count" class="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-2">Bilangan Orang (Pax)</label>
+                                    <input type="number" id="pax-count" min="1" max="88" required oninput="checkDineInCapacity();" class="w-full px-4 py-3 rounded-btn border border-gray-200 focus:ring-2 focus:ring-primary focus:border-primary outline-none transition-all text-sm disabled:bg-gray-100 disabled:text-gray-400 disabled:cursor-not-allowed" placeholder="Bilangan tetamu">
+                                </div>
+                            </div>
+                            <!-- Notis Had Kapasiti Terlampau (88 Pax) -->
+                            <div id="capacity-warning-notice" class="p-3 bg-red-50 text-red-700 border border-red-200 rounded-btn text-xs font-medium hidden">
+                                ⚠️ Maaf, kapasiti Dine In bagi jam dan tarikh berikut telah penuh. Slot ini mengehadkan maksimum 88 pax sejam. Sila pilih masa yang lain atau tukar jenis order kepada Take Away.
                             </div>
                             <div>
                                 <label for="pax-note" class="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-2">Catatan Tambahan (Optional)</label>
                                 <textarea id="pax-note" rows="3" class="w-full px-4 py-3 rounded-btn border border-gray-200 focus:ring-2 focus:ring-primary focus:border-primary outline-none transition-all text-sm" placeholder="Tulis permintaan khas seperti alahan, kerusi bayi dsb."></textarea>
                             </div>
-                            <button type="submit" id="submit-btn" class="w-full bg-primary hover:bg-darkRed text-white font-bold py-4 px-6 rounded-btn transition-colors flex items-center justify-center gap-2 shadow-md">
+                            <button type="submit" id="submit-btn" class="w-full bg-primary hover:bg-darkRed text-white font-bold py-4 px-6 rounded-btn transition-colors flex items-center justify-center gap-2 shadow-md disabled:opacity-40 disabled:cursor-not-allowed">
                                 <span>Hantar Keseluruhan Pesanan & Pilihan Order</span>
                                 <svg class="w-5 h-5 fill-current text-white" viewBox="0 0 24 24">
                                     <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946C.06 5.348 5.397.01 12.008.01c3.202.001 6.212 1.246 8.477 3.513 2.262 2.268 3.507 5.28 3.505 8.484-.004 6.657-5.34 11.997-11.953 11.997-2.005-.001-3.973-.5-5.739-1.446L0 24zm6.59-4.846c1.6.95 3.188 1.449 4.825 1.451 5.436 0 9.86-4.37 9.864-9.799.002-2.623-1.023-5.086-2.885-6.948C16.62 2.016 14.154.99 11.52.99c-5.44 0-9.866 4.372-9.87 9.802 0 1.724.482 3.41 1.396 4.887l-.991 3.621 3.733-.967c1.4.78 2.96 1.19 4.54 1.19a9.77 9.77 0 0 0 4.26-.99zm10.425-5.417c-.339-.167-2.006-.973-2.312-1.084-.306-.111-.53-.167-.751.167-.221.334-.855 1.084-1.048 1.306-.193.222-.386.25-.725.083-.339-.167-1.43-.518-2.724-1.655-1.007-.884-1.686-1.977-1.884-2.311-.197-.334-.021-.514.148-.68.152-.15.339-.389.508-.584.17-.194.226-.333.339-.556.113-.222.056-.417-.028-.584-.085-.167-.751-1.778-1.03-2.444-.27-.648-.545-.561-.75-.572-.19-.01-.41-.011-.628-.011-.219 0-.575.083-.876.417-.301.333-1.15 1.111-1.15 2.709 0 1.597 1.182 3.139 1.346 3.361.164.222 2.327 3.499 5.637 4.904.787.335 1.4.535 1.88.685.792.248 1.512.213 2.081.129.635-.094 2.006-.806 2.29-1.584.283-.778.283-1.444.198-1.584-.085-.14-.306-.222-.646-.389z"/>
@@ -573,7 +577,7 @@
                         </div>
                         <div class="p-8 bg-gray-50 border-t border-gray-100 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
                             <div>
-                                <span class="text-xs text-gray-400 block">Harga Kombo (2 Adults + 2 Kids)</span>
+                                <span class="text-xs text-gray-400 block">Harga Kombo (2A + 2K)</span>
                                 <span class="text-xl font-bold text-primary font-poppins">RM 89.00</span> <span class="text-xs text-gray-500">/ family</span>
                             </div>
                             <a href="https://api.whatsapp.com/send?phone=60106602847&text=Halo%20Qulai%20Pizza!%20Saya%20berminat%20untuk%20menempah%20pakej%20*Woodfired%20Family%20Pizza%20Workshop*%20(RM89/family).%20Boleh%20berikan%20maklumat%20kekosongan%20slot?" target="_blank" rel="noopener" class="w-full sm:w-auto text-center bg-[#25D366] hover:bg-[#20ba5a] text-white text-xs font-bold px-4 py-3 rounded-btn transition-colors shadow-sm inline-flex items-center justify-center gap-1">
@@ -989,7 +993,7 @@
                     </div>
                     <div class="space-y-4">
                         <h3 class="text-lg font-bold font-poppins text-neutralDark">2. Tujuan Penggunaan Maklumat</h3>
-                        <p>Maklumat anda digunakan untuk mengrus dan mengesahkan tempahan, contacting anda berkaitan tempahan, serta memberikan maklumat mengenai perubahan jadual atau tempahan.</p>
+                        <p>Maklumat anda digunakan untuk mengurus dan mengesahkan tempahan, contacting anda berkaitan tempahan, serta memberikan maklumat mengenai perubahan jadual atau tempahan.</p>
                         <p class="font-medium text-neutralDark mt-2">Kami tidak akan menjual atau menyewakan maklumat peribadi anda kepada mana-mana pihak.</p>
                     </div>
                     <div class="space-y-4">
@@ -1095,7 +1099,7 @@
                     <div><strong>Nama:</strong> <span id="summary-name"></span></div>
                     <div><strong>No Telefon:</strong> <span id="summary-phone"></span></div>
                     <div><strong>Tarikh & Masa:</strong> <span id="summary-datetime"></span></div>
-                    <div><strong>Bilangan Tetamu:</strong> <span id="summary-pax"></span> Pax</div>
+                    <div><strong>Bilangan Tetamu:</strong> <span id="summary-pax"></span></div>
                     <div><strong>Pilihan Order:</strong> <span id="summary-package"></span></div>
                 </div>
                 <div class="flex flex-col sm:flex-row gap-3 pt-4">
@@ -1172,6 +1176,13 @@
 
         let userCart = [];
         let currentlySelectedPizzaName = "";
+        
+        // Data Simulasi Kapasiti Dine In Terkumpul bagi Kedai (Had Maksimum 88 Pax Sejam)
+        const dineInCapacityDatabase = {
+            "2026-08-15_18:00": 75, // Contoh slot hampir penuh
+            "2026-08-15_19:00": 85, // Slot tinggal 3 kekosongan
+            "2026-08-20_20:00": 88  // Contoh slot sudah padat 100% penuh
+        };
 
         window.addEventListener('DOMContentLoaded', () => {
             const tomorrow = new Date();
@@ -1344,6 +1355,66 @@
             closePizzaModal();
         }
 
+        function handleOrderTypeChange(selectElement) {
+            const paxCountInput = document.getElementById('pax-count');
+            const paxCountLabel = document.getElementById('pax-count-label');
+            
+            if (selectElement.value === "Take Away") {
+                paxCountInput.value = ""; 
+                paxCountInput.disabled = true; 
+                paxCountInput.required = false; 
+                paxCountLabel.innerHTML = 'Bilangan Orang (Pax) <span class="text-xs font-normal text-gray-400">(N/A bagi Take Away)</span>';
+            } else {
+                paxCountInput.disabled = false; 
+                paxCountInput.required = true; 
+                paxCountLabel.innerHTML = 'Bilangan Orang (Pax)';
+            }
+        }
+
+        // FUNGSI PINTAR: SEMAKAN HAD KAPASITI TEMPAT DUDUK DINE-IN MAKSIMUM 88 PAX SEJAM
+        function checkDineInCapacity() {
+            const orderType = document.getElementById('booking-package').value;
+            const dateInput = document.getElementById('pax-date').value;
+            const timeInput = document.getElementById('pax-time').value;
+            const paxCountInput = document.getElementById('pax-count');
+            const paxValue = parseInt(paxCountInput.value) || 0;
+            
+            const warningNotice = document.getElementById('capacity-warning-notice');
+            const submitBtn = document.getElementById('submit-btn');
+            
+            // Sekiranya take away, tiada sekatan kapasiti tempat duduk dine-in diletakkan
+            if (orderType === "Take Away" || !dateInput || !timeInput) {
+                warningNotice.classList.add('hidden');
+                // Pastikan submit_btn tidak tersekat melainkan disebabkan penutupan hari Isnin
+                const selectedDate = new Date(dateInput);
+                if (selectedDate.getDay() !== 1) {
+                    submitBtn.disabled = false;
+                    submitBtn.classList.remove('opacity-40', 'cursor-not-allowed');
+                }
+                return;
+            }
+            
+            const databaseKey = `${dateInput}_${timeInput}`;
+            // Ambil simulasi jumlah tempahan sedia ada pada slot tersebut, atau letakkan 0 jika slot kosong
+            const currentBookedSeats = dineInCapacityDatabase[databaseKey] || 0;
+            const totalProjectedSeats = currentBookedSeats + paxValue;
+            
+            if (totalProjectedSeats > 88 || paxValue > 88) {
+                // Berikan amaran visual
+                warningNotice.innerText = `⚠️ Maaf, kapasiti Dine In bagi tarikh [${dateInput}] jam [${timeInput}] telah penuh / melebihi had. Slot waktu ini mengehadkan baki tempat duduk sehingga maksimum 88 pax sahaja. Sila pilih masa yang lain atau tukar jenis order kepada Take Away.`;
+                warningNotice.classList.remove('hidden');
+                submitBtn.disabled = true;
+                submitBtn.classList.add('opacity-40', 'cursor-not-allowed');
+            } else {
+                warningNotice.classList.add('hidden');
+                const selectedDate = new Date(dateInput);
+                if (selectedDate.getDay() !== 1) {
+                    submitBtn.disabled = false;
+                    submitBtn.classList.remove('opacity-40', 'cursor-not-allowed');
+                }
+            }
+        }
+
         function closePizzaModal() {
             document.getElementById('pizza-size-modal').classList.add('hidden');
             currentlySelectedPizzaName = "";
@@ -1370,6 +1441,7 @@
             const floatingCartCount = document.getElementById('floating-cart-count');
             
             if (totalQty > 0) {
+                floatingCart.removeProperty ? floatingCart.style.removeProperty('display') : floatingCart.style.display = '';
                 floatingCart.classList.remove('scale-0', 'opacity-0', 'pointer-events-none');
                 floatingCartCount.innerText = totalQty;
                 document.getElementById('cart-review-section').classList.remove('hidden');
@@ -1414,8 +1486,12 @@
             updateCartUIState();
         }
 
+        // KEMASKINI FUNGSI: BUTANG TROLI AKAN MEMBAWA BALIK PENGGUNA KE HALAMAN HOME DARI MANA-MANA HALAMAN LAIN
         function scrollToCartReview() {
-            document.getElementById('cart-review-section').scrollIntoView({ behavior: 'smooth' });
+            showSPASection('home-page');
+            setTimeout(() => {
+                document.getElementById('cart-review-section').scrollIntoView({ behavior: 'smooth' });
+            }, 150);
         }
 
         function showBookingForm() {
@@ -1457,7 +1533,7 @@
             document.getElementById('summary-name').innerText = name;
             document.getElementById('summary-phone').innerText = phone;
             document.getElementById('summary-datetime').innerText = `${date} pada jam ${time}`;
-            document.getElementById('summary-pax').innerText = pax;
+            document.getElementById('summary-pax').innerText = pax ? `${pax} Pax` : "N/A (Take Away)";
             document.getElementById('summary-package').innerText = pkg;
 
             let foodListText = "";
@@ -1466,7 +1542,7 @@
             });
             const totalCost = userCart.reduce((sum, item) => sum + (item.price * item.qty), 0);
 
-            const message = `Halo Qulai Pizza! Saya ingin membuat Pesanan Makanan Online.%0A%0A*BUTIRAN PESANAN:*%0A----------------------%0A👤 *Nama:* ${encodeURIComponent(name)}%0A📞 *Telefon:* ${encodeURIComponent(phone)}%0A📅 *Tarikh:* ${encodeURIComponent(date)}%0A🕒 *Masa:* ${encodeURIComponent(time)}%0A👥 *Bilangan:* ${encodeURIComponent(pax)} Orang%0A📦 *Pilihan Order:* ${encodeURIComponent(pkg)}%0A📝 *Catatan:* ${encodeURIComponent(note || 'Tiada catatan tambahan.')}%0A%0A*SENARAI PESANAN MAKANAN:*%0A----------------------%0A${foodListText}%0A💰 *JUMLAH KESELURUHAN:* *RM ${totalCost.toFixed(2)}*%0A----------------------%0A%0AMohon maklumbalas pengesahan daripada pihak anda kelak. Terima kasih!`;
+            const message = `Halo Qulai Pizza! Saya ingin membuat Pesanan Makanan Online.%0A%0A*BUTIRAN PESANAN:*%0A----------------------%0A👤 *Nama:* ${encodeURIComponent(name)}%0A📞 *Telefon:* ${encodeURIComponent(phone)}%0A📅 *Tarikh:* ${encodeURIComponent(date)}%0A🕒 *Masa:* ${encodeURIComponent(time)}%0A👥 *Bilangan:* ${encodeURIComponent(pax ? `${pax} Orang` : 'N/A (Take Away)')}%0A📦 *Pilihan Order:* ${encodeURIComponent(pkg)}%0A📝 *Catatan:* ${encodeURIComponent(note || 'Tiada catatan tambahan.')}%0A%0A*SENARAI PESANAN MAKANAN:*%0A----------------------%0A${foodListText}%0A💰 *JUMLAH KESELURUHAN:* *RM ${totalCost.toFixed(2)}*%0A----------------------%0A%0AMohon maklumbalas pengesahan daripada pihak anda kelak. Terima kasih!`;
             
             const waLink = `https://api.whatsapp.com/send?phone=60106602847&text=${message}`;
             document.getElementById('whatsapp-trigger-btn').href = waLink;
@@ -1478,7 +1554,6 @@
             document.getElementById('success-modal').classList.add('hidden');
         }
 
-        // LOGIK BARU: MENYUNTIK VALUE CAPTION DI MODAL BESAR TEPAT SEPERTI TEXT HOVER DI SETIAP KAD GAMBAR
         function openGalleryModal(title, description, imageUrl) {
             document.getElementById('modal-title').innerText = title;
             document.getElementById('modal-desc').innerText = description;
@@ -1495,7 +1570,6 @@
             document.getElementById('gallery-modal').classList.add('hidden');
         }
 
-        // Klik Luar Gambar Mengembalikan Semula Halaman Asal (Tutup Lightbox Modal)
         function handleGalleryModalClick(event) {
             const modalImageWrapper = document.getElementById('modal-image-wrapper');
             const modalTextWrapper = document.getElementById('modal-text-wrapper');
