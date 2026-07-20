@@ -10,8 +10,12 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
     <script>
         tailwind.config = {
+            darkMode: 'class',
             theme: {
                 extend: {
                     colors: {
@@ -20,8 +24,13 @@
                         accent: '#FFC247',
                         darkRed: '#7A1C12',
                         wood: '#6E3B22',
-                        neutralBg: '#F5F5F5',
-                        neutralDark: '#1F1F1F'
+                        neutralBg: '#F8FAFC',
+                        neutralDark: '#0F172A',
+                        // Admin Dashboard SaaS Light Palette
+                        adminBg: '#F1F5F9',
+                        adminCard: '#FFFFFF',
+                        adminBorder: '#E2E8F0',
+                        adminText: '#0F172A'
                     },
                     borderRadius: {
                         'btn': '14px',
@@ -36,7 +45,6 @@
         }
     </script>
     <style>
-        /* Custom Keyframe Animations & Styles */
         .hover-lift {
             transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s ease;
         }
@@ -44,47 +52,79 @@
             transform: translateY(-8px);
             box-shadow: 0 20px 30px -10px rgba(110, 59, 34, 0.15);
         }
-        .animate-fade {
-            animation: fadeIn 0.8s ease-out;
+        .animate-fade { animation: fadeIn 0.8s ease-out; }
+        .animate-slide-up { animation: slideUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+        .animate-zoom { animation: zoomIn 0.8s ease-out; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes slideUp { from { transform: translateY(30px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+        @keyframes zoomIn { from { transform: scale(0.95); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+        
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #F5F5F5; }
+        ::-webkit-scrollbar-thumb { background: #A52A1A; border-radius: 4px; }
+        
+        .wood-gradient { background: linear-gradient(135deg, #7A1C12 0%, #6E3B22 100%); }
+
+        .saas-card {
+            background: #FFFFFF;
+            border: 1px solid #E2E8F0;
+            box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.05), 0 1px 2px 0 rgba(0, 0, 0, 0.03);
         }
-        .animate-slide-up {
-            animation: slideUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-        }
-        .animate-zoom {
-            animation: zoomIn 0.8s ease-out;
-        }
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-        @keyframes slideUp {
-            from { transform: translateY(30px); opacity: 0; }
-            to { transform: translateY(0); opacity: 1; }
-        }
-        @keyframes zoomIn {
-            from { transform: scale(0.95); opacity: 0; }
-            to { transform: scale(1); opacity: 1; }
-        }
-        /* Custom Scrollbar */
-        ::-webkit-scrollbar {
-            width: 8px;
-        }
-        ::-webkit-scrollbar-track {
-            background: #F5F5F5;
-        }
-        ::-webkit-scrollbar-thumb {
-            background: #A52A1A;
-            border-radius: 4px;
-        }
-        /* Wood textured decorative overlays */
-        .wood-gradient {
-            background: linear-gradient(135deg, #7A1C12 0%, #6E3B22 100%);
+
+        /* PEMBAIKAN PERATURAN MEDIA PRINT DUA MOD (LAPORAN VS RESIT INDIVIDU) */
+        @media print {
+            body * { visibility: hidden !important; }
+            .no-print { display: none !important; }
+
+            /* CETAKAN RESIT INDIVIDU */
+            body.is-printing-receipt #receipt-printable-area, 
+            body.is-printing-receipt #receipt-printable-area * { 
+                visibility: visible !important; 
+            }
+            body.is-printing-receipt #receipt-printable-area { 
+                display: block !important;
+                position: absolute !important; 
+                left: 0 !important; 
+                top: 0 !important; 
+                width: 100% !important; 
+                color: #000 !important; 
+                background: #fff !important; 
+            }
+            body.is-printing-receipt #printable-area { 
+                display: none !important; 
+            }
+
+            /* CETAKAN LAPORAN SENARAI BESAR */
+            body:not(.is-printing-receipt) #printable-area, 
+            body:not(.is-printing-receipt) #printable-area * { 
+                visibility: visible !important; 
+            }
+            body:not(.is-printing-receipt) #printable-area { 
+                position: absolute !important; 
+                left: 0 !important; 
+                top: 0 !important; 
+                width: 100% !important; 
+                color: #000 !important; 
+                background: #fff !important; 
+            }
+            body:not(.is-printing-receipt) #receipt-printable-area { 
+                display: none !important; 
+            }
         }
     </style>
 </head>
-<body class="bg-[#FFFFFF] text-neutralDark font-sans selection:bg-accent selection:text-darkRed">
+<body class="bg-[#FFFFFF] text-neutralDark font-sans selection:bg-accent selection:text-darkRed transition-colors duration-300">
 
-<!-- HEADER / NAVIGATION BAR (Konsisten gaya SPA untuk penukaran halaman) -->
+    <!-- TOAST NOTIFICATION CONTAINER -->
+    <div id="toast-container" class="fixed top-5 right-5 z-[100] flex flex-col gap-3 pointer-events-none"></div>
+
+    <!-- LOADING SPINNER (CENTERED PERFECTLY) -->
+    <div id="global-spinner" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-[90] hidden flex flex-col items-center justify-center text-white">
+        <div class="w-14 h-14 border-4 border-accent border-t-transparent rounded-full animate-spin"></div>
+        <p class="mt-4 font-poppins font-semibold text-sm tracking-wide">Memproses data...</p>
+    </div>
+
+    <!-- HEADER / NAVIGATION BAR -->
     <header class="sticky top-0 z-50 bg-white/95 backdrop-blur-md border-b border-gray-100 transition-all duration-300">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex items-center justify-between h-20">
@@ -99,7 +139,7 @@
                     </div>
                 </a>
 
-<!-- Desktop Navigation Links (Berfungsi menukar halaman SPA) -->
+                <!-- Desktop Navigation Links -->
                 <nav class="hidden md:flex space-x-8 font-medium">
                     <a href="javascript:void(0)" onclick="showSPASection('home-page')" class="nav-link text-primary hover:text-primary transition-colors py-2 font-bold" id="nav-home-page">Home</a>
                     <a href="javascript:void(0)" onclick="showSPASection('about-page')" class="nav-link text-neutralDark hover:text-primary transition-colors py-2" id="nav-about-page">Tentang Kami</a>
@@ -108,16 +148,20 @@
                     <a href="javascript:void(0)" onclick="showSPASection('contact-page')" class="nav-link text-neutralDark hover:text-primary transition-colors py-2" id="nav-contact-page">Hubungi</a>
                 </nav>
 
-<!-- CTA Button -->
-                <div class="hidden md:block">
+                <!-- Action Buttons: Admin & CTA -->
+                <div class="hidden md:flex items-center gap-3">
+                    <button onclick="toggleAdminView()" class="bg-slate-900 hover:bg-black text-white text-xs font-semibold px-4 py-3 rounded-btn transition-all shadow-md flex items-center gap-2">
+                        <span>🔒 Admin Dashboard</span>
+                    </button>
                     <a href="javascript:void(0)" onclick="navigateToMenu()" class="bg-primary hover:bg-darkRed text-white font-semibold px-6 py-3 rounded-btn transition-all shadow-md hover:shadow-lg inline-flex items-center gap-2 group transform hover:scale-105 duration-200">
                         <span>Pesan Sekarang</span>
                         <svg class="w-4 h-4 transform group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
                     </a>
                 </div>
 
-<!-- Mobile menu button -->
-                <div class="md:hidden">
+                <!-- Mobile Header Tools -->
+                <div class="md:hidden flex items-center gap-2">
+                    <button onclick="toggleAdminView()" class="text-xs bg-neutralDark text-white px-3 py-2 rounded-btn font-semibold">Admin</button>
                     <button id="mobile-menu-btn" class="text-neutralDark hover:text-primary focus:outline-none p-2" aria-label="Toggle Menu">
                         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path id="menu-icon" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
                     </button>
@@ -125,7 +169,7 @@
             </div>
         </div>
 
-<!-- Mobile Menu (Hidden by default) -->
+        <!-- Mobile Menu -->
         <div id="mobile-menu" class="hidden md:hidden bg-white border-b border-gray-100 transition-all duration-300 ease-in-out">
             <div class="px-4 pt-2 pb-6 space-y-3 font-medium">
                 <a href="javascript:void(0)" onclick="showSPASection('home-page'); toggleMobileMenu()" class="block text-neutralDark hover:text-primary py-2 border-b border-gray-50">Home</a>
@@ -138,7 +182,7 @@
         </div>
     </header>
 
-<!-- ==================== HALAMAN 1: HOME PAGE (HERO, MENU, TROLI & BORANG TEMPAHAN) ==================== -->
+    <!-- ==================== HALAMAN 1: HOME PAGE ==================== -->
     <div id="home-page" class="spa-section block">
         <!-- 1. HERO SECTION -->
         <section class="relative min-h-[90vh] flex items-center justify-center bg-neutralBg py-12 overflow-hidden">
@@ -146,8 +190,7 @@
             <div class="absolute -top-40 -right-40 w-96 h-96 rounded-full bg-accent/20 blur-3xl"></div>
             <div class="absolute -bottom-40 -left-40 w-96 h-96 rounded-full bg-primary/10 blur-3xl"></div>
 
-<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
-                <!-- Text Content -->
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
                 <div class="lg:col-span-7 text-center lg:text-left space-y-6 animate-slide-up">
                     <span class="inline-flex items-center gap-2 bg-primary/10 text-primary font-bold px-4 py-2 rounded-full text-sm">
                         <span class="w-2 h-2 rounded-full bg-secondary animate-ping"></span>
@@ -185,7 +228,7 @@
                     </div>
                 </div>
 
-<!-- Visual Content -->
+                <!-- Visual Content -->
                 <div class="lg:col-span-5 relative w-full animate-zoom">
                     <div class="relative w-full overflow-hidden rounded-card shadow-2xl border-4 border-accent/40 group hover-lift transition-all duration-300">
                         <video autoplay muted loop playsinline class="w-full h-[280px] sm:h-[380px] md:h-[420px] object-cover block">
@@ -194,7 +237,6 @@
                         </video>
                         <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-90 group-hover:opacity-95 transition-opacity duration-300 flex flex-col justify-end p-6">
                             <span class="inline-flex items-center gap-1.5 bg-accent text-darkRed font-extrabold px-3 py-1 rounded-full text-xs self-start mb-2">
-                                <span class="w-2.5 h-2.5 rounded-full bg-primary animate-ping"></span>
                                 PROSES BAKAR LIVE 🔥
                             </span>
                             <h4 class="text-white font-poppins font-bold text-lg leading-tight">Suhu Optimum 450°C</h4>
@@ -205,7 +247,7 @@
             </div>
         </section>
 
-<!-- 2. MENU SECTION -->
+        <!-- 2. MENU SECTION -->
         <section id="menu-section" class="py-24 bg-neutralBg">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="text-center max-w-3xl mx-auto mb-12">
@@ -214,7 +256,7 @@
                     <p class="text-gray-500 mt-4">Pilih makanan kegemaran anda dan kumpulkan pesanan di dalam troli.</p>
                 </div>
 
-<!-- Menu Category Filter Buttons -->
+                <!-- Menu Category Filter Buttons -->
                 <div class="flex flex-wrap justify-center gap-3 mb-12">
                     <button onclick="filterMenu('all')" class="menu-tab-btn active bg-primary text-white font-semibold px-6 py-3 rounded-btn transition-all text-sm shadow-sm" id="tab-all">Semua Menu</button>
                     <button onclick="filterMenu('pizza')" class="menu-tab-btn bg-white hover:bg-gray-100 text-gray-700 font-semibold px-6 py-3 rounded-btn transition-all text-sm" id="tab-pizza">🍕 Pizza Kayu Api</button>
@@ -224,31 +266,24 @@
                     <button onclick="filterMenu('drinks')" class="menu-tab-btn bg-white hover:bg-gray-100 text-gray-700 font-semibold px-6 py-3 rounded-btn transition-all text-sm" id="tab-drinks">🍹 Minuman</button>
                 </div>
 
-<!-- Menu Items Grid -->
-                <div id="menu-items-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                    <!-- Items rendered dynamically via JavaScript -->
-                </div>
+                <!-- Menu Items Grid -->
+                <div id="menu-items-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"></div>
             </div>
         </section>
 
-<!-- 3. REVIEW CART VIEW SECTION (Muncul apabila barang ada di cart) -->
+        <!-- 3. REVIEW CART VIEW SECTION -->
         <section id="cart-review-section" class="py-12 bg-white border-t border-gray-100 hidden">
             <div class="max-w-4xl mx-auto px-4 sm:px-6">
-                <div class="bg-neutralBg rounded-card p-6 sm:p-8 shadow-sm">
+                <div class="bg-neutralBg rounded-card p-6 sm:p-8 shadow-sm border border-gray-200">
                     <h3 class="text-xl font-bold font-poppins text-neutralDark mb-4 flex items-center gap-2">
                         <span>🛒</span> Semak Senarai Pesanan Anda
                     </h3>
-
-<div id="cart-items-list" class="space-y-3 divide-y divide-gray-200/60">
-                        <!-- Rendered via JS -->
-                    </div>
-
-<div class="pt-6 mt-6 border-t border-gray-300 flex justify-between items-center">
+                    <div id="cart-items-list" class="space-y-3 divide-y divide-gray-200/60"></div>
+                    <div class="pt-6 mt-6 border-t border-gray-300 flex justify-between items-center">
                         <span class="text-gray-600 font-medium">Jumlah Keseluruhan Hidangan:</span>
                         <span id="cart-total-price" class="text-2xl font-extrabold text-primary font-poppins">RM 0.00</span>
                     </div>
-
-<div class="mt-6 flex justify-end">
+                    <div class="mt-6 flex justify-end">
                         <button onclick="showBookingForm()" id="checkout-btn" class="bg-primary hover:bg-darkRed text-white font-bold px-8 py-3.5 rounded-btn shadow-md hover:shadow-lg transition-all flex items-center gap-2 text-sm">
                             <span>Sahkan Pesanan & Isi Butiran Pilihan Pesanan →</span>
                         </button>
@@ -257,17 +292,16 @@
             </div>
         </section>
 
-<!-- 4. ONLINE BOOKING SECTION (Hidden secara lalai, muncul bila klik checkout di cart) -->
+        <!-- 4. ONLINE BOOKING SECTION -->
         <section id="booking-section" class="py-24 bg-white border-t border-gray-50 hidden animate-fade">
             <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
                 <div class="bg-neutralBg rounded-card shadow-xl overflow-hidden border border-gray-100 grid grid-cols-1 lg:grid-cols-12">
-                    <!-- Left Details Banner -->
                     <div class="lg:col-span-5 wood-gradient text-white p-8 sm:p-12 flex flex-col justify-between">
                         <div>
                             <span class="text-accent font-semibold tracking-wider uppercase text-xs">Sistem Tempahan Pintar</span>
                             <h3 class="text-3xl font-extrabold font-poppins mt-2 mb-6">Lengkapkan Maklumat Pesanan</h3>
                             <p class="text-orange-100 text-sm leading-relaxed mb-6">
-                                Sila isi butiran lengkap kedatangan atau pengambilan makanan anda. Pilihan jenis order dan senarai makanan di dalam troli akan dihantar terus ke WhatsApp kami untuk pengesahan segera!
+                                Sila isi butiran lengkap kedatangan atau pengambilan makanan anda. Pilihan jenis order dan senarai makanan di dalam troli akan dihantar terus ke pangkalan data dan WhatsApp kami!
                             </p>
                         </div>
                         <div class="space-y-4">
@@ -286,26 +320,25 @@
                         </div>
                     </div>
 
-<!-- Right Form Input -->
                     <div class="lg:col-span-7 p-8 sm:p-12 bg-white">
                         <form id="booking-form" onsubmit="handleFormSubmit(event)" class="space-y-5">
                             <div>
                                 <label for="pax-name" class="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-2">Nama Penuh</label>
-                                <input type="text" id="pax-name" required class="w-full px-4 py-3 rounded-btn border border-gray-200 focus:ring-2 focus:ring-primary focus:border-primary outline-none transition-all text-sm" placeholder="Masukkan nama penuh anda">
+                                <input type="text" id="pax-name" required class="w-full px-4 py-3 rounded-btn border border-gray-200 focus:ring-2 focus:ring-primary outline-none transition-all text-sm" placeholder="Masukkan nama penuh anda">
                             </div>
                             <div>
                                 <label for="pax-phone" class="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-2">Nombor Telefon (WhatsApp)</label>
-                                <input type="tel" id="pax-phone" required class="w-full px-4 py-3 rounded-btn border border-gray-200 focus:ring-2 focus:ring-primary focus:border-primary outline-none transition-all text-sm" placeholder="Contoh: 0123456789">
+                                <input type="tel" id="pax-phone" required class="w-full px-4 py-3 rounded-btn border border-gray-200 focus:ring-2 focus:ring-primary outline-none transition-all text-sm" placeholder="Contoh: 0123456789">
                             </div>
                             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                                 <div>
                                     <label for="pax-date" class="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-2">Tarikh Pesanan</label>
-                                    <input type="date" id="pax-date" required onchange="checkMonday(this); checkDineInCapacity();" class="w-full px-4 py-3 rounded-btn border border-gray-200 focus:ring-2 focus:ring-primary focus:border-primary outline-none transition-all text-sm">
+                                    <input type="date" id="pax-date" required onchange="checkMonday(this); checkDineInCapacity();" class="w-full px-4 py-3 rounded-btn border border-gray-200 focus:ring-2 focus:ring-primary outline-none transition-all text-sm">
                                     <span id="monday-warn" class="text-xs text-red-500 font-medium mt-1 hidden">Maaf, kami tutup pada hari Isnin!</span>
                                 </div>
                                 <div>
                                     <label for="pax-time" class="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-2">Masa</label>
-                                    <select id="pax-time" required onchange="checkDineInCapacity();" class="w-full px-4 py-3 rounded-btn border border-gray-200 focus:ring-2 focus:ring-primary focus:border-primary outline-none transition-all text-sm">
+                                    <select id="pax-time" required onchange="checkDineInCapacity();" class="w-full px-4 py-3 rounded-btn border border-gray-200 focus:ring-2 focus:ring-primary outline-none transition-all text-sm">
                                         <option value="" disabled selected>Pilih waktu</option>
                                         <option value="14:00">02:00 PM</option>
                                         <option value="15:00">03:00 PM</option>
@@ -322,23 +355,22 @@
                             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                                 <div>
                                     <label for="booking-package" class="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-2">Pilihan Jenis Order</label>
-                                    <select id="booking-package" onchange="handleOrderTypeChange(this); checkDineInCapacity();" required class="w-full px-4 py-3 rounded-btn border border-gray-200 focus:ring-2 focus:ring-primary focus:border-primary outline-none transition-all text-sm">
+                                    <select id="booking-package" onchange="handleOrderTypeChange(this); checkDineInCapacity();" required class="w-full px-4 py-3 rounded-btn border border-gray-200 focus:ring-2 focus:ring-primary outline-none transition-all text-sm">
                                         <option value="Dine In" selected>Makan di Kedai (Dine In)</option>
                                         <option value="Take Away">Bawa Pulang (Take Away)</option>
                                     </select>
                                 </div>
                                 <div>
                                     <label id="pax-count-label" for="pax-count" class="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-2">Bilangan Orang (Pax)</label>
-                                    <input type="number" id="pax-count" min="1" max="88" required oninput="checkDineInCapacity();" class="w-full px-4 py-3 rounded-btn border border-gray-200 focus:ring-2 focus:ring-primary focus:border-primary outline-none transition-all text-sm disabled:bg-gray-100 disabled:text-gray-400 disabled:cursor-not-allowed" placeholder="Bilangan tetamu">
+                                    <input type="number" id="pax-count" min="1" max="88" required oninput="checkDineInCapacity();" class="w-full px-4 py-3 rounded-btn border border-gray-200 focus:ring-2 focus:ring-primary outline-none transition-all text-sm disabled:bg-gray-100 disabled:text-gray-400" placeholder="Bilangan tetamu">
                                 </div>
                             </div>
-                            <!-- Notis Had Kapasiti Terlampau (88 Pax) -->
                             <div id="capacity-warning-notice" class="p-3 bg-red-50 text-red-700 border border-red-200 rounded-btn text-xs font-medium hidden">
                                 ⚠️ Maaf, kapasiti Dine In bagi jam dan tarikh berikut telah penuh. Slot ini mengehadkan maksimum 88 pax sejam. Sila pilih masa yang lain atau tukar jenis order kepada Take Away.
                             </div>
                             <div>
                                 <label for="pax-note" class="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-2">Catatan Tambahan (Optional)</label>
-                                <textarea id="pax-note" rows="3" class="w-full px-4 py-3 rounded-btn border border-gray-200 focus:ring-2 focus:ring-primary focus:border-primary outline-none transition-all text-sm" placeholder="Tulis permintaan khas seperti alahan, kerusi bayi dsb."></textarea>
+                                <textarea id="pax-note" rows="3" class="w-full px-4 py-3 rounded-btn border border-gray-200 focus:ring-2 focus:ring-primary outline-none transition-all text-sm" placeholder="Tulis permintaan khas seperti alahan, kerusi bayi dsb."></textarea>
                             </div>
                             <button type="submit" id="submit-btn" class="w-full bg-primary hover:bg-darkRed text-white font-bold py-4 px-6 rounded-btn transition-colors flex items-center justify-center gap-2 shadow-md disabled:opacity-40 disabled:cursor-not-allowed">
                                 <span>Hantar Keseluruhan Pesanan & Pilihan Order</span>
@@ -352,7 +384,7 @@
             </div>
         </section>
 
-<!-- FOOTER UNTUK HOME PAGE -->
+        <!-- FOOTER HOME -->
         <footer class="bg-neutralDark text-white pt-16 pb-8 border-t border-gray-800">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 md:grid-cols-4 gap-12 mb-12">
                 <div class="space-y-4">
@@ -397,7 +429,7 @@
         </footer>
     </div>
 
-<!-- ==================== SECTION HALAMAN 2: TENTANG KAMI ==================== -->
+    <!-- ==================== HALAMAN 2: TENTANG KAMI ==================== -->
     <div id="about-page" class="spa-section hidden animate-fade">
         <section class="py-24 bg-white min-h-[75vh]">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -460,7 +492,6 @@
             </div>
         </section>
 
-<!-- FOOTER UNTUK TENTANG KAMI -->
         <footer class="bg-neutralDark text-white pt-16 pb-8 border-t border-gray-800">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 md:grid-cols-4 gap-12 mb-12">
                 <div class="space-y-4">
@@ -505,7 +536,7 @@
         </footer>
     </div>
 
-<!-- ==================== SECTION HALAMAN 3: PAKEJ AKTIVITI ==================== -->
+    <!-- ==================== HALAMAN 3: PAKEJ AKTIVITI ==================== -->
     <div id="packages-page" class="spa-section hidden animate-fade">
         <section class="py-24 bg-white min-h-[75vh]">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -515,8 +546,8 @@
                     <p class="text-gray-500 mt-4">Cipta memori indah bersama keluarga dan rakan-rakan melalui aktiviti kulinari kami.</p>
                 </div>
 
-<div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                    <!-- Package 1: Fun Workshop -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <!-- Package 1 -->
                     <div class="bg-neutralBg rounded-card overflow-hidden shadow-sm hover:shadow-lg border border-gray-100 flex flex-col justify-between hover-lift">
                         <div class="p-8">
                             <div class="text-accent text-3xl mb-4">👶</div>
@@ -547,13 +578,13 @@
                                 <span class="text-xs text-gray-400 block">Harga</span>
                                 <span class="text-xl font-bold text-primary font-poppins">RM 25.00</span> <span class="text-xs text-gray-500">/ kid</span>
                             </div>
-                            <a href="https://api.whatsapp.com/send?phone=60106602847&text=Halo%20Qulai%20Pizza!%20Saya%20berminat%20untuk%20menempah%20pakej%20*Woodfired%20Pizza-Making%20Fun%20Workshop*%20(RM25/kid).%20Boleh%20berikan%20maklumat%20kekosongan%20slot?" target="_blank" rel="noopener" class="w-full sm:w-auto text-center bg-[#25D366] hover:bg-[#20ba5a] text-white text-xs font-bold px-4 py-3 rounded-btn transition-colors shadow-sm inline-flex items-center justify-center gap-1">
+                            <a href="https://api.whatsapp.com/send?phone=60106602847&text=Halo%20Qulai%20Pizza!%20Saya%20berminat%20untuk%20menempah%20pakej%20*Woodfired%20Pizza-Making%20Fun%20Workshop*%20(RM25/kid)." target="_blank" rel="noopener" class="w-full sm:w-auto text-center bg-[#25D366] hover:bg-[#20ba5a] text-white text-xs font-bold px-4 py-3 rounded-btn transition-colors shadow-sm inline-flex items-center justify-center gap-1">
                                 <span>🟢 Book via WhatsApp</span>
                             </a>
                         </div>
                     </div>
 
-<!-- Package 2: Family Workshop -->
+                    <!-- Package 2 -->
                     <div class="bg-neutralBg rounded-card overflow-hidden shadow-sm hover:shadow-lg border border-gray-100 flex flex-col justify-between hover-lift">
                         <div class="p-8">
                             <div class="text-secondary text-3xl mb-4">👪</div>
@@ -580,13 +611,13 @@
                                 <span class="text-xs text-gray-400 block">Harga Kombo (2 Adults + 2 Kids)</span>
                                 <span class="text-xl font-bold text-primary font-poppins">RM 89.00</span> <span class="text-xs text-gray-500">/ family</span>
                             </div>
-                            <a href="https://api.whatsapp.com/send?phone=60106602847&text=Halo%20Qulai%20Pizza!%20Saya%20berminat%20untuk%20menempah%20pakej%20*Woodfired%20Family%20Pizza%20Workshop*%20(RM89/family).%20Boleh%20berikan%20maklumat%20kekosongan%20slot?" target="_blank" rel="noopener" class="w-full sm:w-auto text-center bg-[#25D366] hover:bg-[#20ba5a] text-white text-xs font-bold px-4 py-3 rounded-btn transition-colors shadow-sm inline-flex items-center justify-center gap-1">
+                            <a href="https://api.whatsapp.com/send?phone=60106602847&text=Halo%20Qulai%20Pizza!%20Saya%20berminat%20untuk%20menempah%20pakej%20*Woodfired%20Family%20Pizza%20Workshop*%20(RM89/family)." target="_blank" rel="noopener" class="w-full sm:w-auto text-center bg-[#25D366] hover:bg-[#20ba5a] text-white text-xs font-bold px-4 py-3 rounded-btn transition-colors shadow-sm inline-flex items-center justify-center gap-1">
                                 <span>🟢 Book via WhatsApp</span>
                             </a>
                         </div>
                     </div>
 
-<!-- Package 3: Birthday Workshop -->
+                    <!-- Package 3 -->
                     <div class="bg-neutralBg rounded-card overflow-hidden shadow-sm hover:shadow-lg border border-gray-100 flex flex-col justify-between hover-lift">
                         <div class="p-8">
                             <div class="text-primary text-3xl mb-4">🎉</div>
@@ -615,7 +646,7 @@
                                 <span class="text-xs text-gray-400 block">Harga</span>
                                 <span class="text-xl font-bold text-primary font-poppins">RM 35.00</span> <span class="text-xs text-gray-500">/ pax</span>
                             </div>
-                            <a href="https://api.whatsapp.com/send?phone=60106602847&text=Halo%20Qulai%20Pizza!%20Saya%20berminat%20untuk%20menempah%20pakej%20*Woodfired%20Birthday%20Pizza%20Workshop*%20(RM35/pax).%20Boleh%20berikan%20maklumat%20kekosongan%20slot?" target="_blank" rel="noopener" class="w-full sm:w-auto text-center bg-[#25D366] hover:bg-[#20ba5a] text-white text-xs font-bold px-4 py-3 rounded-btn transition-colors shadow-sm inline-flex items-center justify-center gap-1">
+                            <a href="https://api.whatsapp.com/send?phone=60106602847&text=Halo%20Qulai%20Pizza!%20Saya%20berminat%20untuk%20menempah%20pakej%20*Woodfired%20Birthday%20Pizza%20Workshop*%20(RM35/pax)." target="_blank" rel="noopener" class="w-full sm:w-auto text-center bg-[#25D366] hover:bg-[#20ba5a] text-white text-xs font-bold px-4 py-3 rounded-btn transition-colors shadow-sm inline-flex items-center justify-center gap-1">
                                 <span>🟢 Book via WhatsApp</span>
                             </a>
                         </div>
@@ -624,7 +655,6 @@
             </div>
         </section>
 
-<!-- FOOTER UNTUK PAKEJ AKTIVITI -->
         <footer class="bg-neutralDark text-white pt-16 pb-8 border-t border-gray-800">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 md:grid-cols-4 gap-12 mb-12">
                 <div class="space-y-4">
@@ -669,7 +699,7 @@
         </footer>
     </div>
 
-<!-- ==================== SECTION HALAMAN 4: GALERI (GAMBAR DIKEMASKINI DENGAN POPUP BESAR) ==================== -->
+    <!-- ==================== HALAMAN 4: GALERI ==================== -->
     <div id="gallery-page" class="spa-section hidden animate-fade">
         <section class="py-24 bg-white min-h-[75vh]">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -679,114 +709,50 @@
                     <p class="text-gray-500 mt-4">Kompilasi suasana restoran kami, oven bata tradisi, serta aktiviti interaktif kami. Klik gambar untuk paparan besar.</p>
                 </div>
 
-<!-- Sub-Section 1: Oven Batu Bata Tradisional -->
                 <div class="mb-16">
-                    <h3 class="text-xl font-bold font-poppins text-neutralDark mb-6 flex items-center gap-2">
-                        <span>🔥</span> Oven Bata Tradisional
-                    </h3>
+                    <h3 class="text-xl font-bold font-poppins text-neutralDark mb-6 flex items-center gap-2"><span>🔥</span> Oven Bata Tradisional</h3>
                     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                         <div class="group relative rounded-card overflow-hidden shadow-sm aspect-video bg-gray-100 cursor-pointer hover-lift" onclick="openGalleryModal('Oven Bata Tradisional', 'Aroma kayu api asli yang membangkitkan selera.', 'https://arleta.site/interactivelink/118/gallery2.jpeg')">
                             <img src="https://arleta.site/interactivelink/118/gallery2.jpeg" alt="Oven Bata Tradisional" class="w-full h-full object-cover">
-                            <div class="absolute inset-0 bg-gradient-to-t from-darkRed/90 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-4">
-                                <p class="text-white text-xs">Aroma kayu api asli yang membangkitkan selera.</p>
-                            </div>
                         </div>
                         <div class="group relative rounded-card overflow-hidden shadow-sm aspect-video bg-gray-100 cursor-pointer hover-lift" onclick="openGalleryModal('Oven Bata Tradisional', 'Ketuhar bata binaan tangan khas mengekalkan keaslian rasa.', 'https://arleta.site/interactivelink/118/gallery7.jpeg')">
                             <img src="https://arleta.site/interactivelink/118/gallery7.jpeg" alt="Oven Bata Tradisional" class="w-full h-full object-cover">
-                            <div class="absolute inset-0 bg-gradient-to-t from-darkRed/90 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-4">
-                                <p class="text-white text-xs">Ketuhar bata binaan tangan khas mengekalkan keaslian rasa.</p>
-                            </div>
                         </div>
                     </div>
                 </div>
 
-<!-- Sub-Section 2: Suasana Restoran Rustic -->
                 <div class="mb-16">
-                    <h3 class="text-xl font-bold font-poppins text-neutralDark mb-6 flex items-center gap-2">
-                        <span>🏡</span> Suasana Restoran Rustic
-                    </h3>
+                    <h3 class="text-xl font-bold font-poppins text-neutralDark mb-6 flex items-center gap-2"><span>🏡</span> Suasana Restoran Rustic</h3>
                     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                         <div class="group relative rounded-card overflow-hidden shadow-sm aspect-video bg-gray-100 cursor-pointer hover-lift" onclick="openGalleryModal('Suasana Restoran Rustic', 'Papan tanda ke Qulai Pizza.', 'https://arleta.site/interactivelink/118/gallery1.jpeg')">
                             <img src="https://arleta.site/interactivelink/118/gallery1.jpeg" alt="Suasana Restoran" class="w-full h-full object-cover">
-                            <div class="absolute inset-0 bg-gradient-to-t from-darkRed/90 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-4">
-                                <p class="text-white text-xs">Papan tanda ke Qulai Pizza.</p>
-                            </div>
                         </div>
                         <div class="group relative rounded-card overflow-hidden shadow-sm aspect-video bg-gray-100 cursor-pointer hover-lift" onclick="openGalleryModal('Suasana Restoran Rustic', 'Masih mengekalkan alatan tradisional seperti cerek antik.', 'https://arleta.site/interactivelink/118/gallery3.jpeg')">
                             <img src="https://arleta.site/interactivelink/118/gallery3.jpeg" alt="Suasana Restoran" class="w-full h-full object-cover">
-                            <div class="absolute inset-0 bg-gradient-to-t from-darkRed/90 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-4">
-                                <p class="text-white text-xs">Masih mengekalkan alatan tradisional seperti cerek antik.</p>
-                            </div>
                         </div>
                         <div class="group relative rounded-card overflow-hidden shadow-sm aspect-video bg-gray-100 cursor-pointer hover-lift" onclick="openGalleryModal('Suasana Restoran Rustic', 'Tempat makan yang tenang dan santai.', 'https://arleta.site/interactivelink/118/gallery4.jpeg')">
                             <img src="https://arleta.site/interactivelink/118/gallery4.jpeg" alt="Suasana Restoran" class="w-full h-full object-cover">
-                            <div class="absolute inset-0 bg-gradient-to-t from-darkRed/90 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-4">
-                                <p class="text-white text-xs">Tempat makan yang tenang dan santai.</p>
-                            </div>
-                        </div>
-                        <div class="group relative rounded-card overflow-hidden shadow-sm aspect-video bg-gray-100 cursor-pointer hover-lift" onclick="openGalleryModal('Suasana Restoran Rustic', 'Sejarah Qulai Pizza bersama pengasasnya.', 'https://arleta.site/interactivelink/118/gallery5.jpeg')">
-                            <img src="https://arleta.site/interactivelink/118/gallery5.jpeg" alt="Suasana Restoran" class="w-full h-full object-cover">
-                            <div class="absolute inset-0 bg-gradient-to-t from-darkRed/90 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-4">
-                                <p class="text-white text-xs">Sejarah Qulai Pizza bersama pengasasnya.</p>
-                            </div>
-                        </div>
-                        <div class="group relative rounded-card overflow-hidden shadow-sm aspect-video bg-gray-100 cursor-pointer hover-lift" onclick="openGalleryModal('Suasana Restoran Rustic', 'Ruang gambar sijil dan anugerah oleh Qulai Pizza.', 'https://arleta.site/interactivelink/118/gallery6.jpeg')">
-                            <img src="https://arleta.site/interactivelink/118/gallery6.jpeg" alt="Suasana Restoran" class="w-full h-full object-cover">
-                            <div class="absolute inset-0 bg-gradient-to-t from-darkRed/90 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-4">
-                                <p class="text-white text-xs">Ruang gambar sijil dan anugerah oleh Qulai Pizza.</p>
-                            </div>
                         </div>
                     </div>
                 </div>
 
-<!-- Sub-Section 3: Bengkel & Aktiviti DIY -->
                 <div>
-                    <h3 class="text-xl font-bold font-poppins text-neutralDark mb-6 flex items-center gap-2">
-                        <span>👨‍🍳</span> Bengkel & Aktiviti DIY
-                    </h3>
+                    <h3 class="text-xl font-bold font-poppins text-neutralDark mb-6 flex items-center gap-2"><span>👨‍🍳</span> Bengkel & Aktiviti DIY</h3>
                     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                         <div class="group relative rounded-card overflow-hidden shadow-sm aspect-video bg-gray-100 cursor-pointer hover-lift" onclick="openGalleryModal('Aktiviti DIY Pizza', 'Sambutan hari lahir yang unik, gamat dan penuh memori.', 'https://arleta.site/interactivelink/118/birthday1.jpeg')">
                             <img src="https://arleta.site/interactivelink/118/birthday1.jpeg" alt="Aktiviti DIY" class="w-full h-full object-cover">
-                            <div class="absolute inset-0 bg-gradient-to-t from-darkRed/90 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-4">
-                                <p class="text-white text-xs">Sambutan hari lahir yang unik, gamat dan penuh memori.</p>
-                            </div>
                         </div>
                         <div class="group relative rounded-card overflow-hidden shadow-sm aspect-video bg-gray-100 cursor-pointer hover-lift" onclick="openGalleryModal('Aktiviti DIY Pizza', 'Cipta keyakinan diri kanak-kanak menerusi seni pembuatan makanan.', 'https://arleta.site/interactivelink/118/workshop1.jpeg')">
                             <img src="https://arleta.site/interactivelink/118/workshop1.jpeg" alt="Aktiviti DIY" class="w-full h-full object-cover">
-                            <div class="absolute inset-0 bg-gradient-to-t from-darkRed/90 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-4">
-                                <p class="text-white text-xs">Cipta keyakinan diri kanak-kanak menerusi seni pembuatan makanan.</p>
-                            </div>
                         </div>
                         <div class="group relative rounded-card overflow-hidden shadow-sm aspect-video bg-gray-100 cursor-pointer hover-lift" onclick="openGalleryModal('Aktiviti DIY Pizza', 'Sesi bimbingan mesra langkah demi langkah daripada Chef kami.', 'https://arleta.site/interactivelink/118/workshop2.jpeg')">
                             <img src="https://arleta.site/interactivelink/118/workshop2.jpeg" alt="Aktiviti DIY" class="w-full h-full object-cover">
-                            <div class="absolute inset-0 bg-gradient-to-t from-darkRed/90 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-4">
-                                <p class="text-white text-xs">Sesi bimbingan mesra langkah demi langkah daripada Chef kami.</p>
-                            </div>
-                        </div>
-                        <div class="group relative rounded-card overflow-hidden shadow-sm aspect-video bg-gray-100 cursor-pointer hover-lift" onclick="openGalleryModal('Aktiviti DIY Pizza', 'Pengalaman kulinari interaktif menguli doh pizza yang segar.', 'https://arleta.site/interactivelink/118/workshop3.jpeg')">
-                            <img src="https://arleta.site/interactivelink/118/workshop3.jpeg" alt="Aktiviti DIY" class="w-full h-full object-cover">
-                            <div class="absolute inset-0 bg-gradient-to-t from-darkRed/90 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-4">
-                                <p class="text-white text-xs">Pengalaman kulinari interaktif menguli doh pizza yang segar.</p>
-                            </div>
-                        </div>
-                        <div class="group relative rounded-card overflow-hidden shadow-sm aspect-video bg-gray-100 cursor-pointer hover-lift" onclick="openGalleryModal('Aktiviti DIY Pizza', 'Aktiviti hujung minggu yang bermanfaat bersama insan tersayang.', 'https://arleta.site/interactivelink/118/workshop4.jpeg')">
-                            <img src="https://arleta.site/interactivelink/118/workshop4.jpeg" alt="Aktiviti DIY" class="w-full h-full object-cover">
-                            <div class="absolute inset-0 bg-gradient-to-t from-darkRed/90 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-4">
-                                <p class="text-white text-xs">Aktiviti hujung minggu yang bermanfaat bersama insan tersayang.</p>
-                            </div>
-                        </div>
-                        <div class="group relative rounded-card overflow-hidden shadow-sm aspect-video bg-gray-100 cursor-pointer hover-lift" onclick="openGalleryModal('Aktiviti DIY Pizza', 'Momen magis membuat pizza sendiri bersama keluarga.', 'https://arleta.site/interactivelink/118/workshop5.jpeg')">
-                            <img src="https://arleta.site/interactivelink/118/workshop5.jpeg" alt="Aktiviti DIY" class="w-full h-full object-cover">
-                            <div class="absolute inset-0 bg-gradient-to-t from-darkRed/90 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-4">
-                                <p class="text-white text-xs">Momen magis membuat pizza sendiri bersama keluarga.</p>
-                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </section>
 
-<!-- FOOTER UNTUK GALERI -->
         <footer class="bg-neutralDark text-white pt-16 pb-8 border-t border-gray-800">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 md:grid-cols-4 gap-12 mb-12">
                 <div class="space-y-4">
@@ -831,7 +797,7 @@
         </footer>
     </div>
 
-<!-- ==================== SECTION HALAMAN 5: HUBUNGI ==================== -->
+    <!-- ==================== HALAMAN 5: HUBUNGI ==================== -->
     <div id="contact-page" class="spa-section hidden animate-fade">
         <section class="py-24 bg-neutralBg relative overflow-hidden min-h-[75vh]">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
@@ -844,46 +810,34 @@
                         </div>
                         <div class="space-y-6">
                             <div class="flex items-start gap-4">
-                                <div class="w-10 h-10 bg-white shadow-sm rounded-btn flex items-center justify-center text-primary shrink-0 mt-1">
-                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
-                                </div>
+                                <div class="w-10 h-10 bg-white shadow-sm rounded-btn flex items-center justify-center text-primary shrink-0 mt-1">📍</div>
                                 <div>
                                     <h4 class="font-bold text-neutralDark font-poppins">Alamat Restoran</h4>
                                     <p class="text-gray-600 text-sm mt-1">Qulai Pizza Kayu Api, Kulai, Johor, Malaysia.</p>
                                 </div>
                             </div>
                             <div class="flex items-start gap-4">
-                                <div class="w-10 h-10 bg-white shadow-sm rounded-btn flex items-center justify-center text-primary shrink-0 mt-1">
-                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.94.725l.548 2.2a1 1 0 01-.321.988l-1.305.98a10.582 10.582 0 004.872 4.872l.98-1.305a1 1 0 01.988-.321l2.2.548a1 1 0 01.725.94V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/></svg>
-                                </div>
+                                <div class="w-10 h-10 bg-white shadow-sm rounded-btn flex items-center justify-center text-primary shrink-0 mt-1">📞</div>
                                 <div>
                                     <h4 class="font-bold text-neutralDark font-poppins">WhatsApp Hotline</h4>
                                     <a href="https://wa.me/60106602847" class="text-primary hover:underline text-sm font-medium block mt-1">+60 10-660 2847</a>
                                 </div>
                             </div>
                             <div class="flex items-start gap-4">
-                                <div class="w-10 h-10 bg-white shadow-sm rounded-btn flex items-center justify-center text-primary shrink-0 mt-1">
-                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
-                                </div>
+                                <div class="w-10 h-10 bg-white shadow-sm rounded-btn flex items-center justify-center text-primary shrink-0 mt-1">✉️</div>
                                 <div>
                                     <h4 class="font-bold text-neutralDark font-poppins">E-mel Rasmi</h4>
-                                    <a href="mailto:qulaipizzakayuapi@gmail.com" class="text-gray-600 hover:text-primary hover:underline text-sm block mt-1">qulaipizzakayuapi@gmail.com</a>
+                                    <a href="mailto:qulaipizzakayuapi@gmail.com" class="text-gray-600 hover:text-primary text-sm block mt-1">qulaipizzakayuapi@gmail.com</a>
                                 </div>
                             </div>
                             <div class="flex items-start gap-4">
-                                <div class="w-10 h-10 bg-white shadow-sm rounded-btn flex items-center justify-center text-primary shrink-0 mt-1">
-                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-                                </div>
+                                <div class="w-10 h-10 bg-white shadow-sm rounded-btn flex items-center justify-center text-primary shrink-0 mt-1">🕒</div>
                                 <div class="w-full">
                                     <h4 class="font-bold text-neutralDark font-poppins mb-2">Waktu Operasi</h4>
                                     <div class="grid grid-cols-2 gap-x-4 gap-y-1 text-xs text-gray-600">
-                                        <span>Khamis</span> <span class="font-semibold text-right">2:00 PM – 10:30 PM</span>
-                                        <span>Jumaat</span> <span class="font-semibold text-right">2:00 PM – 10:30 PM</span>
-                                        <span>Sabtu</span> <span class="font-semibold text-right">2:00 PM – 10:30 PM</span>
-                                        <span>Ahad</span> <span class="font-semibold text-right">2:00 PM – 10:30 PM</span>
+                                        <span>Khamis - Ahad</span> <span class="font-semibold text-right">2:00 PM – 10:30 PM</span>
                                         <span>Isnin</span> <span class="text-red-500 font-bold text-right">TUTUP</span>
-                                        <span>Selasa</span> <span class="font-semibold text-right">2:00 PM – 10:30 PM</span>
-                                        <span>Rabu</span> <span class="font-semibold text-right">2:00 PM – 10:30 PM</span>
+                                        <span>Selasa - Rabu</span> <span class="font-semibold text-right">2:00 PM – 10:30 PM</span>
                                     </div>
                                 </div>
                             </div>
@@ -893,14 +847,7 @@
                         <div class="bg-white p-4 rounded-card shadow-md border border-gray-100 overflow-hidden">
                             <h4 class="font-bold text-neutralDark font-poppins px-2 mb-3">Peta Lokasi</h4>
                             <div class="w-full h-80 rounded-btn overflow-hidden relative">
-                                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3988.0822606554553!2d103.6263597!3d1.6428784999999998!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x31da79ebedd07269%3A0x36ed6038785e53e4!2sQulai%20Pizza%20Kayu%20Api!5e0!3m2!1sen!2smy!4v1700000000000!5m2!1sen!2smy" width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
-                            </div>
-                            <div class="mt-4 flex flex-col sm:flex-row items-center justify-between gap-4 px-2">
-                                <span class="text-xs text-gray-500">Koordinat tepat tersedia di Google Maps.</span>
-                                <a href="https://maps.google.com/maps/place//data=!4m2!3m1!1s0x31da79ebedd07269:0x36ed6038785e53e4?entry=s&sa=X&ved=2ahUKEwiapfTU49aVAxWnka8BHc4DBEAQ4kB6BAgdEAA&hl=en" target="_blank" rel="noopener" class="bg-primary hover:bg-darkRed text-white text-xs font-bold px-4 py-3 rounded-btn transition-colors inline-flex items-center gap-1">
-                                    <span>Navigasi G-Maps</span>
-                                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
-                                </a>
+                                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3988.0822606554553!2d103.6263597!3d1.6428784999999998!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x31da79ebedd07269%3A0x36ed6038785e53e4!2sQulai%20Pizza%20Kayu%20Api!5e0!3m2!1sen!2smy!4v1700000000000!5m2!1sen!2smy" width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
                             </div>
                         </div>
                     </div>
@@ -908,7 +855,6 @@
             </div>
         </section>
 
-<!-- FOOTER UNTUK HUBUNGI -->
         <footer class="bg-neutralDark text-white pt-16 pb-8 border-t border-gray-800">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 md:grid-cols-4 gap-12 mb-12">
                 <div class="space-y-4">
@@ -926,8 +872,8 @@
                         <li><a href="javascript:void(0)" onclick="showSPASection('home-page')" class="hover:text-primary transition-colors">Utama / Tempahan</a></li>
                         <li><a href="javascript:void(0)" onclick="showSPASection('about-page')" class="hover:text-primary transition-colors">Tentang Kami</a></li>
                         <li><a href="javascript:void(0)" onclick="showSPASection('packages-page')" class="hover:text-primary transition-colors">Pakej Aktiviti</a></li>
-                        <li><a href="javascript:void(0)" onclick="showSPASection('gallery-page')" class="hover:text-primary transition-colors">Galeri Foto</a></li>
-                        <li><a href="javascript:void(0)" onclick="showSPASection('contact-page')" class="hover:text-primary transition-colors font-bold text-white">Hubungi Kami</a></li>
+                        <li><a href="javascript:void(0)" onclick="showSPASection('gallery-page')" class="hover:text-primary transition-colors font-bold text-white">Galeri Foto</a></li>
+                        <li><a href="javascript:void(0)" onclick="showSPASection('contact-page')" class="hover:text-primary transition-colors">Hubungi Kami</a></li>
                     </ul>
                 </div>
                 <div>
@@ -953,7 +899,7 @@
         </footer>
     </div>
 
-<!-- ==================== HALAMAN HIDDEN: POLISI PRIVASI ==================== -->
+    <!-- ==================== POLISI PRIVASI ==================== -->
     <div id="privacy-policy-page" class="spa-section hidden animate-fade">
         <div class="min-h-screen bg-neutralBg py-12 sm:py-20 px-4 sm:px-6 lg:px-8">
             <div class="max-w-4xl mx-auto bg-white rounded-card shadow-lg overflow-hidden border border-gray-100">
@@ -963,21 +909,19 @@
                             <div class="w-12 h-12 rounded-btn overflow-hidden bg-white flex items-center justify-center p-1">
                                 <img src="https://arleta.site/interactivelink/118/logoqulai.png" alt="Qulai Pizza Logo" class="w-full h-full object-cover">
                             </div>
-                            <div class="group relative">
+                            <div>
                                 <span class="block text-xs font-bold text-accent tracking-widest uppercase">Qulai Pizza</span>
                                 <h1 class="text-2xl sm:text-3xl font-extrabold font-poppins leading-none">Polisi Privasi</h1>
                             </div>
                         </div>
-                        <button onclick="showSPASection('home-page')" class="bg-white/10 hover:bg-white/20 text-white font-bold px-5 py-2.5 rounded-btn text-xs transition-colors inline-flex items-center gap-2">
-                            ← Kembali ke Utama
-                        </button>
+                        <button onclick="showSPASection('home-page')" class="bg-white/10 hover:bg-white/20 text-white font-bold px-5 py-2.5 rounded-btn text-xs transition-colors">← Kembali ke Utama</button>
                     </div>
                 </div>
-                <div class="p-8 sm:p-12 space-y-8 text-sm sm:text-base text-gray-700 leading-relaxed">
+                <div class="p-8 sm:p-12 space-y-8 text-sm text-gray-700 leading-relaxed">
                     <div>
                         <h2 class="text-xl font-bold font-poppins text-neutralDark border-b border-gray-100 pb-2 mb-2">Polisi Privasi Qulai Pizza</h2>
                         <p class="text-xs text-primary font-semibold">Tarikh Kuat Kuasa: 16 Julai 2026</p>
-                        <p class="mt-4">Di Qulai Pizza, kami menghormati privasi setiap pelanggan. Polisi Privasi ini menerangkan bagaimana kami mengumpul, menggunakan and melindungi maklumat peribadi anda apabila menggunakan laman web kami.</p>
+                        <p class="mt-4">Di Qulai Pizza, kami menghormati privasi setiap pelanggan. Polisi Privasi ini menerangkan bagaimana kami mengumpul, menggunakan dan melindungi maklumat peribadi anda apabila menggunakan laman web kami.</p>
                     </div>
                     <div class="space-y-4">
                         <h3 class="text-lg font-bold font-poppins text-neutralDark">1. Maklumat Yang Dikumpulkan</h3>
@@ -993,19 +937,14 @@
                     </div>
                     <div class="space-y-4">
                         <h3 class="text-lg font-bold font-poppins text-neutralDark">2. Tujuan Penggunaan Maklumat</h3>
-                        <p>Maklumat anda digunakan untuk mengurus dan mengesahkan tempahan, contacting anda berkaitan tempahan, serta memberikan maklumat mengenai perubahan jadual atau tempahan.</p>
-                        <p class="font-medium text-neutralDark mt-2">Kami tidak akan menjual atau menyewakan maklumat peribadi anda kepada mana-mana pihak.</p>
-                    </div>
-                    <div class="space-y-4">
-                        <h3 class="text-lg font-bold font-poppins text-neutralDark">3. WhatsApp</h3>
-                        <p>Apabila anda menghantar tempahan melalui WhatsApp, anda akan berurusan terus melalui platform WhatsApp. Sebarang penggunaan data selepas mesej dihantar adalah tertakluk kepada Polisi Privasi WhatsApp.</p>
+                        <p>Maklumat anda digunakan untuk mengurus dan mengesahkan tempahan, menghubungi anda berkaitan tempahan, serta memberikan maklumat mengenai perubahan jadual atau tempahan.</p>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 
-<!-- ==================== HALAMAN HIDDEN: TERMA & SYARAT ==================== -->
+    <!-- ==================== TERMA & SYARAT ==================== -->
     <div id="terms-conditions-page" class="spa-section hidden animate-fade">
         <div class="min-h-screen bg-neutralBg py-12 sm:py-20 px-4 sm:px-6 lg:px-8">
             <div class="max-w-4xl mx-auto bg-white rounded-card shadow-lg overflow-hidden border border-gray-100">
@@ -1020,12 +959,10 @@
                                 <h1 class="text-2xl sm:text-3xl font-extrabold font-poppins leading-none">Terma & Syarat</h1>
                             </div>
                         </div>
-                        <button onclick="showSPASection('home-page')" class="bg-white/10 hover:bg-white/20 text-white font-bold px-5 py-2.5 rounded-btn text-xs transition-colors inline-flex items-center gap-2">
-                            ← Kembali ke Utama
-                        </button>
+                        <button onclick="showSPASection('home-page')" class="bg-white/10 hover:bg-white/20 text-white font-bold px-5 py-2.5 rounded-btn text-xs transition-colors">← Kembali ke Utama</button>
                     </div>
                 </div>
-                <div class="p-8 sm:p-12 space-y-8 text-sm sm:text-base text-gray-700 leading-relaxed">
+                <div class="p-8 sm:p-12 space-y-8 text-sm text-gray-700 leading-relaxed">
                     <div>
                         <h2 class="text-xl font-bold font-poppins text-neutralDark border-b border-gray-100 pb-2 mb-2">Terma & Syarat Penggunaan</h2>
                         <p class="text-xs text-primary font-semibold">Tarikh Kuat Kuasa: 16 Julai 2026</p>
@@ -1037,19 +974,172 @@
                             <li>Tempahan hanya dianggap sah selepas disahkan secara rasmi oleh pihak Qulai Pizza melalui WhatsApp.</li>
                         </ul>
                     </div>
-                    <div class="space-y-4">
-                        <h3 class="text-lg font-bold font-poppins text-neutralDark">2. Ketibaan</h3>
-                        <p>Pelanggan disarankan hadir 10 minit awal. Sekiranya pelanggan lewat melebihi 30 minit tanpa makluman, pihak restoran berhak melepaskan tempahan kepada pelanggan lain.</p>
-                    </div>
                 </div>
             </div>
         </div>
     </div>
 
-<!-- CUSTOM SELECTION MODAL UNTUK PIZZA SIZE (REGULAR / LARGE) -->
+    <!-- ==================== ADMIN DASHBOARD SAAS LIGHT THEME ==================== -->
+    <div id="admin-dashboard-page" class="spa-section hidden bg-slate-100 min-h-screen text-slate-800">
+        <!-- Admin Login Modal -->
+        <div id="admin-login-modal" class="fixed inset-0 z-[80] bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4">
+            <div class="bg-white max-w-md w-full rounded-card p-8 border border-slate-200 shadow-2xl space-y-6">
+                <div class="text-center">
+                    <div class="w-12 h-12 rounded-full bg-primary/10 text-primary flex items-center justify-center mx-auto mb-3 text-2xl font-bold">🔐</div>
+                    <h2 class="text-2xl font-bold font-poppins text-slate-900">Log Masuk Admin</h2>
+                    <p class="text-xs text-slate-500 mt-1">Sila masukkan e-mel & kata laluan daripada Google Sheet Admin</p>
+                </div>
+                <form onsubmit="handleAdminLogin(event)" class="space-y-4">
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 uppercase mb-1">E-mel Admin</label>
+                        <input type="email" id="admin-email-input" required class="w-full px-4 py-3 rounded-btn border border-slate-300 bg-slate-50 focus:bg-white focus:ring-2 focus:ring-primary outline-none text-xs" placeholder="admin@qulaipizza.com">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Kata Laluan</label>
+                        <input type="password" id="admin-pass-input" required class="w-full px-4 py-3 rounded-btn border border-slate-300 bg-slate-50 focus:bg-white focus:ring-2 focus:ring-primary outline-none text-xs" placeholder="••••••••">
+                    </div>
+                    <button type="submit" id="admin-login-btn" class="w-full bg-primary hover:bg-darkRed text-white font-bold py-3 rounded-btn text-xs transition-all shadow-md">Log Masuk Dashboard</button>
+                </form>
+                <div class="text-center">
+                    <button onclick="showSPASection('home-page')" class="text-xs text-slate-500 hover:text-slate-900 underline">← Kembali ke Halaman Utama</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Dashboard Content (LIGHT THEME) -->
+        <div id="admin-content" class="hidden min-h-screen flex flex-col">
+            <header class="bg-white border-b border-slate-200 sticky top-0 z-40 px-6 py-4 flex justify-between items-center shadow-sm">
+                <div class="flex items-center gap-3">
+                    <span class="w-3 h-3 rounded-full bg-emerald-500 animate-pulse"></span>
+                    <h1 class="text-lg font-bold font-poppins text-slate-900 tracking-wide">QULAI PIZZA <span class="text-xs bg-primary/10 text-primary px-2.5 py-1 rounded-full font-semibold ml-2">Admin SaaS Light</span></h1>
+                </div>
+                <div class="flex items-center gap-3">
+                    <button onclick="fetchAdminData()" class="bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs px-3.5 py-2 rounded-btn border border-slate-300 transition-all font-semibold flex items-center gap-1.5">
+                        🔄 Refresh Data
+                    </button>
+                    <button onclick="logoutAdmin()" class="bg-red-50 hover:bg-red-100 text-red-700 text-xs px-3.5 py-2 rounded-btn border border-red-200 transition-all font-semibold">
+                        Log Keluar
+                    </button>
+                </div>
+            </header>
+
+            <main class="p-6 max-w-7xl mx-auto w-full space-y-8 flex-1">
+                <!-- Stats Summary Metric Cards -->
+                <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
+                    <div class="saas-card p-4 rounded-card space-y-1">
+                        <span class="text-[10px] text-slate-500 uppercase font-bold tracking-wider">Jumlah Tempahan</span>
+                        <div class="text-2xl font-extrabold text-slate-900 font-poppins" id="stat-total-orders">0</div>
+                    </div>
+                    <div class="saas-card p-4 rounded-card space-y-1">
+                        <span class="text-[10px] text-slate-500 uppercase font-bold tracking-wider">Tempahan Hari Ini</span>
+                        <div class="text-2xl font-extrabold text-primary font-poppins" id="stat-today-orders">0</div>
+                    </div>
+                    <div class="saas-card p-4 rounded-card space-y-1">
+                        <span class="text-[10px] text-slate-500 uppercase font-bold tracking-wider">Jumlah Jualan</span>
+                        <div class="text-2xl font-extrabold text-emerald-600 font-poppins" id="stat-total-sales">RM 0.00</div>
+                    </div>
+                    <div class="saas-card p-4 rounded-card space-y-1">
+                        <span class="text-[10px] text-slate-500 uppercase font-bold tracking-wider">Purata Jualan</span>
+                        <div class="text-2xl font-extrabold text-blue-600 font-poppins" id="stat-avg-order">RM 0.00</div>
+                    </div>
+                    <div class="saas-card p-4 rounded-card space-y-1">
+                        <span class="text-[10px] text-slate-500 uppercase font-bold tracking-wider">Dine In</span>
+                        <div class="text-2xl font-extrabold text-purple-600 font-poppins" id="stat-dine-in">0</div>
+                    </div>
+                    <div class="saas-card p-4 rounded-card space-y-1">
+                        <span class="text-[10px] text-slate-500 uppercase font-bold tracking-wider">Take Away</span>
+                        <div class="text-2xl font-extrabold text-orange-600 font-poppins" id="stat-take-away">0</div>
+                    </div>
+                </div>
+
+                <!-- ANALISIS MENGIKUT KATEGORI MENU (MENU TERLARIS VS KURANG SAMBUTAN) -->
+                <div class="saas-card p-6 rounded-card space-y-4">
+                    <div class="flex flex-col sm:flex-row sm:items-center justify-between border-b border-slate-200 pb-3 gap-2">
+                        <div>
+                            <h3 class="text-base font-bold text-slate-900 font-poppins flex items-center gap-2">
+                                <span>📊</span> Analisis Populariti Menu Mengikut Jenis Kategori
+                            </h3>
+                            <p class="text-xs text-slate-500">Mengenal pasti menu yang Paling Laris (Top) dan Kurang Sambutan (Least)</p>
+                        </div>
+                        <span class="text-[11px] bg-slate-100 text-slate-600 px-3 py-1 rounded-full font-medium">Berdasarkan Jumlah Unit Terjual</span>
+                    </div>
+
+                    <div id="category-analytics-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 pt-2">
+                        <!-- Dynamic render analytics per category -->
+                    </div>
+                </div>
+
+                <!-- Analytics Charts -->
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    <div class="saas-card p-5 rounded-card space-y-3">
+                        <h3 class="text-sm font-bold text-slate-900 font-poppins">📈 Trend Tempahan Harian</h3>
+                        <div class="h-60"><canvas id="dailyChart"></canvas></div>
+                    </div>
+                    <div class="saas-card p-5 rounded-card space-y-3">
+                        <h3 class="text-sm font-bold text-slate-900 font-poppins">🍕 Taburan Jenis Order</h3>
+                        <div class="h-60 flex items-center justify-center"><canvas id="typeChart"></canvas></div>
+                    </div>
+                </div>
+
+                <!-- Orders Table -->
+                <div class="saas-card rounded-card overflow-hidden space-y-4 p-5">
+                    <div class="flex flex-col md:flex-row gap-4 justify-between items-center">
+                        <input type="text" id="admin-search-input" oninput="applyTableFilters()" class="w-full md:w-72 px-4 py-2 rounded-btn border border-slate-300 text-xs bg-slate-50 focus:bg-white outline-none" placeholder="🔍 Cari nama, phone, menu...">
+                        <div class="flex flex-wrap items-center gap-3 w-full md:w-auto justify-end">
+                            <select id="filter-order-type" onchange="applyTableFilters()" class="px-3 py-2 rounded-btn border border-slate-300 bg-slate-50 text-xs">
+                                <option value="ALL">Semua Jenis Order</option>
+                                <option value="Dine In">Dine In</option>
+                                <option value="Take Away">Take Away</option>
+                            </select>
+                            <input type="date" id="filter-date" onchange="applyTableFilters()" class="px-3 py-2 rounded-btn border border-slate-300 bg-slate-50 text-xs">
+                            <button onclick="clearAdminFilters()" class="text-xs text-slate-500 hover:text-slate-900 font-medium">Reset</button>
+                            <button onclick="exportToCSV()" class="bg-emerald-600 hover:bg-emerald-700 text-white text-xs px-3 py-2 rounded-btn transition-all font-bold">📥 CSV</button>
+                            <button onclick="window.print()" class="bg-slate-800 hover:bg-slate-900 text-white text-xs px-3 py-2 rounded-btn transition-all font-bold">🖨️ Print Laporan</button>
+                        </div>
+                    </div>
+
+                    <div class="overflow-x-auto" id="printable-area">
+                        <!-- HEADER LOGO KHAS APABILA PRINT SENARAI BESAR -->
+                        <div class="hidden print:block mb-6 text-center border-b border-slate-300 pb-4">
+                            <img src="https://arleta.site/interactivelink/118/logoqulai.png" alt="Qulai Pizza Logo" class="w-16 h-16 mx-auto mb-2 object-cover">
+                            <h1 class="text-xl font-extrabold font-poppins text-black tracking-wider">QULAI PIZZA KAYU API</h1>
+                            <p class="text-xs text-slate-600">Laporan Ringkasan Senarai Tempahan Pelanggan</p>
+                        </div>
+
+                        <table class="w-full text-left text-xs text-slate-700 border-collapse">
+                            <thead class="bg-slate-100 text-slate-700 uppercase text-[10px] tracking-wider border-b border-slate-200 font-bold">
+                                <tr>
+                                    <th class="p-3 cursor-pointer hover:text-primary" onclick="sortTable('namaPenuh')">Nama ↕</th>
+                                    <th class="p-3">Telefon</th>
+                                    <th class="p-3 cursor-pointer hover:text-primary" onclick="sortTable('tarikhPesanan')">Tarikh & Masa ↕</th>
+                                    <th class="p-3">Jenis</th>
+                                    <th class="p-3">Menu</th>
+                                    <th class="p-3">Pax</th>
+                                    <th class="p-3 cursor-pointer hover:text-primary" onclick="sortTable('jumlah')">Jumlah (RM) ↕</th>
+                                    <th class="p-3 no-print text-center">Tindakan</th>
+                                </tr>
+                            </thead>
+                            <tbody id="admin-orders-tbody" class="divide-y divide-slate-200"></tbody>
+                        </table>
+                    </div>
+
+                    <div class="flex items-center justify-between pt-2 text-xs text-slate-500 no-print">
+                        <span id="pagination-info">Menunjukkan 0 daripada 0 entri</span>
+                        <div class="flex items-center gap-2">
+                            <button id="btn-prev-page" onclick="changePage(-1)" class="px-3 py-1.5 rounded-btn border border-slate-300 bg-white hover:bg-slate-100 disabled:opacity-40">Sebelum</button>
+                            <span id="current-page-num" class="font-bold text-slate-900">1</span>
+                            <button id="btn-next-page" onclick="changePage(1)" class="px-3 py-1.5 rounded-btn border border-slate-300 bg-white hover:bg-slate-100 disabled:opacity-40">Selepas</button>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <!-- MODAL SAIZ PIZZA (ASAL) -->
     <div id="pizza-size-modal" class="hidden fixed inset-0 z-[60] bg-black/70 flex items-center justify-center p-4">
         <div class="bg-white rounded-card max-w-md w-full overflow-hidden shadow-2xl relative animate-fade">
-            <button onclick="closePizzaModal()" class="absolute top-4 right-4 text-gray-500 hover:text-black focus:outline-none text-2xl font-bold">×</button>
+            <button onclick="closePizzaModal()" class="absolute top-4 right-4 text-gray-500 hover:text-black text-2xl font-bold">×</button>
             <div class="p-8 space-y-5">
                 <div class="w-12 h-12 bg-primary/10 rounded-btn flex items-center justify-center text-primary text-xl">🍕</div>
                 <div>
@@ -1070,15 +1160,13 @@
         </div>
     </div>
 
-<!-- INTERACTIVE GALLERY DETAIL MODAL -->
+    <!-- MODAL GALERI DETAIL (ASAL) -->
     <div id="gallery-modal" onclick="handleGalleryModalClick(event)" class="hidden fixed inset-0 z-50 bg-black/90 flex flex-col items-center justify-center p-4 animate-fade">
-        <button onclick="closeGalleryModal()" class="absolute top-6 right-6 text-white hover:text-accent font-extrabold text-4xl focus:outline-none z-50">×</button>
+        <button onclick="closeGalleryModal()" class="absolute top-6 right-6 text-white hover:text-accent font-extrabold text-4xl z-50">×</button>
         <div class="max-w-4xl w-full flex flex-col items-center justify-center space-y-4">
-            <!-- Container Imej Besar -->
             <div id="modal-image-wrapper" class="max-h-[70vh] rounded-card overflow-hidden bg-black/40 shadow-2xl border border-white/10 flex items-center justify-center animate-zoom">
                 <img id="modal-image-large" src="" alt="Paparan Besar" class="max-w-full max-h-[70vh] object-contain block">
             </div>
-            <!-- Informasi Imej -->
             <div id="modal-text-wrapper" class="text-center max-w-2xl px-4">
                 <h3 id="modal-title" class="text-xl font-bold font-poppins text-accent">Meneroka Detail</h3>
                 <p id="modal-desc" class="text-gray-300 text-sm mt-1 leading-relaxed">Penerangan imej terpilih.</p>
@@ -1086,14 +1174,14 @@
         </div>
     </div>
 
-<!-- BOOKING SUCCESS CONFIRMATION MODAL -->
+    <!-- MODAL PENGESAHAN PENGHANTARAN / WHATSAPP (ASAL) -->
     <div id="success-modal" class="hidden fixed inset-0 z-50 bg-black/80 flex items-center justify-center p-4">
         <div class="bg-white rounded-card max-w-lg w-full overflow-hidden shadow-2xl relative animate-fade">
             <div class="p-8 text-center space-y-4">
                 <div class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center text-green-600 text-3xl mx-auto">✓</div>
                 <h3 class="text-2xl font-bold font-poppins text-neutralDark">Tempahan Sedia Dihantar!</h3>
                 <p class="text-gray-600 text-sm leading-relaxed">
-                    Sistem telah memformatkan butiran pesanan anda. Sila klik butang di bawah untuk menghantar borang secara terus ke WhatsApp rasmi Qulai Pizza.
+                    Sistem telah menyimpan pesanan anda ke pengkalan data. Sila klik butang di bawah untuk menghantar borang secara terus ke WhatsApp rasmi Qulai Pizza.
                 </p>
                 <div class="bg-neutralBg p-4 rounded-btn text-left text-xs space-y-2 text-gray-700">
                     <div><strong>Nama:</strong> <span id="summary-name"></span></div>
@@ -1103,8 +1191,8 @@
                     <div><strong>Pilihan Order:</strong> <span id="summary-package"></span></div>
                 </div>
                 <div class="flex flex-col sm:flex-row gap-3 pt-4">
-                    <button onclick="closeSuccessModal()" class="w-full sm:w-1/2 bg-gray-150 hover:bg-gray-200 text-gray-700 font-semibold px-6 py-3 rounded-btn text-xs transition-colors">Tukar Detail</button>
-                    <a id="whatsapp-trigger-btn" target="_blank" rel="noopener" class="w-full sm:w-1/2 bg-primary hover:bg-darkRed text-white font-bold px-6 py-3 rounded-btn text-xs transition-all flex items-center justify-center gap-1.5">
+                    <button onclick="closeSuccessModal()" class="w-full sm:w-1/2 bg-gray-150 hover:bg-gray-200 text-gray-700 font-semibold px-6 py-3 rounded-btn text-xs">Tukar Detail</button>
+                    <a id="whatsapp-trigger-btn" target="_blank" rel="noopener" class="w-full sm:w-1/2 bg-primary hover:bg-darkRed text-white font-bold px-6 py-3 rounded-btn text-xs flex items-center justify-center gap-1.5">
                         <span>Hantar Ke WhatsApp</span>
                     </a>
                 </div>
@@ -1112,7 +1200,10 @@
         </div>
     </div>
 
-<!-- FLOATING CART BADGE ELEMENT (Bawah Kanan Skrin) -->
+    <!-- PRINT CONTAINER KHAS UNTUK RESIT/INVOIS INDIVIDU -->
+    <div id="receipt-printable-area" class="hidden"></div>
+
+    <!-- FLOATING CART BADGE (ASAL) -->
     <div id="floating-cart" class="fixed bottom-6 right-6 z-40 transform scale-0 opacity-0 transition-all duration-300 pointer-events-none">
         <button onclick="scrollToCartReview()" class="pointer-events-auto bg-secondary hover:bg-primary text-white font-bold p-4 sm:p-5 rounded-full shadow-2xl flex items-center gap-3 hover-lift group relative">
             <span class="absolute -top-2 -right-1 bg-primary text-white text-xs font-extrabold w-6 h-6 rounded-full flex items-center justify-center border-2 border-white" id="floating-cart-count">0</span>
@@ -1123,10 +1214,11 @@
         </button>
     </div>
 
-<!-- JAVASCRIPT LOGIC -->
+    <!-- JAVASCRIPT SYSTEM ENGINE -->
     <script>
+        const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzIUBEP5R_YjsLg3GRFeY_xLpRslPH2XHIttps5qpacCFlFenoLugP3vAIYHTNJFO1ivg/exec";
+
         const fullMenu = [
-            // PIZZA CATEGORY
             { name: "Sambal Bilis Pizza", detail: "Anchovies, onions, mozzarella cheese & secret homemade Sambal Bilis Kampung.", category: "pizza", basePrice: 19.00 },
             { name: "Chicken Carbonara Pizza", detail: "Minced chicken, chicken sausage, carrot, holland onion, mushroom, mozzarella & secret carbonara sauce.", category: "pizza", basePrice: 21.00 },
             { name: "Seafood Pizza", detail: "Prawn, crab sticks, squid fishcake, holland onion, mozzarella & white sauce.", category: "pizza", basePrice: 23.00 },
@@ -1142,8 +1234,6 @@
             { name: "Asam Pedas Muo Pizza", detail: "Tuna, holland onion, eggplant, mozzarella & homemade asam pedas sauce.", category: "pizza", basePrice: 20.00 },
             { name: "Chicken Rendang Pizza", detail: "Shredded chicken, capsicum, red onion, mozzarella & homemade rendang sauce.", category: "pizza", basePrice: 21.00 },
             { name: "Otak-Otak Royale Pizza", detail: "Otak-otak, holland onion, secret white sauce & mozzarella.", category: "pizza", basePrice: 20.00 },
-
-            // PASTA & NEW SPESIAL
             { name: "Spaghetti Spicy Korean Chicken", price: "RM 17.90", detail: "Italian pasta with Gochujang, Korean red pepper paste, giving a spicy twist.", category: "pasta", basePrice: 17.90 },
             { name: "Spaghetti Buttermilk Popcorn Chicken", price: "RM 17.90", detail: "Spaghetti infused with a rich buttermilk sauce and topped with crispy popcorn chicken.", category: "pasta", basePrice: 17.90 },
             { name: "Spaghetti Asam Pedas Dory", price: "RM 17.90", detail: "Malaysian classic blends with Italian style - tangy tamarind, fiery chillies & savory broth.", category: "pasta", basePrice: 17.90 },
@@ -1151,22 +1241,16 @@
             { name: "Spaghetti Salted Egg", price: "RM 15.90", detail: "Savory spaghetti generously coated with rich, aromatic salted egg sauce.", category: "pasta", basePrice: 15.90 },
             { name: "Beef Lasagna", price: "RM 14.90", detail: "Layers of pasta, rich beef bolognese, creamy white sauce, and baked mozzarella.", category: "pasta", basePrice: 14.90 },
             { name: "Roasted Chicken Chop", price: "RM 12.90", detail: "Perfectly seasoned roasted chicken chop served with delicious black pepper sauce.", category: "pasta", basePrice: 12.90 },
-
-            // PROSPERITY BURGER
             { name: "Beef Prosperity Set", price: "RM 14.90", detail: "Comes with Curly Fries & Sunquick Tropical Drink.", category: "burger", basePrice: 14.90 },
             { name: "Chicken Prosperity Set", price: "RM 12.90", detail: "Comes with Curly Fries & Sunquick Tropical Drink.", category: "burger", basePrice: 12.90 },
             { name: "Beef Prosperity W/O Drink", price: "RM 12.90", detail: "Ala-carte Prosperity Beef burger.", category: "burger", basePrice: 12.90 },
             { name: "Chicken Prosperity W/O Drink", price: "RM 10.90", detail: "Ala-carte Prosperity Chicken burger.", category: "burger", basePrice: 10.90 },
-
-            // SIDES / LOCAL / DESSERTS
             { name: "Kacang Pool", price: "RM 7.00", detail: "Traditional local Johor thick gravy served with toasted soft bread.", category: "sides", basePrice: 7.00 },
             { name: "Nasi Gulai Ayam Goreng", price: "RM 12.00", detail: "Fragrant rice served with hot crispy fried chicken and rich curry gravy.", category: "sides", basePrice: 12.00 },
             { name: "Mushroom Soup & Garlic Bread", price: "RM 9.00", detail: "Wonderful classic mushroom soup served with crispy toasted garlic bread.", category: "sides", basePrice: 9.00 },
             { name: "Cheesy Loaded Fries", price: "RM 9.90", detail: "A pile of French fries smothered in melted cheese and savory bolognese sauce.", category: "sides", basePrice: 9.90 },
             { name: "Cheesy Meatball", price: "RM 10.00", detail: "Juicy meatballs topped with black pepper sauce or pizza sauce with cheese.", category: "sides", basePrice: 10.00 },
             { name: "Ice Cream (Bowl)", price: "RM 7.50", detail: "Scrumptious cooling ice cream served in a sharing bowl.", category: "sides", basePrice: 7.50 },
-
-            // DRINKS
             { name: "Iced Soda Herbs", price: "RM 5.90", detail: "Refreshing botanical infusion of local herbs with effervescent soda.", category: "drinks", basePrice: 5.90 },
             { name: "Iced Sunquick Tropical", price: "RM 3.00", detail: "Zesty, sweet citrus punch to cool off on hot days.", category: "drinks", basePrice: 3.00 },
             { name: "Teh Tarik (Hot)", price: "RM 4.00", detail: "Malaysian favorite frothy milk tea.", category: "drinks", basePrice: 4.00 },
@@ -1176,13 +1260,77 @@
 
         let userCart = [];
         let currentlySelectedPizzaName = "";
-        
-        // Data Simulasi Kapasiti Dine In Terkumpul bagi Kedai (Had Maksimum 88 Pax Sejam)
-        const dineInCapacityDatabase = {
-            "2026-08-15_18:00": 75, // Contoh slot hampir penuh
-            "2026-08-15_19:00": 85, // Slot tinggal 3 kekosongan
-            "2026-08-20_20:00": 88  // Contoh slot sudah padat 100% penuh
-        };
+        const dineInCapacityDatabase = { "2026-08-15_18:00": 75, "2026-08-15_19:00": 85, "2026-08-20_20:00": 88 };
+
+        // State Dashboard Admin
+        let rawOrdersData = [];
+        let filteredOrdersData = [];
+        let currentPage = 1;
+        const itemsPerPage = 8;
+        let currentSortColumn = '';
+        let currentSortAsc = true;
+        let chartDailyInstance = null;
+        let chartTypeInstance = null;
+
+        // FUNGSI FORMAT PHONE NUMBER (MENAMBAH '60' JIKA SHEET PULANGKAN 123456789/0123456789)
+        function formatPhone(phoneStr) {
+            if (!phoneStr) return '-';
+            let p = String(phoneStr).trim().replace(/\D/g, ''); // Ambil nombor sahaja
+            if (p.startsWith('01')) {
+                p = '6' + p;
+            } else if (p.startsWith('1')) {
+                p = '60' + p;
+            } else if (!p.startsWith('60') && p.length >= 8) {
+                p = '60' + p;
+            }
+            return p;
+        }
+
+        // FORMAT TARIKH & MASA
+        function formatDateTime(dateStr, timeStr) {
+            if (!dateStr) return { date: '-', time: '-' };
+
+            let dateObj = new Date(dateStr);
+
+            if (!isNaN(dateObj.getTime()) && String(dateStr).includes('T')) {
+                let day = String(dateObj.getUTCDate()).padStart(2, '0');
+                let month = String(dateObj.getUTCMonth() + 1).padStart(2, '0');
+                let year = dateObj.getUTCFullYear();
+
+                let hours = dateObj.getUTCHours();
+                let minutes = String(dateObj.getUTCMinutes()).padStart(2, '0');
+                let ampm = hours >= 12 ? 'PM' : 'AM';
+                let formattedTime = `${String(hours).padStart(2, '0')}:${minutes}${ampm}`;
+
+                return {
+                    date: `${day}-${month}-${year}`,
+                    time: timeStr || formattedTime,
+                    full: `${day}-${month}-${year}, ${timeStr || formattedTime}`
+                };
+            }
+
+            if (/^\d{4}-\d{2}-\d{2}$/.test(dateStr)) {
+                let parts = dateStr.split('-');
+                let formattedDate = `${parts[2]}-${parts[1]}-${parts[0]}`;
+                
+                let formattedTime = timeStr || '';
+                if (timeStr && !timeStr.includes('AM') && !timeStr.includes('PM')) {
+                    let timeParts = timeStr.split(':');
+                    let h = parseInt(timeParts[0]);
+                    let m = timeParts[1] || '00';
+                    let ampm = h >= 12 ? 'PM' : 'AM';
+                    formattedTime = `${String(h).padStart(2, '0')}:${m}${ampm}`;
+                }
+
+                return {
+                    date: formattedDate,
+                    time: formattedTime,
+                    full: `${formattedDate}${formattedTime ? ', ' + formattedTime : ''}`
+                };
+            }
+
+            return { date: dateStr, time: timeStr || '', full: dateStr };
+        }
 
         window.addEventListener('DOMContentLoaded', () => {
             const tomorrow = new Date();
@@ -1194,10 +1342,30 @@
             renderMenuItems(fullMenu);
 
             const mobileMenuBtn = document.getElementById('mobile-menu-btn');
-            mobileMenuBtn.addEventListener('click', () => {
-                toggleMobileMenu();
-            });
+            if(mobileMenuBtn) mobileMenuBtn.addEventListener('click', toggleMobileMenu);
         });
+
+        function showToast(message, type = 'success') {
+            const container = document.getElementById('toast-container');
+            const toast = document.createElement('div');
+            const bgClass = type === 'success' ? 'bg-emerald-600' : 'bg-red-600';
+            toast.className = `${bgClass} text-white px-4 py-3 rounded-btn shadow-xl text-xs font-medium flex items-center justify-between gap-3 pointer-events-auto animate-fade`;
+            toast.innerHTML = `<span>${type === 'success' ? '✓' : '⚠️'} ${message}</span>`;
+            container.appendChild(toast);
+            setTimeout(() => toast.remove(), 4000);
+        }
+
+        // SPINNER CENTERED FIX
+        function toggleSpinner(show) {
+            const spinner = document.getElementById('global-spinner');
+            if (show) {
+                spinner.classList.remove('hidden');
+                spinner.classList.add('flex');
+            } else {
+                spinner.classList.add('hidden');
+                spinner.classList.remove('flex');
+            }
+        }
 
         function showSPASection(sectionId) {
             document.querySelectorAll('.spa-section').forEach(page => {
@@ -1219,10 +1387,7 @@
                 desktopNavLink.className = "nav-link text-primary hover:text-primary transition-colors py-2 font-bold";
             }
 
-            window.scrollTo({
-                top: 0,
-                behavior: 'smooth'
-            });
+            window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
         function toggleMobileMenu() {
@@ -1240,9 +1405,7 @@
 
         function navigateToMenu() {
             showSPASection('home-page');
-            setTimeout(() => {
-                scrollToMenuSection();
-            }, 200);
+            setTimeout(() => { scrollToMenuSection(); }, 200);
         }
 
         function scrollToMenuSection() {
@@ -1262,22 +1425,11 @@
                 let badgeColor = "bg-gray-100 text-gray-800";
                 let priceDisplay = item.price ? item.price : "Pilih Saiz 🔥";
                 
-                if (item.category === 'pizza') {
-                    emoji = "🍕";
-                    badgeColor = "bg-red-100 text-red-800";
-                } else if (item.category === 'pasta') {
-                    emoji = "🍝";
-                    badgeColor = "bg-blue-100 text-blue-800";
-                } else if (item.category === 'burger') {
-                    emoji = "🍔";
-                    badgeColor = "bg-green-100 text-green-800";
-                } else if (item.category === 'sides') {
-                    emoji = "🍟";
-                    badgeColor = "bg-purple-100 text-purple-800";
-                } else if (item.category === 'drinks') {
-                    emoji = "🍹";
-                    badgeColor = "bg-amber-100 text-amber-800";
-                }
+                if (item.category === 'pizza') { emoji = "🍕"; badgeColor = "bg-red-100 text-red-800"; }
+                else if (item.category === 'pasta') { emoji = "🍝"; badgeColor = "bg-blue-100 text-blue-800"; }
+                else if (item.category === 'burger') { emoji = "🍔"; badgeColor = "bg-green-100 text-green-800"; }
+                else if (item.category === 'sides') { emoji = "🍟"; badgeColor = "bg-purple-100 text-purple-800"; }
+                else if (item.category === 'drinks') { emoji = "🍹"; badgeColor = "bg-amber-100 text-amber-800"; }
 
                 card.innerHTML = `
                     <div>
@@ -1311,30 +1463,20 @@
                 activeBtn.className = "menu-tab-btn active bg-primary text-white font-semibold px-6 py-3 rounded-btn transition-all text-sm shadow-sm";
             }
 
-            if (category === 'all') {
-                renderMenuItems(fullMenu);
-            } else {
-                const filtered = fullMenu.filter(item => item.category === category);
-                renderMenuItems(filtered);
-            }
+            if (category === 'all') renderMenuItems(fullMenu);
+            else renderMenuItems(fullMenu.filter(item => item.category === category));
         }
 
         function handleAddToCartClick(name, category, basePrice) {
             if (category === 'pizza') {
                 currentlySelectedPizzaName = name;
-                if (name === "Sambal Bilis Pizza" || name === "Cheesy Cheese Pizza") {
-                    updatePizzaModalPrices(19.00, 26.00);
-                } else if (name === "Chicken Carbonara Pizza" || name === "Beef Pepperoni Pizza" || name === "Flaming Tuna Pizza" || name === "Chicken BBQ Pizza" || name === "Asam Pedas Muo Pizza" || name === "Otak-Otak Royale Pizza") {
-                    updatePizzaModalPrices(20.00, 28.00);
-                } else if (name === "Seafood Pizza" || name === "Rose Korean BBQ Pizza") {
-                    updatePizzaModalPrices(23.00, 29.00);
-                } else if (name === "Qulai Signature Pizza" || name === "Chicken Pepperoni Pizza") {
-                    updatePizzaModalPrices(19.00, 27.00);
-                } else if (name === "Beef BBQ Pizza" || name === "Chicken Rendang Pizza") {
-                    updatePizzaModalPrices(21.00, 29.00);
-                } else if (name === "Vegetarian Lover Pizza") {
-                    updatePizzaModalPrices(17.00, 25.00);
-                }
+                if (name === "Sambal Bilis Pizza" || name === "Cheesy Cheese Pizza") updatePizzaModalPrices(19.00, 26.00);
+                else if (name === "Chicken Carbonara Pizza" || name === "Beef Pepperoni Pizza" || name === "Flaming Tuna Pizza" || name === "Chicken BBQ Pizza" || name === "Asam Pedas Muo Pizza" || name === "Otak-Otak Royale Pizza") updatePizzaModalPrices(20.00, 28.00);
+                else if (name === "Seafood Pizza" || name === "Rose Korean BBQ Pizza") updatePizzaModalPrices(23.00, 29.00);
+                else if (name === "Qulai Signature Pizza" || name === "Chicken Pepperoni Pizza") updatePizzaModalPrices(19.00, 27.00);
+                else if (name === "Beef BBQ Pizza" || name === "Chicken Rendang Pizza") updatePizzaModalPrices(21.00, 29.00);
+                else if (name === "Vegetarian Lover Pizza") updatePizzaModalPrices(17.00, 25.00);
+
                 document.getElementById('pizza-modal-title').innerText = name;
                 document.getElementById('pizza-size-modal').classList.remove('hidden');
             } else {
@@ -1355,66 +1497,6 @@
             closePizzaModal();
         }
 
-        function handleOrderTypeChange(selectElement) {
-            const paxCountInput = document.getElementById('pax-count');
-            const paxCountLabel = document.getElementById('pax-count-label');
-            
-            if (selectElement.value === "Take Away") {
-                paxCountInput.value = ""; 
-                paxCountInput.disabled = true; 
-                paxCountInput.required = false; 
-                paxCountLabel.innerHTML = 'Bilangan Orang (Pax)';
-            } else {
-                paxCountInput.disabled = false; 
-                paxCountInput.required = true; 
-                paxCountLabel.innerHTML = 'Bilangan Orang (Pax)';
-            }
-        }
-
-        // FUNGSI PINTAR: SEMAKAN HAD KAPASITI TEMPAT DUDUK DINE-IN MAKSIMUM 88 PAX SEJAM
-        function checkDineInCapacity() {
-            const orderType = document.getElementById('booking-package').value;
-            const dateInput = document.getElementById('pax-date').value;
-            const timeInput = document.getElementById('pax-time').value;
-            const paxCountInput = document.getElementById('pax-count');
-            const paxValue = parseInt(paxCountInput.value) || 0;
-            
-            const warningNotice = document.getElementById('capacity-warning-notice');
-            const submitBtn = document.getElementById('submit-btn');
-            
-            // Sekiranya take away, tiada sekatan kapasiti tempat duduk dine-in diletakkan
-            if (orderType === "Take Away" || !dateInput || !timeInput) {
-                warningNotice.classList.add('hidden');
-                // Pastikan submit_btn tidak tersekat melainkan disebabkan penutupan hari Isnin
-                const selectedDate = new Date(dateInput);
-                if (selectedDate.getDay() !== 1) {
-                    submitBtn.disabled = false;
-                    submitBtn.classList.remove('opacity-40', 'cursor-not-allowed');
-                }
-                return;
-            }
-            
-            const databaseKey = `${dateInput}_${timeInput}`;
-            // Ambil simulasi jumlah tempahan sedia ada pada slot tersebut, atau letakkan 0 jika slot kosong
-            const currentBookedSeats = dineInCapacityDatabase[databaseKey] || 0;
-            const totalProjectedSeats = currentBookedSeats + paxValue;
-            
-            if (totalProjectedSeats > 88 || paxValue > 88) {
-                // Berikan amaran visual
-                warningNotice.innerText = `⚠️ Maaf, kapasiti Dine In bagi tarikh [${dateInput}] jam [${timeInput}] telah penuh / melebihi had. Slot waktu ini mengehadkan baki tempat duduk sehingga maksimum 88 pax sahaja. Sila pilih masa yang lain atau tukar jenis order kepada Take Away.`;
-                warningNotice.classList.remove('hidden');
-                submitBtn.disabled = true;
-                submitBtn.classList.add('opacity-40', 'cursor-not-allowed');
-            } else {
-                warningNotice.classList.add('hidden');
-                const selectedDate = new Date(dateInput);
-                if (selectedDate.getDay() !== 1) {
-                    submitBtn.disabled = false;
-                    submitBtn.classList.remove('opacity-40', 'cursor-not-allowed');
-                }
-            }
-        }
-
         function closePizzaModal() {
             document.getElementById('pizza-size-modal').classList.add('hidden');
             currentlySelectedPizzaName = "";
@@ -1424,13 +1506,11 @@
             const itemKey = name + (option ? ` (${option})` : "");
             const existingItem = userCart.find(item => item.key === itemKey);
 
-            if (existingItem) {
-                existingItem.qty += 1;
-            } else {
-                userCart.push({ key: itemKey, name: name, option: option, price: price, qty: 1 });
-            }
+            if (existingItem) existingItem.qty += 1;
+            else userCart.push({ key: itemKey, name: name, option: option, price: price, qty: 1 });
 
             updateCartUIState();
+            showToast("Item dimasukkan ke dalam troli");
         }
 
         function updateCartUIState() {
@@ -1441,7 +1521,6 @@
             const floatingCartCount = document.getElementById('floating-cart-count');
             
             if (totalQty > 0) {
-                floatingCart.removeProperty ? floatingCart.style.removeProperty('display') : floatingCart.style.display = '';
                 floatingCart.classList.remove('scale-0', 'opacity-0', 'pointer-events-none');
                 floatingCartCount.innerText = totalQty;
                 document.getElementById('cart-review-section').classList.remove('hidden');
@@ -1480,13 +1559,10 @@
 
         function adjustCartItemQty(index, change) {
             userCart[index].qty += change;
-            if (userCart[index].qty <= 0) {
-                userCart.splice(index, 1);
-            }
+            if (userCart[index].qty <= 0) userCart.splice(index, 1);
             updateCartUIState();
         }
 
-        // KEMASKINI FUNGSI: BUTANG TROLI AKAN MEMBAWA BALIK PENGGUNA KE HALAMAN HOME DARI MANA-MANA HALAMAN LAIN
         function scrollToCartReview() {
             showSPASection('home-page');
             setTimeout(() => {
@@ -1501,14 +1577,63 @@
             }, 100);
         }
 
+        function handleOrderTypeChange(selectElement) {
+            const paxCountInput = document.getElementById('pax-count');
+            if (selectElement.value === "Take Away") {
+                paxCountInput.value = ""; 
+                paxCountInput.disabled = true; 
+                paxCountInput.required = false; 
+            } else {
+                paxCountInput.disabled = false; 
+                paxCountInput.required = true; 
+            }
+        }
+
+        function checkDineInCapacity() {
+            const orderType = document.getElementById('booking-package').value;
+            const dateInput = document.getElementById('pax-date').value;
+            const timeInput = document.getElementById('pax-time').value;
+            const paxCountInput = document.getElementById('pax-count');
+            const paxValue = parseInt(paxCountInput.value) || 0;
+            
+            const warningNotice = document.getElementById('capacity-warning-notice');
+            const submitBtn = document.getElementById('submit-btn');
+            
+            if (orderType === "Take Away" || !dateInput || !timeInput) {
+                warningNotice.classList.add('hidden');
+                const selectedDate = new Date(dateInput);
+                if (selectedDate.getDay() !== 1) {
+                    submitBtn.disabled = false;
+                    submitBtn.classList.remove('opacity-40', 'cursor-not-allowed');
+                }
+                return;
+            }
+            
+            const databaseKey = `${dateInput}_${timeInput}`;
+            const currentBookedSeats = dineInCapacityDatabase[databaseKey] || 0;
+            const totalProjectedSeats = currentBookedSeats + paxValue;
+            
+            if (totalProjectedSeats > 88 || paxValue > 88) {
+                warningNotice.innerText = `⚠️ Maaf, kapasiti Dine In bagi tarikh [${dateInput}] jam [${timeInput}] telah penuh. Slot ini mengehadkan baki tempat duduk sehingga maksimum 88 pax sahaja. Sila pilih masa lain atau tukar kepada Take Away.`;
+                warningNotice.classList.remove('hidden');
+                submitBtn.disabled = true;
+                submitBtn.classList.add('opacity-40', 'cursor-not-allowed');
+            } else {
+                warningNotice.classList.add('hidden');
+                const selectedDate = new Date(dateInput);
+                if (selectedDate.getDay() !== 1) {
+                    submitBtn.disabled = false;
+                    submitBtn.classList.remove('opacity-40', 'cursor-not-allowed');
+                }
+            }
+        }
+
         function checkMonday(datePicker) {
             const selectedDate = new Date(datePicker.value);
-            const day = selectedDate.getDay(); 
-
             const warnMsg = document.getElementById('monday-warn');
             const submitBtn = document.getElementById('submit-btn');
 
-            if (day === 1) {
+            if (selectedDate.getDay() === 1) {
                 warnMsg.classList.remove('hidden');
                 submitBtn.disabled = true;
                 submitBtn.classList.add('opacity-50', 'cursor-not-allowed');
@@ -1519,35 +1644,82 @@
             }
         }
 
+        // POST SAVING ORDER TO APPS SCRIPT
         function handleFormSubmit(event) {
             event.preventDefault();
 
+            const submitBtn = document.getElementById('submit-btn');
+            submitBtn.disabled = true; // WAJIB: Disable untuk elak double submit
+            toggleSpinner(true);
+
             const name = document.getElementById('pax-name').value.trim();
-            const phone = document.getElementById('pax-phone').value.trim();
+            const rawPhone = document.getElementById('pax-phone').value.trim();
+            const phone = formatPhone(rawPhone);
             const date = document.getElementById('pax-date').value;
             const time = document.getElementById('pax-time').value;
-            const pax = document.getElementById('pax-count').value;
+            const pax = document.getElementById('pax-count').value || "0";
             const pkg = document.getElementById('booking-package').value;
             const note = document.getElementById('pax-note').value.trim();
 
-            document.getElementById('summary-name').innerText = name;
-            document.getElementById('summary-phone').innerText = phone;
-            document.getElementById('summary-datetime').innerText = `${date} pada jam ${time}`;
-            document.getElementById('summary-pax').innerText = pax ? `${pax} Pax` : "N/A (Take Away)";
-            document.getElementById('summary-package').innerText = pkg;
-
-            let foodListText = "";
-            userCart.forEach(item => {
-                foodListText += `• ${item.qty}x ${item.name}${item.option ? ` (${item.option})` : ""} - RM ${(item.price * item.qty).toFixed(2)}%0A`;
-            });
+            const totalQty = userCart.reduce((sum, item) => sum + item.qty, 0);
             const totalCost = userCart.reduce((sum, item) => sum + (item.price * item.qty), 0);
+            const menuSummary = userCart.map(i => `${i.qty}x ${i.name}${i.option ? ` (${i.option})` : ''}`).join(', ');
 
-            const message = `Halo Qulai Pizza! Saya ingin membuat Pesanan Makanan Online.%0A%0A*BUTIRAN PESANAN:*%0A----------------------%0A👤 *Nama:* ${encodeURIComponent(name)}%0A📞 *Telefon:* ${encodeURIComponent(phone)}%0A📅 *Tarikh:* ${encodeURIComponent(date)}%0A🕒 *Masa:* ${encodeURIComponent(time)}%0A👥 *Bilangan:* ${encodeURIComponent(pax ? `${pax} Orang` : 'N/A (Take Away)')}%0A📦 *Pilihan Order:* ${encodeURIComponent(pkg)}%0A📝 *Catatan:* ${encodeURIComponent(note || 'Tiada catatan tambahan.')}%0A%0A*SENARAI PESANAN MAKANAN:*%0A----------------------%0A${foodListText}%0A💰 *JUMLAH KESELURUHAN:* *RM ${totalCost.toFixed(2)}*%0A----------------------%0A%0AMohon maklumbalas pengesahan daripada pihak anda kelak. Terima kasih!`;
-            
-            const waLink = `https://api.whatsapp.com/send?phone=60106602847&text=${message}`;
-            document.getElementById('whatsapp-trigger-btn').href = waLink;
+            const payload = {
+                action: "saveOrder",
+                namaPenuh: name,
+                nomborTelefon: phone,
+                tarikhPesanan: date,
+                masa: time,
+                jenisOrder: pkg,
+                menu: menuSummary,
+                bilangan: totalQty,
+                jumlah: totalCost,
+                bilanganOrang: pax,
+                catatanTambahan: note
+            };
 
-            document.getElementById('success-modal').classList.remove('hidden');
+            // WAJIB: Content-Type: text/plain
+            fetch(APPS_SCRIPT_URL, {
+                method: "POST",
+                headers: { "Content-Type": "text/plain" },
+                body: JSON.stringify(payload)
+            })
+            .then(res => res.text()) // WAJIB: response.text()
+            .then(text => {
+                const resData = JSON.parse(text);
+                toggleSpinner(false);
+                submitBtn.disabled = false;
+
+                if (resData.success) {
+                    showToast("Tempahan berjaya disimpan dalam sistem!");
+
+                    document.getElementById('summary-name').innerText = name;
+                    document.getElementById('summary-phone').innerText = phone;
+                    document.getElementById('summary-datetime').innerText = `${date} pada jam ${time}`;
+                    document.getElementById('summary-pax').innerText = pax ? `${pax} Pax` : "N/A (Take Away)";
+                    document.getElementById('summary-package').innerText = pkg;
+
+                    let foodListText = "";
+                    userCart.forEach(item => {
+                        foodListText += `• ${item.qty}x ${item.name}${item.option ? ` (${item.option})` : ""} - RM ${(item.price * item.qty).toFixed(2)}%0A`;
+                    });
+
+                    const message = `Halo Qulai Pizza! Saya telah membuat Pesanan Makanan Online.%0A%0A*BUTIRAN PESANAN:*%0A----------------------%0A👤 *Nama:* ${encodeURIComponent(name)}%0A📞 *Telefon:* ${encodeURIComponent(phone)}%0A📅 *Tarikh:* ${encodeURIComponent(date)}%0A🕒 *Masa:* ${encodeURIComponent(time)}%0A👥 *Bilangan:* ${encodeURIComponent(pax ? `${pax} Orang` : 'N/A (Take Away)')}%0A📦 *Pilihan Order:* ${encodeURIComponent(pkg)}%0A📝 *Catatan:* ${encodeURIComponent(note || 'Tiada catatan tambahan.')}%0A%0A*SENARAI PESANAN MAKANAN:*%0A----------------------%0A${foodListText}%0A💰 *JUMLAH KESELURUHAN:* *RM ${totalCost.toFixed(2)}*%0A----------------------%0A%0AMohon maklumbalas pengesahan daripada pihak anda kelak. Terima kasih!`;
+                    
+                    const waLink = `https://api.whatsapp.com/send?phone=60106602847&text=${message}`;
+                    document.getElementById('whatsapp-trigger-btn').href = waLink;
+
+                    document.getElementById('success-modal').classList.remove('hidden');
+                } else {
+                    showToast("Gagal menyimpan pesanan: " + resData.message, 'error');
+                }
+            })
+            .catch(err => {
+                toggleSpinner(false);
+                submitBtn.disabled = false;
+                showToast("Ralat Rangkaian: " + err.toString(), 'error');
+            });
         }
 
         function closeSuccessModal() {
@@ -1557,12 +1729,8 @@
         function openGalleryModal(title, description, imageUrl) {
             document.getElementById('modal-title').innerText = title;
             document.getElementById('modal-desc').innerText = description;
-            
             const largeImageElement = document.getElementById('modal-image-large');
-            if (largeImageElement && imageUrl) {
-                largeImageElement.src = imageUrl;
-            }
-            
+            if (largeImageElement && imageUrl) largeImageElement.src = imageUrl;
             document.getElementById('gallery-modal').classList.remove('hidden');
         }
 
@@ -1573,10 +1741,471 @@
         function handleGalleryModalClick(event) {
             const modalImageWrapper = document.getElementById('modal-image-wrapper');
             const modalTextWrapper = document.getElementById('modal-text-wrapper');
-            
             if (!modalImageWrapper.contains(event.target) && !modalTextWrapper.contains(event.target)) {
                 closeGalleryModal();
             }
+        }
+
+        // ==================== ADMIN DASHBOARD ENGINE ====================
+        function toggleAdminView() {
+            showSPASection('admin-dashboard-page');
+            const token = sessionStorage.getItem('adminToken');
+            if (token === 'valid') {
+                document.getElementById('admin-login-modal').classList.add('hidden');
+                document.getElementById('admin-content').classList.remove('hidden');
+                fetchAdminData();
+            } else {
+                document.getElementById('admin-login-modal').classList.remove('hidden');
+                document.getElementById('admin-content').classList.add('hidden');
+            }
+        }
+
+        // LOG MASUK ADMIN VIA GOOGLE SHEETS 'Admin'
+        function handleAdminLogin(e) {
+            e.preventDefault();
+            const btn = document.getElementById('admin-login-btn');
+            btn.disabled = true; // WAJIB: Disable elak double submission
+            toggleSpinner(true);
+
+            const email = document.getElementById('admin-email-input').value.trim();
+            const pass = document.getElementById('admin-pass-input').value.trim();
+
+            const payload = {
+                action: "adminLogin",
+                email: email,
+                password: pass
+            };
+
+            // WAJIB: Content-Type: text/plain
+            fetch(APPS_SCRIPT_URL, {
+                method: "POST",
+                headers: { "Content-Type": "text/plain" },
+                body: JSON.stringify(payload)
+            })
+            .then(res => res.text()) // WAJIB: response.text()
+            .then(text => {
+                const resData = JSON.parse(text);
+                toggleSpinner(false);
+                btn.disabled = false;
+
+                if (resData.success) {
+                    sessionStorage.setItem('adminToken', 'valid');
+                    document.getElementById('admin-login-modal').classList.add('hidden');
+                    document.getElementById('admin-content').classList.remove('hidden');
+                    showToast("Log masuk admin berjaya!");
+                    fetchAdminData();
+                } else {
+                    showToast(resData.message || "Log masuk gagal!", 'error');
+                }
+            })
+            .catch(err => {
+                toggleSpinner(false);
+                btn.disabled = false;
+                showToast("Ralat Rangkaian: " + err.toString(), 'error');
+            });
+        }
+
+        function logoutAdmin() {
+            sessionStorage.removeItem('adminToken');
+            toggleAdminView();
+        }
+
+        function fetchAdminData() {
+            toggleSpinner(true);
+            fetch(`${APPS_SCRIPT_URL}?action=getOrders`)
+            .then(res => res.text()) // WAJIB: response.text()
+            .then(text => {
+                const resData = JSON.parse(text);
+                if (resData.success) {
+                    rawOrdersData = resData.data;
+                    applyTableFilters();
+                    updateMetricsAndCharts();
+                    renderMenuPopularityAnalytics();
+                } else {
+                    showToast("Gagal mengambil data pesanan admin", 'error');
+                }
+                toggleSpinner(false);
+            })
+            .catch(err => {
+                toggleSpinner(false);
+                showToast("Ralat: " + err.toString(), 'error');
+            });
+        }
+
+        function updateMetricsAndCharts() {
+            let totalOrders = rawOrdersData.length;
+            let totalSales = 0;
+            let dineInCount = 0;
+            let takeAwayCount = 0;
+            let todayOrdersCount = 0;
+
+            const todayStr = new Date().toISOString().split('T')[0];
+
+            rawOrdersData.forEach(item => {
+                totalSales += Number(item.jumlah) || 0;
+                if ((item.jenisOrder || '').toLowerCase() === 'dine in') dineInCount++;
+                if ((item.jenisOrder || '').toLowerCase() === 'take away') takeAwayCount++;
+                if (item.tarikhPesanan === todayStr) todayOrdersCount++;
+            });
+
+            document.getElementById('stat-total-orders').innerText = totalOrders;
+            document.getElementById('stat-today-orders').innerText = todayOrdersCount;
+            document.getElementById('stat-total-sales').innerText = `RM ${totalSales.toFixed(2)}`;
+            document.getElementById('stat-avg-order').innerText = `RM ${(totalOrders > 0 ? totalSales/totalOrders : 0).toFixed(2)}`;
+            document.getElementById('stat-dine-in').innerText = dineInCount;
+            document.getElementById('stat-take-away').innerText = takeAwayCount;
+
+            renderCharts(dineInCount, takeAwayCount);
+        }
+
+        // FUNGSI ANALISIS MENU TERLARIS VS KURANG SAMBUTAN
+        function renderMenuPopularityAnalytics() {
+            const container = document.getElementById('category-analytics-grid');
+            if(!container) return;
+            container.innerHTML = '';
+
+            const itemCounts = {};
+
+            rawOrdersData.forEach(order => {
+                const menuString = order.menu || '';
+                const parts = menuString.split(',');
+
+                parts.forEach(part => {
+                    const match = part.trim().match(/^(\d+)x\s+(.+)$/);
+                    if (match) {
+                        const qty = parseInt(match[1]) || 1;
+                        let itemName = match[2].trim();
+                        itemName = itemName.replace(/\s*\(Regular\)|\s*\(Large\)/i, '').trim();
+
+                        itemCounts[itemName] = (itemCounts[itemName] || 0) + qty;
+                    }
+                });
+            });
+
+            const categories = [
+                { key: 'pizza', name: '🍕 Pizza Kayu Api' },
+                { key: 'pasta', name: '🍝 Pasta & Spesial' },
+                { key: 'burger', name: '🍔 Prosperity Burger' },
+                { key: 'sides', name: '🍟 Sampingan / Pencuci Mulut' },
+                { key: 'drinks', name: '🍹 Minuman' }
+            ];
+
+            categories.forEach(cat => {
+                const catMenuItems = fullMenu.filter(m => m.category === cat.key);
+                
+                let maxQty = -1;
+                let topItem = 'Tiada Data';
+                
+                let minQty = Infinity;
+                let leastItem = 'Tiada Data';
+
+                catMenuItems.forEach(item => {
+                    const count = itemCounts[item.name] || 0;
+
+                    if (count > maxQty) {
+                        maxQty = count;
+                        topItem = item.name;
+                    }
+                    if (count < minQty) {
+                        minQty = count;
+                        leastItem = item.name;
+                    }
+                });
+
+                if (maxQty <= 0) { topItem = "Belum Ada Pesanan"; maxQty = 0; }
+                if (minQty === Infinity || minQty < 0) { leastItem = "Belum Ada Pesanan"; minQty = 0; }
+
+                const card = document.createElement('div');
+                card.className = "p-4 rounded-xl border border-slate-200 bg-slate-50/50 space-y-3";
+                card.innerHTML = `
+                    <div class="font-bold text-slate-800 text-xs border-b border-slate-200 pb-2 flex justify-between items-center">
+                        <span>${cat.name}</span>
+                    </div>
+                    <div class="space-y-2 text-xs">
+                        <div class="p-2.5 bg-emerald-50 border border-emerald-200 rounded-lg flex items-center justify-between">
+                            <div>
+                                <span class="text-[10px] font-bold text-emerald-700 uppercase block">🔥 Paling Terlaris</span>
+                                <span class="font-bold text-slate-900">${topItem}</span>
+                            </div>
+                            <span class="bg-emerald-600 text-white font-extrabold text-[10px] px-2 py-0.5 rounded-full">${maxQty} unit</span>
+                        </div>
+                        <div class="p-2.5 bg-rose-50 border border-red-200 rounded-lg flex items-center justify-between">
+                            <div>
+                                <span class="text-[10px] font-bold text-red-700 uppercase block">📉 Kurang Sambutan</span>
+                                <span class="font-bold text-slate-900">${leastItem}</span>
+                            </div>
+                            <span class="bg-red-500 text-white font-extrabold text-[10px] px-2 py-0.5 rounded-full">${minQty} unit</span>
+                        </div>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        // RENDER CHARTS (Y-AXIS WHOLE NUMBERS / NOMBOR BULAT SAHAJA)
+        function renderCharts(dineIn, takeAway) {
+            const dateCounts = {};
+            rawOrdersData.forEach(o => {
+                if (o.tarikhPesanan) dateCounts[o.tarikhPesanan] = (dateCounts[o.tarikhPesanan] || 0) + 1;
+            });
+
+            const labels = Object.keys(dateCounts).sort().slice(-7);
+            const dataVals = labels.map(l => dateCounts[l]);
+
+            if (chartDailyInstance) chartDailyInstance.destroy();
+            const ctxDaily = document.getElementById('dailyChart').getContext('2d');
+            chartDailyInstance = new Chart(ctxDaily, {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Pesanan Harian',
+                        data: dataVals,
+                        borderColor: '#F47C20',
+                        backgroundColor: 'rgba(244, 124, 32, 0.1)',
+                        fill: true,
+                        tension: 0.3
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { display: false } },
+                    scales: {
+                        x: { ticks: { color: '#64748B' }, grid: { color: '#E2E8F0' } },
+                        y: { 
+                            ticks: { 
+                                color: '#64748B',
+                                stepSize: 1,
+                                precision: 0 
+                            }, 
+                            beginAtZero: true,
+                            grid: { color: '#E2E8F0' } 
+                        }
+                    }
+                }
+            });
+
+            if (chartTypeInstance) chartTypeInstance.destroy();
+            const ctxType = document.getElementById('typeChart').getContext('2d');
+            chartTypeInstance = new Chart(ctxType, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Dine In', 'Take Away'],
+                    datasets: [{ data: [dineIn, takeAway], backgroundColor: ['#A52A1A', '#F47C20'] }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { labels: { color: '#334155' } } }
+                }
+            });
+        }
+
+        function applyTableFilters() {
+            const query = document.getElementById('admin-search-input').value.toLowerCase();
+            const typeFilter = document.getElementById('filter-order-type').value;
+            const dateFilter = document.getElementById('filter-date').value;
+
+            filteredOrdersData = rawOrdersData.filter(item => {
+                const formattedPhone = formatPhone(item.nomborTelefon);
+                const matchSearch = (item.namaPenuh || '').toLowerCase().includes(query) ||
+                                    formattedPhone.includes(query) ||
+                                    (item.menu || '').toLowerCase().includes(query);
+                
+                const matchType = typeFilter === 'ALL' || item.jenisOrder === typeFilter;
+                const matchDate = !dateFilter || item.tarikhPesanan === dateFilter;
+
+                return matchSearch && matchType && matchDate;
+            });
+
+            currentPage = 1;
+            renderAdminTable();
+        }
+
+        function clearAdminFilters() {
+            document.getElementById('admin-search-input').value = '';
+            document.getElementById('filter-order-type').value = 'ALL';
+            document.getElementById('filter-date').value = '';
+            applyTableFilters();
+        }
+
+        function sortTable(colKey) {
+            if (currentSortColumn === colKey) currentSortAsc = !currentSortAsc;
+            else { currentSortColumn = colKey; currentSortAsc = true; }
+
+            filteredOrdersData.sort((a, b) => {
+                let valA = a[colKey] || '';
+                let valB = b[colKey] || '';
+                if (typeof valA === 'number') return currentSortAsc ? valA - valB : valB - valA;
+                return currentSortAsc ? valA.toString().localeCompare(valB.toString()) : valB.toString().localeCompare(valA.toString());
+            });
+
+            renderAdminTable();
+        }
+
+        // JADUAL ADMIN: BUTANG ACTION HANYA BUTANG PRINT RESIT INDIVIDU
+        function renderAdminTable() {
+            const tbody = document.getElementById('admin-orders-tbody');
+            tbody.innerHTML = '';
+
+            const total = filteredOrdersData.length;
+            const startIdx = (currentPage - 1) * itemsPerPage;
+            const endIdx = Math.min(startIdx + itemsPerPage, total);
+            const pageData = filteredOrdersData.slice(startIdx, endIdx);
+
+            if (pageData.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="8" class="p-4 text-center text-slate-400">Tiada rekod tempahan ditemui</td></tr>`;
+            } else {
+                pageData.forEach(item => {
+                    const dt = formatDateTime(item.tarikhPesanan, item.masa);
+                    const formattedPhone = formatPhone(item.nomborTelefon);
+
+                    const tr = document.createElement('tr');
+                    tr.className = "hover:bg-slate-50 transition-colors border-b border-slate-200";
+                    tr.innerHTML = `
+                        <td class="p-3 font-semibold text-slate-900">${item.namaPenuh}</td>
+                        <td class="p-3 font-mono font-medium">${formattedPhone}</td>
+                        <td class="p-3">${dt.date}<br><span class="text-[10px] text-slate-500 font-mono">${dt.time}</span></td>
+                        <td class="p-3">
+                            <span class="px-2 py-0.5 rounded text-[10px] font-bold ${item.jenisOrder === 'Dine In' ? 'bg-purple-100 text-purple-800 border border-purple-200' : 'bg-orange-100 text-orange-800 border border-orange-200'}">
+                                ${item.jenisOrder}
+                            </span>
+                        </td>
+                        <td class="p-3 max-w-xs whitespace-normal break-words leading-relaxed text-slate-800 font-medium">
+                            ${item.menu}
+                        </td>
+                        <td class="p-3">${item.bilanganOrang || '0'}</td>
+                        <td class="p-3 font-bold text-emerald-700">RM ${Number(item.jumlah || 0).toFixed(2)}</td>
+                        <td class="p-3 text-center no-print">
+                            <button onclick="printSingleReceipt(${item.row})" class="bg-primary hover:bg-darkRed text-white text-[11px] font-bold px-3 py-1.5 rounded-btn transition-all shadow-sm flex items-center gap-1 mx-auto">
+                                🖨️ Resit
+                            </button>
+                        </td>
+                    `;
+                    tbody.appendChild(tr);
+                });
+            }
+
+            document.getElementById('pagination-info').innerText = `Menunjukkan ${startIdx + 1} - ${endIdx} daripada ${total} entri`;
+            document.getElementById('current-page-num').innerText = currentPage;
+            document.getElementById('btn-prev-page').disabled = currentPage === 1;
+            document.getElementById('btn-next-page').disabled = endIdx >= total;
+        }
+
+        function changePage(dir) {
+            currentPage += dir;
+            renderAdminTable();
+        }
+
+        // FUNGSI PRINT RESIT / INVOIS INDIVIDU DENGAN FIX CETAKAN ISOLASI
+        function printSingleReceipt(rowId) {
+            const item = rawOrdersData.find(i => i.row == rowId);
+            if (!item) return;
+
+            const dt = formatDateTime(item.tarikhPesanan, item.masa);
+            const formattedPhone = formatPhone(item.nomborTelefon);
+
+            let menuHtml = "";
+            const menuParts = (item.menu || '').split(',');
+            menuParts.forEach(m => {
+                if(m.trim()) {
+                    menuHtml += `<div class="flex justify-between text-xs py-1 border-b border-dashed border-slate-200">
+                        <span class="text-slate-800 font-medium">${m.trim()}</span>
+                    </div>`;
+                }
+            });
+
+            const receiptContainer = document.getElementById('receipt-printable-area');
+            receiptContainer.innerHTML = `
+                <div class="max-w-md mx-auto p-6 bg-white text-slate-900 font-sans space-y-4">
+                    <!-- HEADER LOGO -->
+                    <div class="text-center space-y-1 border-b border-slate-300 pb-4">
+                        <img src="https://arleta.site/interactivelink/118/logoqulai.png" alt="Qulai Pizza Logo" class="w-20 h-20 mx-auto object-cover mb-1">
+                        <h1 class="text-xl font-extrabold font-poppins text-slate-900 tracking-wider">QULAI PIZZA KAYU API</h1>
+                        <p class="text-[11px] text-slate-500">Kulai, Johor, Malaysia • Tel: +60 10-660 2847</p>
+                        <span class="inline-block mt-2 bg-slate-900 text-white text-[10px] font-extrabold uppercase px-3 py-1 rounded-full tracking-widest">INVOIS / RESIT RASMI</span>
+                    </div>
+
+                    <!-- MAKLUMAT TEMPAHAN -->
+                    <div class="grid grid-cols-2 gap-2 text-xs py-2 bg-slate-50 p-3 rounded-lg border border-slate-200">
+                        <div><span class="text-slate-500 block">ID Tempahan:</span> <strong class="text-slate-900">#ORD-${item.row}</strong></div>
+                        <div><span class="text-slate-500 block">Jenis Order:</span> <strong class="text-primary">${item.jenisOrder}</strong></div>
+                        <div><span class="text-slate-500 block">Pelanggan:</span> <strong class="text-slate-900">${item.namaPenuh}</strong></div>
+                        <div><span class="text-slate-500 block">WhatsApp:</span> <strong class="text-slate-900 font-mono">${formattedPhone}</strong></div>
+                        <div><span class="text-slate-500 block">Tarikh Kunjungan:</span> <strong>${dt.date}</strong></div>
+                        <div><span class="text-slate-500 block">Masa & Pax:</span> <strong>${dt.time} (${item.bilanganOrang || '0'} Pax)</strong></div>
+                    </div>
+
+                    <!-- SENARAI ITEM MAKANAN -->
+                    <div class="space-y-1">
+                        <h4 class="text-xs font-bold text-slate-700 uppercase border-b border-slate-300 pb-1">Senarai Hidangan</h4>
+                        ${menuHtml}
+                    </div>
+
+                    <!-- JUMLAH & CATATAN -->
+                    <div class="pt-2 space-y-2">
+                        <div class="flex justify-between items-center text-sm font-extrabold border-t-2 border-slate-900 pt-2">
+                            <span>JUMLAH KESELURUHAN</span>
+                            <span class="text-emerald-700 text-base font-poppins">RM ${Number(item.jumlah || 0).toFixed(2)}</span>
+                        </div>
+                        ${item.catatanTambahan ? `<div class="text-[11px] text-slate-600 bg-amber-50 p-2 rounded border border-amber-200"><strong>Catatan:</strong> ${item.catatanTambahan}</div>` : ''}
+                    </div>
+
+                    <!-- FOOTER RESIT -->
+                    <div class="text-center pt-4 border-t border-slate-200 space-y-1">
+                        <p class="text-xs font-bold font-poppins text-slate-800">Terima Kasih Atas Pesanan Anda! 🍕</p>
+                        <p class="text-[10px] text-slate-400">Sila simpan resit ini sebagai bukti pengesahan tempahan.</p>
+                    </div>
+                </div>
+            `;
+
+            // TANDA KELAS CETAKAN RESIT PADA BODY
+            receiptContainer.classList.remove('hidden');
+            document.body.classList.add('is-printing-receipt');
+
+            window.print();
+
+            // KEMBALIKAN TETAPAN SELEPAS CETAKAN
+            setTimeout(() => {
+                receiptContainer.classList.add('hidden');
+                document.body.classList.remove('is-printing-receipt');
+            }, 500);
+        }
+
+        function exportToCSV() {
+            if (filteredOrdersData.length === 0) {
+                showToast("Tiada data untuk dieksport", 'error');
+                return;
+            }
+
+            let csvContent = "data:text/csv;charset=utf-8,";
+            csvContent += "Nama Penuh,Nombor Telefon,Tarikh,Masa,Jenis Order,Menu,Bilangan,Jumlah (RM),Pax,Catatan\n";
+
+            filteredOrdersData.forEach(row => {
+                const formattedPhone = formatPhone(row.nomborTelefon);
+                const r = [
+                    `"${row.namaPenuh || ''}"`,
+                    `"${formattedPhone}"`,
+                    `"${row.tarikhPesanan || ''}"`,
+                    `"${row.masa || ''}"`,
+                    `"${row.jenisOrder || ''}"`,
+                    `"${row.menu || ''}"`,
+                    `"${row.bilangan || 0}"`,
+                    `"${row.jumlah || 0}"`,
+                    `"${row.bilanganOrang || 0}"`,
+                    `"${(row.catatanTambahan || '').replace(/"/g, '""')}"`
+                ];
+                csvContent += r.join(",") + "\n";
+            });
+
+            const encodedUri = encodeURI(csvContent);
+            const link = document.createElement("a");
+            link.setAttribute("href", encodedUri);
+            link.setAttribute("download", `Qulai_Pizza_Orders_${new Date().toISOString().split('T')[0]}.csv`);
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
         }
     </script>
 </body>
