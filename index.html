@@ -13,7 +13,7 @@
     <!-- Chart.js -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-<script>
+    <script>
         tailwind.config = {
             darkMode: 'class',
             theme: {
@@ -59,24 +59,24 @@
         @keyframes slideUp { from { transform: translateY(30px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
         @keyframes zoomIn { from { transform: scale(0.95); opacity: 0; } to { transform: scale(1); opacity: 1; } }
 
-::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar { width: 8px; }
         ::-webkit-scrollbar-track { background: #F5F5F5; }
         ::-webkit-scrollbar-thumb { background: #A52A1A; border-radius: 4px; }
 
-.wood-gradient { background: linear-gradient(135deg, #7A1C12 0%, #6E3B22 100%); }
+        .wood-gradient { background: linear-gradient(135deg, #7A1C12 0%, #6E3B22 100%); }
 
-.saas-card {
+        .saas-card {
             background: #FFFFFF;
             border: 1px solid #E2E8F0;
             box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.05), 0 1px 2px 0 rgba(0, 0, 0, 0.03);
         }
 
-/* PEMBAIKAN PERATURAN MEDIA PRINT DUA MOD (LAPORAN VS RESIT INDIVIDU) */
+        /* PEMBAIKAN PERATURAN MEDIA PRINT DUA MOD (LAPORAN VS RESIT INDIVIDU) */
         @media print {
             body * { visibility: hidden !important; }
             .no-print { display: none !important; }
 
-/* CETAKAN RESIT INDIVIDU */
+            /* CETAKAN RESIT INDIVIDU */
             body.is-printing-receipt #receipt-printable-area, 
             body.is-printing-receipt #receipt-printable-area * { 
                 visibility: visible !important; 
@@ -94,7 +94,7 @@
                 display: none !important; 
             }
 
-/* CETAKAN LAPORAN SENARAI BESAR */
+            /* CETAKAN LAPORAN SENARAI BESAR */
             body:not(.is-printing-receipt) #printable-area, 
             body:not(.is-printing-receipt) #printable-area * { 
                 visibility: visible !important; 
@@ -115,16 +115,16 @@
 </head>
 <body class="bg-[#FFFFFF] text-neutralDark font-sans selection:bg-accent selection:text-darkRed transition-colors duration-300">
 
-<!-- TOAST NOTIFICATION CONTAINER -->
+    <!-- TOAST NOTIFICATION CONTAINER -->
     <div id="toast-container" class="fixed top-5 right-5 z-[100] flex flex-col gap-3 pointer-events-none"></div>
 
-<!-- LOADING SPINNER (CENTERED PERFECTLY) -->
+    <!-- LOADING SPINNER (CENTERED PERFECTLY) -->
     <div id="global-spinner" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-[90] hidden flex flex-col items-center justify-center text-white">
         <div class="w-14 h-14 border-4 border-accent border-t-transparent rounded-full animate-spin"></div>
         <p class="mt-4 font-poppins font-semibold text-sm tracking-wide">Memproses data...</p>
     </div>
 
-<!-- HEADER / NAVIGATION BAR UTAMA -->
+    <!-- HEADER / NAVIGATION BAR UTAMA -->
     <header id="main-header" class="sticky top-0 z-50 bg-white/95 backdrop-blur-md border-b border-gray-100 transition-all duration-300">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex items-center justify-between h-20">
@@ -139,7 +139,7 @@
                     </div>
                 </a>
 
-<!-- Desktop Navigation Links -->
+                <!-- Desktop Navigation Links -->
                 <nav class="hidden md:flex space-x-8 font-medium">
                     <a href="javascript:void(0)" onclick="showSPASection('home-page')" class="nav-link text-primary hover:text-primary transition-colors py-2 font-bold" id="nav-home-page">Home</a>
                     <a href="javascript:void(0)" onclick="showSPASection('about-page')" class="nav-link text-neutralDark hover:text-primary transition-colors py-2" id="nav-about-page">Tentang Kami</a>
@@ -148,7 +148,7 @@
                     <a href="javascript:void(0)" onclick="showSPASection('contact-page')" class="nav-link text-neutralDark hover:text-primary transition-colors py-2" id="nav-contact-page">Hubungi</a>
                 </nav>
 
-<!-- Action Buttons: Admin & CTA -->
+                <!-- Action Buttons: Admin & CTA -->
                 <div class="hidden md:flex items-center gap-3">
                     <button onclick="toggleAdminView()" class="bg-slate-900 hover:bg-black text-white text-xs font-semibold px-4 py-3 rounded-btn transition-all shadow-md flex items-center gap-2">
                         <span>🔒 Admin</span>
@@ -159,7 +159,7 @@
                     </a>
                 </div>
 
-<!-- Mobile Header Tools -->
+                <!-- Mobile Header Tools -->
                 <div class="md:hidden flex items-center gap-2">
                     <button onclick="toggleAdminView()" class="text-xs bg-neutralDark text-white px-3 py-2 rounded-btn font-semibold">Admin</button>
                     <button id="mobile-menu-btn" class="text-neutralDark hover:text-primary focus:outline-none p-2" aria-label="Toggle Menu">
@@ -169,7 +169,7 @@
             </div>
         </div>
 
-<!-- Mobile Menu -->
+        <!-- Mobile Menu -->
         <div id="mobile-menu" class="hidden md:hidden bg-white border-b border-gray-100 transition-all duration-300 ease-in-out">
             <div class="px-4 pt-2 pb-6 space-y-3 font-medium">
                 <a href="javascript:void(0)" onclick="showSPASection('home-page'); toggleMobileMenu()" class="block text-neutralDark hover:text-primary py-2 border-b border-gray-50">Home</a>
@@ -182,7 +182,7 @@
         </div>
     </header>
 
-<!-- ==================== HALAMAN 1: HOME PAGE ==================== -->
+    <!-- ==================== HALAMAN 1: HOME PAGE ==================== -->
     <div id="home-page" class="spa-section block">
         <!-- 1. HERO SECTION -->
         <section class="relative min-h-[90vh] flex items-center justify-center bg-neutralBg py-12 overflow-hidden">
@@ -190,7 +190,7 @@
             <div class="absolute -top-40 -right-40 w-96 h-96 rounded-full bg-accent/20 blur-3xl"></div>
             <div class="absolute -bottom-40 -left-40 w-96 h-96 rounded-full bg-primary/10 blur-3xl"></div>
 
-<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
                 <div class="lg:col-span-7 text-center lg:text-left space-y-6 animate-slide-up">
                     <span class="inline-flex items-center gap-2 bg-primary/10 text-primary font-bold px-4 py-2 rounded-full text-sm">
                         <span class="w-2 h-2 rounded-full bg-secondary animate-ping"></span>
@@ -228,7 +228,7 @@
                     </div>
                 </div>
 
-<!-- Visual Content -->
+                <!-- Visual Content -->
                 <div class="lg:col-span-5 relative w-full animate-zoom">
                     <div class="relative w-full overflow-hidden rounded-card shadow-2xl border-4 border-accent/40 group hover-lift transition-all duration-300">
                         <video autoplay muted loop playsinline class="w-full h-[280px] sm:h-[380px] md:h-[420px] object-cover block">
@@ -247,7 +247,7 @@
             </div>
         </section>
 
-<!-- 2. MENU SECTION -->
+        <!-- 2. MENU SECTION -->
         <section id="menu-section" class="py-24 bg-neutralBg">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="text-center max-w-3xl mx-auto mb-12">
@@ -256,7 +256,7 @@
                     <p class="text-gray-500 mt-4">Pilih makanan kegemaran anda dan kumpulkan pesanan di dalam troli.</p>
                 </div>
 
-<!-- Menu Category Filter Buttons -->
+                <!-- Menu Category Filter Buttons -->
                 <div class="flex flex-wrap justify-center gap-3 mb-12">
                     <button onclick="filterMenu('all')" class="menu-tab-btn active bg-primary text-white font-semibold px-6 py-3 rounded-btn transition-all text-sm shadow-sm" id="tab-all">Semua Menu</button>
                     <button onclick="filterMenu('pizza')" class="menu-tab-btn bg-white hover:bg-gray-100 text-gray-700 font-semibold px-6 py-3 rounded-btn transition-all text-sm" id="tab-pizza">🍕 Pizza Kayu Api</button>
@@ -266,12 +266,12 @@
                     <button onclick="filterMenu('drinks')" class="menu-tab-btn bg-white hover:bg-gray-100 text-gray-700 font-semibold px-6 py-3 rounded-btn transition-all text-sm" id="tab-drinks">🍹 Minuman</button>
                 </div>
 
-<!-- Menu Items Grid -->
+                <!-- Menu Items Grid -->
                 <div id="menu-items-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"></div>
             </div>
         </section>
 
-<!-- 3. REVIEW CART VIEW SECTION -->
+        <!-- 3. REVIEW CART VIEW SECTION -->
         <section id="cart-review-section" class="py-12 bg-white border-t border-gray-100 hidden">
             <div class="max-w-4xl mx-auto px-4 sm:px-6">
                 <div class="bg-neutralBg rounded-card p-6 sm:p-8 shadow-sm border border-gray-200">
@@ -284,7 +284,6 @@
                         <span id="cart-total-price" class="text-2xl font-extrabold text-primary font-poppins">RM 0.00</span>
                     </div>
                     <div class="mt-6 flex justify-end">
-                        <!-- UBAH NAMA BUTANG KEPADA: Sahkan Pesanan & Isi Butiran Pesanan → -->
                         <button onclick="showBookingForm()" id="checkout-btn" class="bg-primary hover:bg-darkRed text-white font-bold px-8 py-3.5 rounded-btn shadow-md hover:shadow-lg transition-all flex items-center gap-2 text-sm">
                             <span>Sahkan Pesanan & Isi Butiran Pesanan →</span>
                         </button>
@@ -293,7 +292,7 @@
             </div>
         </section>
 
-<!-- 4. ONLINE BOOKING SECTION -->
+        <!-- 4. ONLINE BOOKING SECTION -->
         <section id="booking-section" class="py-24 bg-white border-t border-gray-50 hidden animate-fade">
             <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
                 <div class="bg-neutralBg rounded-card shadow-xl overflow-hidden border border-gray-100 grid grid-cols-1 lg:grid-cols-12">
@@ -321,7 +320,7 @@
                         </div>
                     </div>
 
-<div class="lg:col-span-7 p-8 sm:p-12 bg-white">
+                    <div class="lg:col-span-7 p-8 sm:p-12 bg-white">
                         <form id="booking-form" onsubmit="handleFormSubmit(event)" class="space-y-5">
                             <div>
                                 <label for="pax-name" class="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-2">Nama Penuh</label>
@@ -373,7 +372,6 @@
                                 <label for="pax-note" class="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-2">Catatan Tambahan (Optional)</label>
                                 <textarea id="pax-note" rows="3" class="w-full px-4 py-3 rounded-btn border border-gray-200 focus:ring-2 focus:ring-primary outline-none transition-all text-sm" placeholder="Tulis permintaan khas seperti alahan, kerusi bayi dsb."></textarea>
                             </div>
-                            <!-- UBAH NAMA BUTANG KEPADA: Hantar Pesanan -->
                             <button type="submit" id="submit-btn" class="w-full bg-primary hover:bg-darkRed text-white font-bold py-4 px-6 rounded-btn transition-colors flex items-center justify-center gap-2 shadow-md disabled:opacity-40 disabled:cursor-not-allowed">
                                 <span>Hantar Pesanan</span>
                             </button>
@@ -383,7 +381,7 @@
             </div>
         </section>
 
-<!-- FOOTER HOME -->
+        <!-- FOOTER HOME -->
         <footer class="bg-neutralDark text-white pt-16 pb-8 border-t border-gray-800">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 md:grid-cols-4 gap-12 mb-12">
                 <div class="space-y-4">
@@ -428,7 +426,7 @@
         </footer>
     </div>
 
-<!-- ==================== HALAMAN 2: TENTANG KAMI ==================== -->
+    <!-- ==================== HALAMAN 2: TENTANG KAMI ==================== -->
     <div id="about-page" class="spa-section hidden animate-fade">
         <section class="py-24 bg-white min-h-[75vh]">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -491,7 +489,7 @@
             </div>
         </section>
 
-<footer class="bg-neutralDark text-white pt-16 pb-8 border-t border-gray-800">
+        <footer class="bg-neutralDark text-white pt-16 pb-8 border-t border-gray-800">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 md:grid-cols-4 gap-12 mb-12">
                 <div class="space-y-4">
                     <div class="flex items-center space-x-3">
@@ -535,7 +533,7 @@
         </footer>
     </div>
 
-<!-- ==================== HALAMAN 3: PAKEJ AKTIVITI ==================== -->
+    <!-- ==================== HALAMAN 3: PAKEJ AKTIVITI ==================== -->
     <div id="packages-page" class="spa-section hidden animate-fade">
         <section class="py-24 bg-white min-h-[75vh]">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -545,7 +543,7 @@
                     <p class="text-gray-500 mt-4">Cipta memori indah bersama keluarga dan rakan-rakan melalui aktiviti kulinari kami.</p>
                 </div>
 
-<div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
                     <!-- Package 1 -->
                     <div class="bg-neutralBg rounded-card overflow-hidden shadow-sm hover:shadow-lg border border-gray-100 flex flex-col justify-between hover-lift">
                         <div class="p-8">
@@ -583,7 +581,7 @@
                         </div>
                     </div>
 
-<!-- Package 2 -->
+                    <!-- Package 2 -->
                     <div class="bg-neutralBg rounded-card overflow-hidden shadow-sm hover:shadow-lg border border-gray-100 flex flex-col justify-between hover-lift">
                         <div class="p-8">
                             <div class="text-secondary text-3xl mb-4">👪</div>
@@ -616,7 +614,7 @@
                         </div>
                     </div>
 
-<!-- Package 3 -->
+                    <!-- Package 3 -->
                     <div class="bg-neutralBg rounded-card overflow-hidden shadow-sm hover:shadow-lg border border-gray-100 flex flex-col justify-between hover-lift">
                         <div class="p-8">
                             <div class="text-primary text-3xl mb-4">🎉</div>
@@ -654,7 +652,7 @@
             </div>
         </section>
 
-<footer class="bg-neutralDark text-white pt-16 pb-8 border-t border-gray-800">
+        <footer class="bg-neutralDark text-white pt-16 pb-8 border-t border-gray-800">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 md:grid-cols-4 gap-12 mb-12">
                 <div class="space-y-4">
                     <div class="flex items-center space-x-3">
@@ -698,7 +696,7 @@
         </footer>
     </div>
 
-<!-- ==================== HALAMAN 4: GALERI ==================== -->
+    <!-- ==================== HALAMAN 4: GALERI ==================== -->
     <div id="gallery-page" class="spa-section hidden animate-fade">
         <section class="py-24 bg-white min-h-[75vh]">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -708,7 +706,7 @@
                     <p class="text-gray-500 mt-4">Kompilasi suasana restoran kami, oven bata tradisi, serta aktiviti interaktif kami. Klik gambar untuk paparan besar.</p>
                 </div>
 
-<div class="mb-16">
+                <div class="mb-16">
                     <h3 class="text-xl font-bold font-poppins text-neutralDark mb-6 flex items-center gap-2"><span>🔥</span> Oven Bata Tradisional</h3>
                     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                         <div class="group relative rounded-card overflow-hidden shadow-sm aspect-video bg-gray-100 cursor-pointer hover-lift" onclick="openGalleryModal('Oven Bata Tradisional', 'Aroma kayu api asli yang membangkitkan selera.', 'https://arleta.site/interactivelink/118/gallery2.jpeg')">
@@ -720,7 +718,7 @@
                     </div>
                 </div>
 
-<div class="mb-16">
+                <div class="mb-16">
                     <h3 class="text-xl font-bold font-poppins text-neutralDark mb-6 flex items-center gap-2"><span>🏡</span> Suasana Restoran Rustic</h3>
                     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                         <div class="group relative rounded-card overflow-hidden shadow-sm aspect-video bg-gray-100 cursor-pointer hover-lift" onclick="openGalleryModal('Suasana Restoran Rustic', 'Papan tanda ke Qulai Pizza.', 'https://arleta.site/interactivelink/118/gallery1.jpeg')">
@@ -735,7 +733,7 @@
                     </div>
                 </div>
 
-<div>
+                <div>
                     <h3 class="text-xl font-bold font-poppins text-neutralDark mb-6 flex items-center gap-2"><span>👨‍🍳</span> Bengkel & Aktiviti DIY</h3>
                     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                         <div class="group relative rounded-card overflow-hidden shadow-sm aspect-video bg-gray-100 cursor-pointer hover-lift" onclick="openGalleryModal('Aktiviti DIY Pizza', 'Sambutan hari lahir yang unik, gamat dan penuh memori.', 'https://arleta.site/interactivelink/118/birthday1.jpeg')">
@@ -752,7 +750,7 @@
             </div>
         </section>
 
-<footer class="bg-neutralDark text-white pt-16 pb-8 border-t border-gray-800">
+        <footer class="bg-neutralDark text-white pt-16 pb-8 border-t border-gray-800">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 md:grid-cols-4 gap-12 mb-12">
                 <div class="space-y-4">
                     <div class="flex items-center space-x-3">
@@ -796,7 +794,7 @@
         </footer>
     </div>
 
-<!-- ==================== HALAMAN 5: HUBUNGI ==================== -->
+    <!-- ==================== HALAMAN 5: HUBUNGI ==================== -->
     <div id="contact-page" class="spa-section hidden animate-fade">
         <section class="py-24 bg-neutralBg relative overflow-hidden min-h-[75vh]">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
@@ -854,7 +852,7 @@
             </div>
         </section>
 
-<footer class="bg-neutralDark text-white pt-16 pb-8 border-t border-gray-800">
+        <footer class="bg-neutralDark text-white pt-16 pb-8 border-t border-gray-800">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 md:grid-cols-4 gap-12 mb-12">
                 <div class="space-y-4">
                     <div class="flex items-center space-x-3">
@@ -898,7 +896,7 @@
         </footer>
     </div>
 
-<!-- ==================== POLISI PRIVASI ==================== -->
+    <!-- ==================== POLISI PRIVASI ==================== -->
     <div id="privacy-policy-page" class="spa-section hidden animate-fade">
         <div class="min-h-screen bg-neutralBg py-12 sm:py-20 px-4 sm:px-6 lg:px-8">
             <div class="max-w-4xl mx-auto bg-white rounded-card shadow-lg overflow-hidden border border-gray-100">
@@ -943,7 +941,7 @@
         </div>
     </div>
 
-<!-- ==================== TERMA & SYARAT ==================== -->
+    <!-- ==================== TERMA & SYARAT ==================== -->
     <div id="terms-conditions-page" class="spa-section hidden animate-fade">
         <div class="min-h-screen bg-neutralBg py-12 sm:py-20 px-4 sm:px-6 lg:px-8">
             <div class="max-w-4xl mx-auto bg-white rounded-card shadow-lg overflow-hidden border border-gray-100">
@@ -978,7 +976,7 @@
         </div>
     </div>
 
-<!-- ==================== ADMIN DASHBOARD SAAS LIGHT THEME ==================== -->
+    <!-- ==================== ADMIN DASHBOARD SAAS LIGHT THEME ==================== -->
     <div id="admin-dashboard-page" class="spa-section hidden bg-slate-100 min-h-screen text-slate-800">
         <!-- Admin Login Modal -->
         <div id="admin-login-modal" class="fixed inset-0 z-[80] bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4">
@@ -1005,7 +1003,7 @@
             </div>
         </div>
 
-<!-- Main Dashboard Content (LIGHT THEME) -->
+        <!-- Main Dashboard Content (LIGHT THEME) -->
         <div id="admin-content" class="hidden min-h-screen flex flex-col">
             <header class="bg-white border-b border-slate-200 sticky top-0 z-40 px-6 py-4 flex justify-between items-center shadow-sm">
                 <div class="flex items-center gap-3">
@@ -1022,7 +1020,7 @@
                 </div>
             </header>
 
-<main class="p-6 max-w-7xl mx-auto w-full space-y-8 flex-1">
+            <main class="p-6 max-w-7xl mx-auto w-full space-y-8 flex-1">
                 <!-- Stats Summary Metric Cards -->
                 <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
                     <div class="saas-card p-4 rounded-card space-y-1">
@@ -1051,7 +1049,7 @@
                     </div>
                 </div>
 
-<!-- ANALISIS MENGIKUT KATEGORI MENU (MENU TERLARIS VS KURANG SAMBUTAN) -->
+                <!-- ANALISIS MENGIKUT KATEGORI MENU (MENU TERLARIS VS KURANG SAMBUTAN) -->
                 <div class="saas-card p-6 rounded-card space-y-4">
                     <div class="flex flex-col sm:flex-row sm:items-center justify-between border-b border-slate-200 pb-3 gap-2">
                         <div>
@@ -1063,12 +1061,12 @@
                         <span class="text-[11px] bg-slate-100 text-slate-600 px-3 py-1 rounded-full font-medium">Berdasarkan Jumlah Unit Terjual</span>
                     </div>
 
-<div id="category-analytics-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 pt-2">
+                    <div id="category-analytics-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 pt-2">
                         <!-- Dynamic render analytics per category -->
                     </div>
                 </div>
 
-<!-- Analytics Charts -->
+                <!-- Analytics Charts -->
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
                     <div class="saas-card p-5 rounded-card space-y-3">
                         <h3 class="text-sm font-bold text-slate-900 font-poppins">📈 Trend Tempahan Harian</h3>
@@ -1080,10 +1078,10 @@
                     </div>
                 </div>
 
-<!-- Orders Table -->
+                <!-- Orders Table -->
                 <div class="saas-card rounded-card overflow-hidden space-y-4 p-5">
                     <div class="flex flex-col md:flex-row gap-4 justify-between items-center">
-                        <input type="text" id="admin-search-input" oninput="applyTableFilters()" class="w-full md:w-72 px-4 py-2 rounded-btn border border-slate-300 text-xs bg-slate-50 focus:bg-white outline-none" placeholder="🔍 Cari nama, phone, menu...">
+                        <input type="text" id="admin-search-input" oninput="applyTableFilters()" class="w-full md:w-72 px-4 py-2 rounded-btn border border-slate-300 text-xs bg-slate-50 focus:bg-white outline-none" placeholder="🔍 Cari ID, nama, phone, menu...">
                         <div class="flex flex-wrap items-center gap-3 w-full md:w-auto justify-end">
                             <select id="filter-order-type" onchange="applyTableFilters()" class="px-3 py-2 rounded-btn border border-slate-300 bg-slate-50 text-xs">
                                 <option value="ALL">Semua Jenis Order</option>
@@ -1097,7 +1095,7 @@
                         </div>
                     </div>
 
-<div class="overflow-x-auto" id="printable-area">
+                    <div class="overflow-x-auto" id="printable-area">
                         <!-- HEADER LOGO KHAS APABILA PRINT SENARAI BESAR -->
                         <div class="hidden print:block mb-6 text-center border-b border-slate-300 pb-4">
                             <img src="https://arleta.site/interactivelink/118/logoqulai.png" alt="Qulai Pizza Logo" class="w-16 h-16 mx-auto mb-2 object-cover">
@@ -1105,7 +1103,7 @@
                             <p class="text-xs text-slate-600">Laporan Ringkasan Senarai Tempahan Pelanggan</p>
                         </div>
 
-<table class="w-full text-left text-xs text-slate-700 border-collapse">
+                        <table class="w-full text-left text-xs text-slate-700 border-collapse">
                             <thead class="bg-slate-100 text-slate-700 uppercase text-[10px] tracking-wider border-b border-slate-200 font-bold">
                                 <tr>
                                     <th class="p-3">Order ID</th>
@@ -1123,7 +1121,7 @@
                         </table>
                     </div>
 
-<div class="flex items-center justify-between pt-2 text-xs text-slate-500 no-print">
+                    <div class="flex items-center justify-between pt-2 text-xs text-slate-500 no-print">
                         <span id="pagination-info">Menunjukkan 0 daripada 0 entri</span>
                         <div class="flex items-center gap-2">
                             <button id="btn-prev-page" onclick="changePage(-1)" class="px-3 py-1.5 rounded-btn border border-slate-300 bg-white hover:bg-slate-100 disabled:opacity-40">Sebelum</button>
@@ -1136,7 +1134,7 @@
         </div>
     </div>
 
-<!-- MODAL SAIZ PIZZA -->
+    <!-- MODAL SAIZ PIZZA -->
     <div id="pizza-size-modal" class="hidden fixed inset-0 z-[60] bg-black/70 flex items-center justify-center p-4">
         <div class="bg-white rounded-card max-w-md w-full overflow-hidden shadow-2xl relative animate-fade">
             <button onclick="closePizzaModal()" class="absolute top-4 right-4 text-gray-500 hover:text-black text-2xl font-bold">×</button>
@@ -1160,7 +1158,7 @@
         </div>
     </div>
 
-<!-- MODAL GALERI DETAIL -->
+    <!-- MODAL GALERI DETAIL -->
     <div id="gallery-modal" onclick="handleGalleryModalClick(event)" class="hidden fixed inset-0 z-50 bg-black/90 flex flex-col items-center justify-center p-4 animate-fade">
         <button onclick="closeGalleryModal()" class="absolute top-6 right-6 text-white hover:text-accent font-extrabold text-4xl z-50">×</button>
         <div class="max-w-4xl w-full flex flex-col items-center justify-center space-y-4">
@@ -1174,13 +1172,13 @@
         </div>
     </div>
 
-<!-- MODAL PENGESAHAN PENGHANTARAN & INVOIS (KEMASKINI: DIPANTAU DAN BUTANG WHATSAPP DIPADAM, DITAMBAH BUTANG X) -->
+    <!-- MODAL PENGESAHAN PENGHANTARAN & INVOIS PELANGGAN (KEMASKINI: HANYA BUTANG RESIT DAN TUTUP) -->
     <div id="success-modal" class="hidden fixed inset-0 z-50 bg-black/80 flex items-center justify-center p-4">
         <div class="bg-white rounded-card max-w-lg w-full overflow-hidden shadow-2xl relative animate-fade">
             <!-- BUTANG X PENJURU ATAS KANAN -->
-            <button onclick="closeSuccessModal()" class="absolute top-4 right-4 text-gray-400 hover:text-black text-2xl font-bold w-8 h-8 flex items-center justify-center rounded-full bg-gray-100 transition-colors z-10">×</button>
+            <button onclick="closeSuccessModal()" class="absolute top-4 right-4 text-gray-400 hover:text-black text-2xl font-bold w-8 h-8 flex items-center justify-center rounded-full bg-gray-100 transition-colors z-10">&times;</button>
 
-<div class="p-8 text-center space-y-4">
+            <div class="p-8 text-center space-y-4">
                 <div class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center text-green-600 text-3xl mx-auto">✓</div>
                 <h3 class="text-2xl font-bold font-poppins text-neutralDark">Pesanan Berjaya Dihantar!</h3>
                 <p class="text-gray-600 text-sm leading-relaxed">
@@ -1188,7 +1186,7 @@
                 </p>
                 <div class="bg-neutralBg p-4 rounded-btn text-left text-xs space-y-2 text-gray-700 border border-gray-200">
                     <div class="flex justify-between border-b pb-2 mb-2">
-                        <strong>Status:</strong> <span class="text-green-600 font-bold">Diterima / Dalam Sistem</span>
+                        <strong>Order ID:</strong> <span id="summary-order-id" class="font-mono font-bold text-primary"></span>
                     </div>
                     <div><strong>Nama:</strong> <span id="summary-name"></span></div>
                     <div><strong>No Telefon:</strong> <span id="summary-phone"></span></div>
@@ -1207,18 +1205,18 @@
                     <button onclick="printCustomerReceipt()" class="w-full sm:w-1/2 bg-slate-800 hover:bg-slate-900 text-white font-bold px-6 py-3 rounded-btn text-xs flex items-center justify-center gap-1.5 transition-colors">
                         <span>🖨️ Cetak Resit</span>
                     </button>
-                    <button onclick="closeSuccessModal()" class="w-full sm:w-1/2 bg-primary hover:bg-darkRed text-white font-bold px-6 py-3 rounded-btn text-xs transition-colors">
-                        <span>Selesai / Pesanan Baru</span>
+                    <button onclick="closeSuccessModal()" class="w-full sm:w-1/2 bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold px-6 py-3 rounded-btn text-xs transition-colors">
+                        <span>Tutup</span>
                     </button>
                 </div>
             </div>
         </div>
     </div>
 
-<!-- PRINT CONTAINER KHAS UNTUK RESIT/INVOIS INDIVIDU -->
+    <!-- PRINT CONTAINER KHAS UNTUK RESIT/INVOIS INDIVIDU -->
     <div id="receipt-printable-area" class="hidden"></div>
 
-<!-- FLOATING CART BADGE -->
+    <!-- FLOATING CART BADGE -->
     <div id="floating-cart" class="fixed bottom-6 right-6 z-40 transform scale-0 opacity-0 transition-all duration-300 pointer-events-none">
         <button onclick="scrollToCartReview()" class="pointer-events-auto bg-secondary hover:bg-primary text-white font-bold p-4 sm:p-5 rounded-full shadow-2xl flex items-center gap-3 hover-lift group relative">
             <span class="absolute -top-2 -right-1 bg-primary text-white text-xs font-extrabold w-6 h-6 rounded-full flex items-center justify-center border-2 border-white" id="floating-cart-count">0</span>
@@ -1229,7 +1227,7 @@
         </button>
     </div>
 
-<!-- JAVASCRIPT SYSTEM ENGINE -->
+    <!-- JAVASCRIPT SYSTEM ENGINE -->
     <script>
         const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzIUBEP5R_YjsLg3GRFeY_xLpRslPH2XHIttps5qpacCFlFenoLugP3vAIYHTNJFO1ivg/exec";
 
@@ -1674,13 +1672,16 @@
             }
         }
 
-        // POST SAVING ORDER TO APPS SCRIPT (KEMASKINI TAMPA WHATSAPP)
+        // POST SAVING ORDER TO APPS SCRIPT (WITH AUTO GENERATED ORDER ID)
         function handleFormSubmit(event) {
             event.preventDefault();
 
             const submitBtn = document.getElementById('submit-btn');
             submitBtn.disabled = true;
             toggleSpinner(true);
+
+            // AUTO-GENERATE ORDER ID UNIK (Contoh: QP849201)
+            const generatedOrderId = "QP" + Math.floor(100000 + Math.random() * 900000);
 
             const name = document.getElementById('pax-name').value.trim();
             const rawPhone = document.getElementById('pax-phone').value.trim();
@@ -1697,6 +1698,7 @@
 
             const payload = {
                 action: "saveOrder",
+                orderId: generatedOrderId,
                 namaPenuh: name,
                 nomborTelefon: phone,
                 tarikhPesanan: date,
@@ -1724,10 +1726,12 @@
                     showToast("Tempahan berjaya disimpan dalam sistem!");
 
                     lastSubmittedOrder = {
+                        orderId: generatedOrderId,
                         name, phone, date, time, pax, pkg, note,
                         totalCost, items: [...userCart]
                     };
 
+                    document.getElementById('summary-order-id').innerText = generatedOrderId;
                     document.getElementById('summary-name').innerText = name;
                     document.getElementById('summary-phone').innerText = phone;
                     document.getElementById('summary-datetime').innerText = `${date} pada jam ${time}`;
@@ -1782,9 +1786,11 @@
                         <span class="inline-block mt-2 bg-slate-900 text-white text-[10px] font-extrabold uppercase px-3 py-1 rounded-full tracking-widest">RESIT TEMPAHAN</span>
                     </div>
                     <div class="grid grid-cols-2 gap-2 text-xs py-2 bg-slate-50 p-3 rounded-lg border border-slate-200">
+                        <div><span class="text-slate-500 block">ID Tempahan:</span> <strong class="text-slate-900 font-mono">${lastSubmittedOrder.orderId}</strong></div>
+                        <div><span class="text-slate-500 block">Jenis Order:</span> <strong class="text-primary">${lastSubmittedOrder.pkg}</strong></div>
                         <div><span class="text-slate-500 block">Pelanggan:</span> <strong class="text-slate-900">${lastSubmittedOrder.name}</strong></div>
                         <div><span class="text-slate-500 block">Telefon:</span> <strong class="text-slate-900 font-mono">${lastSubmittedOrder.phone}</strong></div>
-                        <div><span class="text-slate-500 block">Jenis Order:</span> <strong class="text-primary">${lastSubmittedOrder.pkg}</strong></div>
+                        <div><span class="text-slate-500 block">Tarikh Kunjungan:</span> <strong>${lastSubmittedOrder.date}</strong></div>
                         <div><span class="text-slate-500 block">Masa & Pax:</span> <strong>${lastSubmittedOrder.time} (${lastSubmittedOrder.pax || '0'} Pax)</strong></div>
                     </div>
                     <div class="space-y-1">
@@ -2127,7 +2133,7 @@
             renderAdminTable();
         }
 
-        // JADUAL ADMIN MEMAPARKAN ORDER ID MANUAL
+        // JADUAL ADMIN MEMAPARKAN ORDER ID
         function renderAdminTable() {
             const tbody = document.getElementById('admin-orders-tbody');
             tbody.innerHTML = '';
@@ -2212,7 +2218,7 @@
 
                     <!-- MAKLUMAT TEMPAHAN -->
                     <div class="grid grid-cols-2 gap-2 text-xs py-2 bg-slate-50 p-3 rounded-lg border border-slate-200">
-                        <div><span class="text-slate-500 block">ID Tempahan:</span> <strong class="text-slate-900">${item.orderId ? item.orderId : '#ORD-' + item.row}</strong></div>
+                        <div><span class="text-slate-500 block">ID Tempahan:</span> <strong class="text-slate-900 font-mono">${item.orderId ? item.orderId : '#ORD-' + item.row}</strong></div>
                         <div><span class="text-slate-500 block">Jenis Order:</span> <strong class="text-primary">${item.jenisOrder}</strong></div>
                         <div><span class="text-slate-500 block">Pelanggan:</span> <strong class="text-slate-900">${item.namaPenuh}</strong></div>
                         <div><span class="text-slate-500 block">WhatsApp:</span> <strong class="text-slate-900 font-mono">${formattedPhone}</strong></div>
