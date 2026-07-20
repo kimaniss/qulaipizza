@@ -13,7 +13,7 @@
     <!-- Chart.js -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-    <script>
+<script>
         tailwind.config = {
             darkMode: 'class',
             theme: {
@@ -58,25 +58,25 @@
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
         @keyframes slideUp { from { transform: translateY(30px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
         @keyframes zoomIn { from { transform: scale(0.95); opacity: 0; } to { transform: scale(1); opacity: 1; } }
-        
-        ::-webkit-scrollbar { width: 8px; }
+
+::-webkit-scrollbar { width: 8px; }
         ::-webkit-scrollbar-track { background: #F5F5F5; }
         ::-webkit-scrollbar-thumb { background: #A52A1A; border-radius: 4px; }
-        
-        .wood-gradient { background: linear-gradient(135deg, #7A1C12 0%, #6E3B22 100%); }
 
-        .saas-card {
+.wood-gradient { background: linear-gradient(135deg, #7A1C12 0%, #6E3B22 100%); }
+
+.saas-card {
             background: #FFFFFF;
             border: 1px solid #E2E8F0;
             box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.05), 0 1px 2px 0 rgba(0, 0, 0, 0.03);
         }
 
-        /* PEMBAIKAN PERATURAN MEDIA PRINT DUA MOD (LAPORAN VS RESIT INDIVIDU) */
+/* PEMBAIKAN PERATURAN MEDIA PRINT DUA MOD (LAPORAN VS RESIT INDIVIDU) */
         @media print {
             body * { visibility: hidden !important; }
             .no-print { display: none !important; }
 
-            /* CETAKAN RESIT INDIVIDU */
+/* CETAKAN RESIT INDIVIDU */
             body.is-printing-receipt #receipt-printable-area, 
             body.is-printing-receipt #receipt-printable-area * { 
                 visibility: visible !important; 
@@ -94,7 +94,7 @@
                 display: none !important; 
             }
 
-            /* CETAKAN LAPORAN SENARAI BESAR */
+/* CETAKAN LAPORAN SENARAI BESAR */
             body:not(.is-printing-receipt) #printable-area, 
             body:not(.is-printing-receipt) #printable-area * { 
                 visibility: visible !important; 
@@ -115,17 +115,17 @@
 </head>
 <body class="bg-[#FFFFFF] text-neutralDark font-sans selection:bg-accent selection:text-darkRed transition-colors duration-300">
 
-    <!-- TOAST NOTIFICATION CONTAINER -->
+<!-- TOAST NOTIFICATION CONTAINER -->
     <div id="toast-container" class="fixed top-5 right-5 z-[100] flex flex-col gap-3 pointer-events-none"></div>
 
-    <!-- LOADING SPINNER (CENTERED PERFECTLY) -->
+<!-- LOADING SPINNER (CENTERED PERFECTLY) -->
     <div id="global-spinner" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-[90] hidden flex flex-col items-center justify-center text-white">
         <div class="w-14 h-14 border-4 border-accent border-t-transparent rounded-full animate-spin"></div>
         <p class="mt-4 font-poppins font-semibold text-sm tracking-wide">Memproses data...</p>
     </div>
 
-    <!-- HEADER / NAVIGATION BAR -->
-    <header class="sticky top-0 z-50 bg-white/95 backdrop-blur-md border-b border-gray-100 transition-all duration-300">
+<!-- HEADER / NAVIGATION BAR UTAMA -->
+    <header id="main-header" class="sticky top-0 z-50 bg-white/95 backdrop-blur-md border-b border-gray-100 transition-all duration-300">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex items-center justify-between h-20">
                 <!-- Logo -->
@@ -139,7 +139,7 @@
                     </div>
                 </a>
 
-                <!-- Desktop Navigation Links -->
+<!-- Desktop Navigation Links -->
                 <nav class="hidden md:flex space-x-8 font-medium">
                     <a href="javascript:void(0)" onclick="showSPASection('home-page')" class="nav-link text-primary hover:text-primary transition-colors py-2 font-bold" id="nav-home-page">Home</a>
                     <a href="javascript:void(0)" onclick="showSPASection('about-page')" class="nav-link text-neutralDark hover:text-primary transition-colors py-2" id="nav-about-page">Tentang Kami</a>
@@ -148,10 +148,10 @@
                     <a href="javascript:void(0)" onclick="showSPASection('contact-page')" class="nav-link text-neutralDark hover:text-primary transition-colors py-2" id="nav-contact-page">Hubungi</a>
                 </nav>
 
-                <!-- Action Buttons: Admin & CTA -->
+<!-- Action Buttons: Admin & CTA -->
                 <div class="hidden md:flex items-center gap-3">
                     <button onclick="toggleAdminView()" class="bg-slate-900 hover:bg-black text-white text-xs font-semibold px-4 py-3 rounded-btn transition-all shadow-md flex items-center gap-2">
-                        <span>🔒 Admin Dashboard</span>
+                        <span>🔒 Admin</span>
                     </button>
                     <a href="javascript:void(0)" onclick="navigateToMenu()" class="bg-primary hover:bg-darkRed text-white font-semibold px-6 py-3 rounded-btn transition-all shadow-md hover:shadow-lg inline-flex items-center gap-2 group transform hover:scale-105 duration-200">
                         <span>Pesan Sekarang</span>
@@ -159,7 +159,7 @@
                     </a>
                 </div>
 
-                <!-- Mobile Header Tools -->
+<!-- Mobile Header Tools -->
                 <div class="md:hidden flex items-center gap-2">
                     <button onclick="toggleAdminView()" class="text-xs bg-neutralDark text-white px-3 py-2 rounded-btn font-semibold">Admin</button>
                     <button id="mobile-menu-btn" class="text-neutralDark hover:text-primary focus:outline-none p-2" aria-label="Toggle Menu">
@@ -169,7 +169,7 @@
             </div>
         </div>
 
-        <!-- Mobile Menu -->
+<!-- Mobile Menu -->
         <div id="mobile-menu" class="hidden md:hidden bg-white border-b border-gray-100 transition-all duration-300 ease-in-out">
             <div class="px-4 pt-2 pb-6 space-y-3 font-medium">
                 <a href="javascript:void(0)" onclick="showSPASection('home-page'); toggleMobileMenu()" class="block text-neutralDark hover:text-primary py-2 border-b border-gray-50">Home</a>
@@ -182,7 +182,7 @@
         </div>
     </header>
 
-    <!-- ==================== HALAMAN 1: HOME PAGE ==================== -->
+<!-- ==================== HALAMAN 1: HOME PAGE ==================== -->
     <div id="home-page" class="spa-section block">
         <!-- 1. HERO SECTION -->
         <section class="relative min-h-[90vh] flex items-center justify-center bg-neutralBg py-12 overflow-hidden">
@@ -190,7 +190,7 @@
             <div class="absolute -top-40 -right-40 w-96 h-96 rounded-full bg-accent/20 blur-3xl"></div>
             <div class="absolute -bottom-40 -left-40 w-96 h-96 rounded-full bg-primary/10 blur-3xl"></div>
 
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
                 <div class="lg:col-span-7 text-center lg:text-left space-y-6 animate-slide-up">
                     <span class="inline-flex items-center gap-2 bg-primary/10 text-primary font-bold px-4 py-2 rounded-full text-sm">
                         <span class="w-2 h-2 rounded-full bg-secondary animate-ping"></span>
@@ -228,7 +228,7 @@
                     </div>
                 </div>
 
-                <!-- Visual Content -->
+<!-- Visual Content -->
                 <div class="lg:col-span-5 relative w-full animate-zoom">
                     <div class="relative w-full overflow-hidden rounded-card shadow-2xl border-4 border-accent/40 group hover-lift transition-all duration-300">
                         <video autoplay muted loop playsinline class="w-full h-[280px] sm:h-[380px] md:h-[420px] object-cover block">
@@ -247,7 +247,7 @@
             </div>
         </section>
 
-        <!-- 2. MENU SECTION -->
+<!-- 2. MENU SECTION -->
         <section id="menu-section" class="py-24 bg-neutralBg">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="text-center max-w-3xl mx-auto mb-12">
@@ -256,7 +256,7 @@
                     <p class="text-gray-500 mt-4">Pilih makanan kegemaran anda dan kumpulkan pesanan di dalam troli.</p>
                 </div>
 
-                <!-- Menu Category Filter Buttons -->
+<!-- Menu Category Filter Buttons -->
                 <div class="flex flex-wrap justify-center gap-3 mb-12">
                     <button onclick="filterMenu('all')" class="menu-tab-btn active bg-primary text-white font-semibold px-6 py-3 rounded-btn transition-all text-sm shadow-sm" id="tab-all">Semua Menu</button>
                     <button onclick="filterMenu('pizza')" class="menu-tab-btn bg-white hover:bg-gray-100 text-gray-700 font-semibold px-6 py-3 rounded-btn transition-all text-sm" id="tab-pizza">🍕 Pizza Kayu Api</button>
@@ -266,12 +266,12 @@
                     <button onclick="filterMenu('drinks')" class="menu-tab-btn bg-white hover:bg-gray-100 text-gray-700 font-semibold px-6 py-3 rounded-btn transition-all text-sm" id="tab-drinks">🍹 Minuman</button>
                 </div>
 
-                <!-- Menu Items Grid -->
+<!-- Menu Items Grid -->
                 <div id="menu-items-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"></div>
             </div>
         </section>
 
-        <!-- 3. REVIEW CART VIEW SECTION -->
+<!-- 3. REVIEW CART VIEW SECTION -->
         <section id="cart-review-section" class="py-12 bg-white border-t border-gray-100 hidden">
             <div class="max-w-4xl mx-auto px-4 sm:px-6">
                 <div class="bg-neutralBg rounded-card p-6 sm:p-8 shadow-sm border border-gray-200">
@@ -284,15 +284,16 @@
                         <span id="cart-total-price" class="text-2xl font-extrabold text-primary font-poppins">RM 0.00</span>
                     </div>
                     <div class="mt-6 flex justify-end">
+                        <!-- UBAH NAMA BUTANG KEPADA: Sahkan Pesanan & Isi Butiran Pesanan → -->
                         <button onclick="showBookingForm()" id="checkout-btn" class="bg-primary hover:bg-darkRed text-white font-bold px-8 py-3.5 rounded-btn shadow-md hover:shadow-lg transition-all flex items-center gap-2 text-sm">
-                            <span>Sahkan Pesanan & Isi Butiran Pilihan Pesanan →</span>
+                            <span>Sahkan Pesanan & Isi Butiran Pesanan →</span>
                         </button>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- 4. ONLINE BOOKING SECTION -->
+<!-- 4. ONLINE BOOKING SECTION -->
         <section id="booking-section" class="py-24 bg-white border-t border-gray-50 hidden animate-fade">
             <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
                 <div class="bg-neutralBg rounded-card shadow-xl overflow-hidden border border-gray-100 grid grid-cols-1 lg:grid-cols-12">
@@ -301,7 +302,7 @@
                             <span class="text-accent font-semibold tracking-wider uppercase text-xs">Sistem Tempahan Pintar</span>
                             <h3 class="text-3xl font-extrabold font-poppins mt-2 mb-6">Lengkapkan Maklumat Pesanan</h3>
                             <p class="text-orange-100 text-sm leading-relaxed mb-6">
-                                Sila isi butiran lengkap kedatangan atau pengambilan makanan anda. Pilihan jenis order dan senarai makanan di dalam troli akan dihantar terus ke pangkalan data dan WhatsApp kami!
+                                Sila isi butiran lengkap kedatangan atau pengambilan makanan anda. Pilihan jenis order dan senarai makanan di dalam troli akan dihantar terus ke pangkalan data sistem.
                             </p>
                         </div>
                         <div class="space-y-4">
@@ -320,14 +321,14 @@
                         </div>
                     </div>
 
-                    <div class="lg:col-span-7 p-8 sm:p-12 bg-white">
+<div class="lg:col-span-7 p-8 sm:p-12 bg-white">
                         <form id="booking-form" onsubmit="handleFormSubmit(event)" class="space-y-5">
                             <div>
                                 <label for="pax-name" class="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-2">Nama Penuh</label>
                                 <input type="text" id="pax-name" required class="w-full px-4 py-3 rounded-btn border border-gray-200 focus:ring-2 focus:ring-primary outline-none transition-all text-sm" placeholder="Masukkan nama penuh anda">
                             </div>
                             <div>
-                                <label for="pax-phone" class="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-2">Nombor Telefon (WhatsApp)</label>
+                                <label for="pax-phone" class="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-2">Nombor Telefon</label>
                                 <input type="tel" id="pax-phone" required class="w-full px-4 py-3 rounded-btn border border-gray-200 focus:ring-2 focus:ring-primary outline-none transition-all text-sm" placeholder="Contoh: 0123456789">
                             </div>
                             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -372,11 +373,9 @@
                                 <label for="pax-note" class="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-2">Catatan Tambahan (Optional)</label>
                                 <textarea id="pax-note" rows="3" class="w-full px-4 py-3 rounded-btn border border-gray-200 focus:ring-2 focus:ring-primary outline-none transition-all text-sm" placeholder="Tulis permintaan khas seperti alahan, kerusi bayi dsb."></textarea>
                             </div>
+                            <!-- UBAH NAMA BUTANG KEPADA: Hantar Pesanan -->
                             <button type="submit" id="submit-btn" class="w-full bg-primary hover:bg-darkRed text-white font-bold py-4 px-6 rounded-btn transition-colors flex items-center justify-center gap-2 shadow-md disabled:opacity-40 disabled:cursor-not-allowed">
-                                <span>Hantar Keseluruhan Pesanan & Pilihan Order</span>
-                                <svg class="w-5 h-5 fill-current text-white" viewBox="0 0 24 24">
-                                    <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946C.06 5.348 5.397.01 12.008.01c3.202.001 6.212 1.246 8.477 3.513 2.262 2.268 3.507 5.28 3.505 8.484-.004 6.657-5.34 11.997-11.953 11.997-2.005-.001-3.973-.5-5.739-1.446L0 24zm6.59-4.846c1.6.95 3.188 1.449 4.825 1.451 5.436 0 9.86-4.37 9.864-9.799.002-2.623-1.023-5.086-2.885-6.948C16.62 2.016 14.154.99 11.52.99c-5.44 0-9.866 4.372-9.87 9.802 0 1.724.482 3.41 1.396 4.887l-.991 3.621 3.733-.967c1.4.78 2.96 1.19 4.54 1.19a9.77 9.77 0 0 0 4.26-.99zm10.425-5.417c-.339-.167-2.006-.973-2.312-1.084-.306-.111-.53-.167-.751.167-.221.334-.855 1.084-1.048 1.306-.193.222-.386.25-.725.083-.339-.167-1.43-.518-2.724-1.655-1.007-.884-1.686-1.977-1.884-2.311-.197-.334-.021-.514.148-.68.152-.15.339-.389.508-.584.17-.194.226-.333.339-.556.113-.222.056-.417-.028-.584-.085-.167-.751-1.778-1.03-2.444-.27-.648-.545-.561-.75-.572-.19-.01-.41-.011-.628-.011-.219 0-.575.083-.876.417-.301.333-1.15 1.111-1.15 2.709 0 1.597 1.182 3.139 1.346 3.361.164.222 2.327 3.499 5.637 4.904.787.335 1.4.535 1.88.685.792.248 1.512.213 2.081.129.635-.094 2.006-.806 2.29-1.584.283-.778.283-1.444.198-1.584-.085-.14-.306-.222-.646-.389z"/>
-                                </svg>
+                                <span>Hantar Pesanan</span>
                             </button>
                         </form>
                     </div>
@@ -384,7 +383,7 @@
             </div>
         </section>
 
-        <!-- FOOTER HOME -->
+<!-- FOOTER HOME -->
         <footer class="bg-neutralDark text-white pt-16 pb-8 border-t border-gray-800">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 md:grid-cols-4 gap-12 mb-12">
                 <div class="space-y-4">
@@ -429,7 +428,7 @@
         </footer>
     </div>
 
-    <!-- ==================== HALAMAN 2: TENTANG KAMI ==================== -->
+<!-- ==================== HALAMAN 2: TENTANG KAMI ==================== -->
     <div id="about-page" class="spa-section hidden animate-fade">
         <section class="py-24 bg-white min-h-[75vh]">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -492,7 +491,7 @@
             </div>
         </section>
 
-        <footer class="bg-neutralDark text-white pt-16 pb-8 border-t border-gray-800">
+<footer class="bg-neutralDark text-white pt-16 pb-8 border-t border-gray-800">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 md:grid-cols-4 gap-12 mb-12">
                 <div class="space-y-4">
                     <div class="flex items-center space-x-3">
@@ -536,7 +535,7 @@
         </footer>
     </div>
 
-    <!-- ==================== HALAMAN 3: PAKEJ AKTIVITI ==================== -->
+<!-- ==================== HALAMAN 3: PAKEJ AKTIVITI ==================== -->
     <div id="packages-page" class="spa-section hidden animate-fade">
         <section class="py-24 bg-white min-h-[75vh]">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -546,7 +545,7 @@
                     <p class="text-gray-500 mt-4">Cipta memori indah bersama keluarga dan rakan-rakan melalui aktiviti kulinari kami.</p>
                 </div>
 
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+<div class="grid grid-cols-1 md:grid-cols-3 gap-8">
                     <!-- Package 1 -->
                     <div class="bg-neutralBg rounded-card overflow-hidden shadow-sm hover:shadow-lg border border-gray-100 flex flex-col justify-between hover-lift">
                         <div class="p-8">
@@ -584,7 +583,7 @@
                         </div>
                     </div>
 
-                    <!-- Package 2 -->
+<!-- Package 2 -->
                     <div class="bg-neutralBg rounded-card overflow-hidden shadow-sm hover:shadow-lg border border-gray-100 flex flex-col justify-between hover-lift">
                         <div class="p-8">
                             <div class="text-secondary text-3xl mb-4">👪</div>
@@ -617,7 +616,7 @@
                         </div>
                     </div>
 
-                    <!-- Package 3 -->
+<!-- Package 3 -->
                     <div class="bg-neutralBg rounded-card overflow-hidden shadow-sm hover:shadow-lg border border-gray-100 flex flex-col justify-between hover-lift">
                         <div class="p-8">
                             <div class="text-primary text-3xl mb-4">🎉</div>
@@ -655,7 +654,7 @@
             </div>
         </section>
 
-        <footer class="bg-neutralDark text-white pt-16 pb-8 border-t border-gray-800">
+<footer class="bg-neutralDark text-white pt-16 pb-8 border-t border-gray-800">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 md:grid-cols-4 gap-12 mb-12">
                 <div class="space-y-4">
                     <div class="flex items-center space-x-3">
@@ -699,7 +698,7 @@
         </footer>
     </div>
 
-    <!-- ==================== HALAMAN 4: GALERI ==================== -->
+<!-- ==================== HALAMAN 4: GALERI ==================== -->
     <div id="gallery-page" class="spa-section hidden animate-fade">
         <section class="py-24 bg-white min-h-[75vh]">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -709,7 +708,7 @@
                     <p class="text-gray-500 mt-4">Kompilasi suasana restoran kami, oven bata tradisi, serta aktiviti interaktif kami. Klik gambar untuk paparan besar.</p>
                 </div>
 
-                <div class="mb-16">
+<div class="mb-16">
                     <h3 class="text-xl font-bold font-poppins text-neutralDark mb-6 flex items-center gap-2"><span>🔥</span> Oven Bata Tradisional</h3>
                     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                         <div class="group relative rounded-card overflow-hidden shadow-sm aspect-video bg-gray-100 cursor-pointer hover-lift" onclick="openGalleryModal('Oven Bata Tradisional', 'Aroma kayu api asli yang membangkitkan selera.', 'https://arleta.site/interactivelink/118/gallery2.jpeg')">
@@ -721,7 +720,7 @@
                     </div>
                 </div>
 
-                <div class="mb-16">
+<div class="mb-16">
                     <h3 class="text-xl font-bold font-poppins text-neutralDark mb-6 flex items-center gap-2"><span>🏡</span> Suasana Restoran Rustic</h3>
                     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                         <div class="group relative rounded-card overflow-hidden shadow-sm aspect-video bg-gray-100 cursor-pointer hover-lift" onclick="openGalleryModal('Suasana Restoran Rustic', 'Papan tanda ke Qulai Pizza.', 'https://arleta.site/interactivelink/118/gallery1.jpeg')">
@@ -736,7 +735,7 @@
                     </div>
                 </div>
 
-                <div>
+<div>
                     <h3 class="text-xl font-bold font-poppins text-neutralDark mb-6 flex items-center gap-2"><span>👨‍🍳</span> Bengkel & Aktiviti DIY</h3>
                     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                         <div class="group relative rounded-card overflow-hidden shadow-sm aspect-video bg-gray-100 cursor-pointer hover-lift" onclick="openGalleryModal('Aktiviti DIY Pizza', 'Sambutan hari lahir yang unik, gamat dan penuh memori.', 'https://arleta.site/interactivelink/118/birthday1.jpeg')">
@@ -753,7 +752,7 @@
             </div>
         </section>
 
-        <footer class="bg-neutralDark text-white pt-16 pb-8 border-t border-gray-800">
+<footer class="bg-neutralDark text-white pt-16 pb-8 border-t border-gray-800">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 md:grid-cols-4 gap-12 mb-12">
                 <div class="space-y-4">
                     <div class="flex items-center space-x-3">
@@ -797,7 +796,7 @@
         </footer>
     </div>
 
-    <!-- ==================== HALAMAN 5: HUBUNGI ==================== -->
+<!-- ==================== HALAMAN 5: HUBUNGI ==================== -->
     <div id="contact-page" class="spa-section hidden animate-fade">
         <section class="py-24 bg-neutralBg relative overflow-hidden min-h-[75vh]">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
@@ -855,7 +854,7 @@
             </div>
         </section>
 
-        <footer class="bg-neutralDark text-white pt-16 pb-8 border-t border-gray-800">
+<footer class="bg-neutralDark text-white pt-16 pb-8 border-t border-gray-800">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 md:grid-cols-4 gap-12 mb-12">
                 <div class="space-y-4">
                     <div class="flex items-center space-x-3">
@@ -899,7 +898,7 @@
         </footer>
     </div>
 
-    <!-- ==================== POLISI PRIVASI ==================== -->
+<!-- ==================== POLISI PRIVASI ==================== -->
     <div id="privacy-policy-page" class="spa-section hidden animate-fade">
         <div class="min-h-screen bg-neutralBg py-12 sm:py-20 px-4 sm:px-6 lg:px-8">
             <div class="max-w-4xl mx-auto bg-white rounded-card shadow-lg overflow-hidden border border-gray-100">
@@ -944,7 +943,7 @@
         </div>
     </div>
 
-    <!-- ==================== TERMA & SYARAT ==================== -->
+<!-- ==================== TERMA & SYARAT ==================== -->
     <div id="terms-conditions-page" class="spa-section hidden animate-fade">
         <div class="min-h-screen bg-neutralBg py-12 sm:py-20 px-4 sm:px-6 lg:px-8">
             <div class="max-w-4xl mx-auto bg-white rounded-card shadow-lg overflow-hidden border border-gray-100">
@@ -979,7 +978,7 @@
         </div>
     </div>
 
-    <!-- ==================== ADMIN DASHBOARD SAAS LIGHT THEME ==================== -->
+<!-- ==================== ADMIN DASHBOARD SAAS LIGHT THEME ==================== -->
     <div id="admin-dashboard-page" class="spa-section hidden bg-slate-100 min-h-screen text-slate-800">
         <!-- Admin Login Modal -->
         <div id="admin-login-modal" class="fixed inset-0 z-[80] bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4">
@@ -987,7 +986,7 @@
                 <div class="text-center">
                     <div class="w-12 h-12 rounded-full bg-primary/10 text-primary flex items-center justify-center mx-auto mb-3 text-2xl font-bold">🔐</div>
                     <h2 class="text-2xl font-bold font-poppins text-slate-900">Log Masuk Admin</h2>
-                    <p class="text-xs text-slate-500 mt-1">Sila masukkan e-mel & kata laluan daripada Google Sheet Admin</p>
+                    <p class="text-xs text-slate-500 mt-1">Sila masukkan e-mel & kata laluan</p>
                 </div>
                 <form onsubmit="handleAdminLogin(event)" class="space-y-4">
                     <div>
@@ -1006,7 +1005,7 @@
             </div>
         </div>
 
-        <!-- Main Dashboard Content (LIGHT THEME) -->
+<!-- Main Dashboard Content (LIGHT THEME) -->
         <div id="admin-content" class="hidden min-h-screen flex flex-col">
             <header class="bg-white border-b border-slate-200 sticky top-0 z-40 px-6 py-4 flex justify-between items-center shadow-sm">
                 <div class="flex items-center gap-3">
@@ -1023,7 +1022,7 @@
                 </div>
             </header>
 
-            <main class="p-6 max-w-7xl mx-auto w-full space-y-8 flex-1">
+<main class="p-6 max-w-7xl mx-auto w-full space-y-8 flex-1">
                 <!-- Stats Summary Metric Cards -->
                 <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
                     <div class="saas-card p-4 rounded-card space-y-1">
@@ -1052,7 +1051,7 @@
                     </div>
                 </div>
 
-                <!-- ANALISIS MENGIKUT KATEGORI MENU (MENU TERLARIS VS KURANG SAMBUTAN) -->
+<!-- ANALISIS MENGIKUT KATEGORI MENU (MENU TERLARIS VS KURANG SAMBUTAN) -->
                 <div class="saas-card p-6 rounded-card space-y-4">
                     <div class="flex flex-col sm:flex-row sm:items-center justify-between border-b border-slate-200 pb-3 gap-2">
                         <div>
@@ -1064,12 +1063,12 @@
                         <span class="text-[11px] bg-slate-100 text-slate-600 px-3 py-1 rounded-full font-medium">Berdasarkan Jumlah Unit Terjual</span>
                     </div>
 
-                    <div id="category-analytics-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 pt-2">
+<div id="category-analytics-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 pt-2">
                         <!-- Dynamic render analytics per category -->
                     </div>
                 </div>
 
-                <!-- Analytics Charts -->
+<!-- Analytics Charts -->
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
                     <div class="saas-card p-5 rounded-card space-y-3">
                         <h3 class="text-sm font-bold text-slate-900 font-poppins">📈 Trend Tempahan Harian</h3>
@@ -1081,7 +1080,7 @@
                     </div>
                 </div>
 
-                <!-- Orders Table -->
+<!-- Orders Table -->
                 <div class="saas-card rounded-card overflow-hidden space-y-4 p-5">
                     <div class="flex flex-col md:flex-row gap-4 justify-between items-center">
                         <input type="text" id="admin-search-input" oninput="applyTableFilters()" class="w-full md:w-72 px-4 py-2 rounded-btn border border-slate-300 text-xs bg-slate-50 focus:bg-white outline-none" placeholder="🔍 Cari nama, phone, menu...">
@@ -1098,7 +1097,7 @@
                         </div>
                     </div>
 
-                    <div class="overflow-x-auto" id="printable-area">
+<div class="overflow-x-auto" id="printable-area">
                         <!-- HEADER LOGO KHAS APABILA PRINT SENARAI BESAR -->
                         <div class="hidden print:block mb-6 text-center border-b border-slate-300 pb-4">
                             <img src="https://arleta.site/interactivelink/118/logoqulai.png" alt="Qulai Pizza Logo" class="w-16 h-16 mx-auto mb-2 object-cover">
@@ -1106,9 +1105,10 @@
                             <p class="text-xs text-slate-600">Laporan Ringkasan Senarai Tempahan Pelanggan</p>
                         </div>
 
-                        <table class="w-full text-left text-xs text-slate-700 border-collapse">
+<table class="w-full text-left text-xs text-slate-700 border-collapse">
                             <thead class="bg-slate-100 text-slate-700 uppercase text-[10px] tracking-wider border-b border-slate-200 font-bold">
                                 <tr>
+                                    <th class="p-3">Order ID</th>
                                     <th class="p-3 cursor-pointer hover:text-primary" onclick="sortTable('namaPenuh')">Nama ↕</th>
                                     <th class="p-3">Telefon</th>
                                     <th class="p-3 cursor-pointer hover:text-primary" onclick="sortTable('tarikhPesanan')">Tarikh & Masa ↕</th>
@@ -1123,7 +1123,7 @@
                         </table>
                     </div>
 
-                    <div class="flex items-center justify-between pt-2 text-xs text-slate-500 no-print">
+<div class="flex items-center justify-between pt-2 text-xs text-slate-500 no-print">
                         <span id="pagination-info">Menunjukkan 0 daripada 0 entri</span>
                         <div class="flex items-center gap-2">
                             <button id="btn-prev-page" onclick="changePage(-1)" class="px-3 py-1.5 rounded-btn border border-slate-300 bg-white hover:bg-slate-100 disabled:opacity-40">Sebelum</button>
@@ -1136,7 +1136,7 @@
         </div>
     </div>
 
-    <!-- MODAL SAIZ PIZZA (ASAL) -->
+<!-- MODAL SAIZ PIZZA -->
     <div id="pizza-size-modal" class="hidden fixed inset-0 z-[60] bg-black/70 flex items-center justify-center p-4">
         <div class="bg-white rounded-card max-w-md w-full overflow-hidden shadow-2xl relative animate-fade">
             <button onclick="closePizzaModal()" class="absolute top-4 right-4 text-gray-500 hover:text-black text-2xl font-bold">×</button>
@@ -1160,7 +1160,7 @@
         </div>
     </div>
 
-    <!-- MODAL GALERI DETAIL (ASAL) -->
+<!-- MODAL GALERI DETAIL -->
     <div id="gallery-modal" onclick="handleGalleryModalClick(event)" class="hidden fixed inset-0 z-50 bg-black/90 flex flex-col items-center justify-center p-4 animate-fade">
         <button onclick="closeGalleryModal()" class="absolute top-6 right-6 text-white hover:text-accent font-extrabold text-4xl z-50">×</button>
         <div class="max-w-4xl w-full flex flex-col items-center justify-center space-y-4">
@@ -1174,36 +1174,51 @@
         </div>
     </div>
 
-    <!-- MODAL PENGESAHAN PENGHANTARAN / WHATSAPP (ASAL) -->
+<!-- MODAL PENGESAHAN PENGHANTARAN & INVOIS (KEMASKINI: DIPANTAU DAN BUTANG WHATSAPP DIPADAM, DITAMBAH BUTANG X) -->
     <div id="success-modal" class="hidden fixed inset-0 z-50 bg-black/80 flex items-center justify-center p-4">
         <div class="bg-white rounded-card max-w-lg w-full overflow-hidden shadow-2xl relative animate-fade">
-            <div class="p-8 text-center space-y-4">
+            <!-- BUTANG X PENJURU ATAS KANAN -->
+            <button onclick="closeSuccessModal()" class="absolute top-4 right-4 text-gray-400 hover:text-black text-2xl font-bold w-8 h-8 flex items-center justify-center rounded-full bg-gray-100 transition-colors z-10">×</button>
+
+<div class="p-8 text-center space-y-4">
                 <div class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center text-green-600 text-3xl mx-auto">✓</div>
-                <h3 class="text-2xl font-bold font-poppins text-neutralDark">Tempahan Sedia Dihantar!</h3>
+                <h3 class="text-2xl font-bold font-poppins text-neutralDark">Pesanan Berjaya Dihantar!</h3>
                 <p class="text-gray-600 text-sm leading-relaxed">
-                    Sistem telah menyimpan pesanan anda ke pengkalan data. Sila klik butang di bawah untuk menghantar borang secara terus ke WhatsApp rasmi Qulai Pizza.
+                    Pesanan anda telah dimasukkan ke dalam sistem. Berikut adalah butiran notis & resit tempahan anda:
                 </p>
-                <div class="bg-neutralBg p-4 rounded-btn text-left text-xs space-y-2 text-gray-700">
+                <div class="bg-neutralBg p-4 rounded-btn text-left text-xs space-y-2 text-gray-700 border border-gray-200">
+                    <div class="flex justify-between border-b pb-2 mb-2">
+                        <strong>Status:</strong> <span class="text-green-600 font-bold">Diterima / Dalam Sistem</span>
+                    </div>
                     <div><strong>Nama:</strong> <span id="summary-name"></span></div>
                     <div><strong>No Telefon:</strong> <span id="summary-phone"></span></div>
                     <div><strong>Tarikh & Masa:</strong> <span id="summary-datetime"></span></div>
                     <div><strong>Bilangan Tetamu:</strong> <span id="summary-pax"></span></div>
                     <div><strong>Pilihan Order:</strong> <span id="summary-package"></span></div>
+                    <div class="pt-2 border-t mt-2">
+                        <strong>Senarai Makanan:</strong>
+                        <div id="summary-food-list" class="mt-1 space-y-1 font-mono text-[11px] text-gray-800"></div>
+                    </div>
+                    <div class="pt-2 border-t flex justify-between items-center text-sm">
+                        <strong>Jumlah Bayaran:</strong> <span id="summary-total" class="font-bold text-primary font-poppins"></span>
+                    </div>
                 </div>
                 <div class="flex flex-col sm:flex-row gap-3 pt-4">
-                    <button onclick="closeSuccessModal()" class="w-full sm:w-1/2 bg-gray-150 hover:bg-gray-200 text-gray-700 font-semibold px-6 py-3 rounded-btn text-xs">Tukar Detail</button>
-                    <a id="whatsapp-trigger-btn" target="_blank" rel="noopener" class="w-full sm:w-1/2 bg-primary hover:bg-darkRed text-white font-bold px-6 py-3 rounded-btn text-xs flex items-center justify-center gap-1.5">
-                        <span>Hantar Ke WhatsApp</span>
-                    </a>
+                    <button onclick="printCustomerReceipt()" class="w-full sm:w-1/2 bg-slate-800 hover:bg-slate-900 text-white font-bold px-6 py-3 rounded-btn text-xs flex items-center justify-center gap-1.5 transition-colors">
+                        <span>🖨️ Cetak Resit</span>
+                    </button>
+                    <button onclick="closeSuccessModal()" class="w-full sm:w-1/2 bg-primary hover:bg-darkRed text-white font-bold px-6 py-3 rounded-btn text-xs transition-colors">
+                        <span>Selesai / Pesanan Baru</span>
+                    </button>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- PRINT CONTAINER KHAS UNTUK RESIT/INVOIS INDIVIDU -->
+<!-- PRINT CONTAINER KHAS UNTUK RESIT/INVOIS INDIVIDU -->
     <div id="receipt-printable-area" class="hidden"></div>
 
-    <!-- FLOATING CART BADGE (ASAL) -->
+<!-- FLOATING CART BADGE -->
     <div id="floating-cart" class="fixed bottom-6 right-6 z-40 transform scale-0 opacity-0 transition-all duration-300 pointer-events-none">
         <button onclick="scrollToCartReview()" class="pointer-events-auto bg-secondary hover:bg-primary text-white font-bold p-4 sm:p-5 rounded-full shadow-2xl flex items-center gap-3 hover-lift group relative">
             <span class="absolute -top-2 -right-1 bg-primary text-white text-xs font-extrabold w-6 h-6 rounded-full flex items-center justify-center border-2 border-white" id="floating-cart-count">0</span>
@@ -1214,7 +1229,7 @@
         </button>
     </div>
 
-    <!-- JAVASCRIPT SYSTEM ENGINE -->
+<!-- JAVASCRIPT SYSTEM ENGINE -->
     <script>
         const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzIUBEP5R_YjsLg3GRFeY_xLpRslPH2XHIttps5qpacCFlFenoLugP3vAIYHTNJFO1ivg/exec";
 
@@ -1262,6 +1277,7 @@
         let currentlySelectedPizzaName = "";
         let currentSection = "home-page";
         const dineInCapacityDatabase = { "2026-08-15_18:00": 75, "2026-08-15_19:00": 85, "2026-08-20_20:00": 88 };
+        let lastSubmittedOrder = null;
 
         // State Dashboard Admin
         let rawOrdersData = [];
@@ -1273,10 +1289,10 @@
         let chartDailyInstance = null;
         let chartTypeInstance = null;
 
-        // FUNGSI FORMAT PHONE NUMBER (MENAMBAH '60' JIKA SHEET PULANGKAN 123456789/0123456789)
+        // FUNGSI FORMAT PHONE NUMBER
         function formatPhone(phoneStr) {
             if (!phoneStr) return '-';
-            let p = String(phoneStr).trim().replace(/\D/g, ''); // Ambil nombor sahaja
+            let p = String(phoneStr).trim().replace(/\D/g, '');
             if (p.startsWith('01')) {
                 p = '6' + p;
             } else if (p.startsWith('1')) {
@@ -1287,7 +1303,7 @@
             return p;
         }
 
-        // FORMAT TARIKH & MASA (MEMASTIKAN FORMAT DD-MM-YYYY)
+        // FORMAT TARIKH & MASA
         function formatDateTime(dateStr, timeStr) {
             if (!dateStr) return { date: '-', time: '-' };
 
@@ -1356,7 +1372,6 @@
             setTimeout(() => toast.remove(), 4000);
         }
 
-        // SPINNER CENTERED FIX
         function toggleSpinner(show) {
             const spinner = document.getElementById('global-spinner');
             if (show) {
@@ -1381,6 +1396,15 @@
                 activePage.classList.add('block');
             }
 
+            const mainHeader = document.getElementById('main-header');
+            if (mainHeader) {
+                if (sectionId === 'admin-dashboard-page') {
+                    mainHeader.classList.add('hidden');
+                } else {
+                    mainHeader.classList.remove('hidden');
+                }
+            }
+
             document.querySelectorAll('.nav-link').forEach(link => {
                 link.className = "nav-link text-neutralDark hover:text-primary transition-colors py-2";
             });
@@ -1389,7 +1413,6 @@
                 desktopNavLink.className = "nav-link text-primary hover:text-primary transition-colors py-2 font-bold";
             }
 
-            // Kemaskini paparan troli bergantung pada halaman semasa
             updateCartUIState();
 
             window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -1525,7 +1548,6 @@
             const floatingCart = document.getElementById('floating-cart');
             const floatingCartCount = document.getElementById('floating-cart-count');
             
-            // Sembunyikan troli jika BUKAN di page home ATAU tiada item
             if (totalQty > 0 && currentSection === 'home-page') {
                 floatingCart.classList.remove('scale-0', 'opacity-0', 'pointer-events-none');
                 floatingCartCount.innerText = totalQty;
@@ -1652,12 +1674,12 @@
             }
         }
 
-        // POST SAVING ORDER TO APPS SCRIPT
+        // POST SAVING ORDER TO APPS SCRIPT (KEMASKINI TAMPA WHATSAPP)
         function handleFormSubmit(event) {
             event.preventDefault();
 
             const submitBtn = document.getElementById('submit-btn');
-            submitBtn.disabled = true; // WAJIB: Disable untuk elak double submit
+            submitBtn.disabled = true;
             toggleSpinner(true);
 
             const name = document.getElementById('pax-name').value.trim();
@@ -1687,13 +1709,12 @@
                 catatanTambahan: note
             };
 
-            // WAJIB: Content-Type: text/plain
             fetch(APPS_SCRIPT_URL, {
                 method: "POST",
                 headers: { "Content-Type": "text/plain" },
                 body: JSON.stringify(payload)
             })
-            .then(res => res.text()) // WAJIB: response.text()
+            .then(res => res.text())
             .then(text => {
                 const resData = JSON.parse(text);
                 toggleSpinner(false);
@@ -1702,23 +1723,29 @@
                 if (resData.success) {
                     showToast("Tempahan berjaya disimpan dalam sistem!");
 
+                    lastSubmittedOrder = {
+                        name, phone, date, time, pax, pkg, note,
+                        totalCost, items: [...userCart]
+                    };
+
                     document.getElementById('summary-name').innerText = name;
                     document.getElementById('summary-phone').innerText = phone;
                     document.getElementById('summary-datetime').innerText = `${date} pada jam ${time}`;
                     document.getElementById('summary-pax').innerText = pax ? `${pax} Pax` : "N/A (Take Away)";
                     document.getElementById('summary-package').innerText = pkg;
+                    document.getElementById('summary-total').innerText = `RM ${totalCost.toFixed(2)}`;
 
-                    let foodListText = "";
+                    let foodHtml = "";
                     userCart.forEach(item => {
-                        foodListText += `• ${item.qty}x ${item.name}${item.option ? ` (${item.option})` : ""} - RM ${(item.price * item.qty).toFixed(2)}%0A`;
+                        foodHtml += `<div>• ${item.qty}x ${item.name}${item.option ? ` (${item.option})` : ""} - RM ${(item.price * item.qty).toFixed(2)}</div>`;
                     });
-
-                    const message = `Halo Qulai Pizza! Saya telah membuat Pesanan Makanan Online.%0A%0A*BUTIRAN PESANAN:*%0A----------------------%0A👤 *Nama:* ${encodeURIComponent(name)}%0A📞 *Telefon:* ${encodeURIComponent(phone)}%0A📅 *Tarikh:* ${encodeURIComponent(date)}%0A🕒 *Masa:* ${encodeURIComponent(time)}%0A👥 *Bilangan:* ${encodeURIComponent(pax ? `${pax} Orang` : 'N/A (Take Away)')}%0A📦 *Pilihan Order:* ${encodeURIComponent(pkg)}%0A📝 *Catatan:* ${encodeURIComponent(note || 'Tiada catatan tambahan.')}%0A%0A*SENARAI PESANAN MAKANAN:*%0A----------------------%0A${foodListText}%0A💰 *JUMLAH KESELURUHAN:* *RM ${totalCost.toFixed(2)}*%0A----------------------%0A%0AMohon maklumbalas pengesahan daripada pihak anda kelak. Terima kasih!`;
-                    
-                    const waLink = `https://api.whatsapp.com/send?phone=60106602847&text=${message}`;
-                    document.getElementById('whatsapp-trigger-btn').href = waLink;
+                    document.getElementById('summary-food-list').innerHTML = foodHtml;
 
                     document.getElementById('success-modal').classList.remove('hidden');
+
+                    userCart = [];
+                    document.getElementById('booking-form').reset();
+                    updateCartUIState();
                 } else {
                     showToast("Gagal menyimpan pesanan: " + resData.message, 'error');
                 }
@@ -1732,6 +1759,55 @@
 
         function closeSuccessModal() {
             document.getElementById('success-modal').classList.add('hidden');
+        }
+
+        function printCustomerReceipt() {
+            if (!lastSubmittedOrder) return;
+            
+            let menuHtml = "";
+            lastSubmittedOrder.items.forEach(m => {
+                menuHtml += `<div class="flex justify-between text-xs py-1 border-b border-dashed border-slate-200">
+                    <span class="text-slate-800 font-medium">${m.qty}x ${m.name}${m.option ? ` (${m.option})` : ""}</span>
+                    <span>RM ${(m.price * m.qty).toFixed(2)}</span>
+                </div>`;
+            });
+
+            const receiptContainer = document.getElementById('receipt-printable-area');
+            receiptContainer.innerHTML = `
+                <div class="max-w-md mx-auto p-6 bg-white text-slate-900 font-sans space-y-4">
+                    <div class="text-center space-y-1 border-b border-slate-300 pb-4">
+                        <img src="https://arleta.site/interactivelink/118/logoqulai.png" alt="Qulai Pizza Logo" class="w-20 h-20 mx-auto object-cover mb-1">
+                        <h1 class="text-xl font-extrabold font-poppins text-slate-900 tracking-wider">QULAI PIZZA KAYU API</h1>
+                        <p class="text-[11px] text-slate-500">Kulai, Johor, Malaysia • Tel: +60 10-660 2847</p>
+                        <span class="inline-block mt-2 bg-slate-900 text-white text-[10px] font-extrabold uppercase px-3 py-1 rounded-full tracking-widest">RESIT TEMPAHAN</span>
+                    </div>
+                    <div class="grid grid-cols-2 gap-2 text-xs py-2 bg-slate-50 p-3 rounded-lg border border-slate-200">
+                        <div><span class="text-slate-500 block">Pelanggan:</span> <strong class="text-slate-900">${lastSubmittedOrder.name}</strong></div>
+                        <div><span class="text-slate-500 block">Telefon:</span> <strong class="text-slate-900 font-mono">${lastSubmittedOrder.phone}</strong></div>
+                        <div><span class="text-slate-500 block">Jenis Order:</span> <strong class="text-primary">${lastSubmittedOrder.pkg}</strong></div>
+                        <div><span class="text-slate-500 block">Masa & Pax:</span> <strong>${lastSubmittedOrder.time} (${lastSubmittedOrder.pax || '0'} Pax)</strong></div>
+                    </div>
+                    <div class="space-y-1">
+                        <h4 class="text-xs font-bold text-slate-700 uppercase border-b border-slate-300 pb-1">Senarai Hidangan</h4>
+                        ${menuHtml}
+                    </div>
+                    <div class="pt-2 space-y-2">
+                        <div class="flex justify-between items-center text-sm font-extrabold border-t-2 border-slate-900 pt-2">
+                            <span>JUMLAH KESELURUHAN</span>
+                            <span class="text-emerald-700 text-base font-poppins">RM ${lastSubmittedOrder.totalCost.toFixed(2)}</span>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            receiptContainer.classList.remove('hidden');
+            document.body.classList.add('is-printing-receipt');
+            window.print();
+
+            setTimeout(() => {
+                receiptContainer.classList.add('hidden');
+                document.body.classList.remove('is-printing-receipt');
+            }, 500);
         }
 
         function openGalleryModal(title, description, imageUrl) {
@@ -1768,11 +1844,10 @@
             }
         }
 
-        // LOG MASUK ADMIN VIA GOOGLE SHEETS 'Admin'
         function handleAdminLogin(e) {
             e.preventDefault();
             const btn = document.getElementById('admin-login-btn');
-            btn.disabled = true; // WAJIB: Disable elak double submission
+            btn.disabled = true;
             toggleSpinner(true);
 
             const email = document.getElementById('admin-email-input').value.trim();
@@ -1784,13 +1859,12 @@
                 password: pass
             };
 
-            // WAJIB: Content-Type: text/plain
             fetch(APPS_SCRIPT_URL, {
                 method: "POST",
                 headers: { "Content-Type": "text/plain" },
                 body: JSON.stringify(payload)
             })
-            .then(res => res.text()) // WAJIB: response.text()
+            .then(res => res.text())
             .then(text => {
                 const resData = JSON.parse(text);
                 toggleSpinner(false);
@@ -1821,7 +1895,7 @@
         function fetchAdminData() {
             toggleSpinner(true);
             fetch(`${APPS_SCRIPT_URL}?action=getOrders`)
-            .then(res => res.text()) // WAJIB: response.text()
+            .then(res => res.text())
             .then(text => {
                 const resData = JSON.parse(text);
                 if (resData.success) {
@@ -1866,7 +1940,6 @@
             renderCharts(dineInCount, takeAwayCount);
         }
 
-        // FUNGSI ANALISIS MENU TERLARIS VS KURANG SAMBUTAN
         function renderMenuPopularityAnalytics() {
             const container = document.getElementById('category-analytics-grid');
             if(!container) return;
@@ -1950,18 +2023,15 @@
             });
         }
 
-        // RENDER CHARTS (DENGAN FORMAT TARIKH DD-MM-YYYY PADA CARTA HARIAN)
         function renderCharts(dineIn, takeAway) {
             const dateCounts = {};
             rawOrdersData.forEach(o => {
                 if (o.tarikhPesanan) dateCounts[o.tarikhPesanan] = (dateCounts[o.tarikhPesanan] || 0) + 1;
             });
 
-            // Susun mengikut tarikh kronologi (YYYY-MM-DD)
             const rawSortedDates = Object.keys(dateCounts).sort().slice(-7);
             const dataVals = rawSortedDates.map(l => dateCounts[l]);
 
-            // Tukar format setiap tarikh kepada DD-MM-YYYY untuk paparan pada paksi X carta
             const formattedLabels = rawSortedDates.map(d => formatDateTime(d).date);
 
             if (chartDailyInstance) chartDailyInstance.destroy();
@@ -2021,7 +2091,8 @@
 
             filteredOrdersData = rawOrdersData.filter(item => {
                 const formattedPhone = formatPhone(item.nomborTelefon);
-                const matchSearch = (item.namaPenuh || '').toLowerCase().includes(query) ||
+                const matchSearch = (item.orderId || '').toLowerCase().includes(query) ||
+                                    (item.namaPenuh || '').toLowerCase().includes(query) ||
                                     formattedPhone.includes(query) ||
                                     (item.menu || '').toLowerCase().includes(query);
                 
@@ -2056,7 +2127,7 @@
             renderAdminTable();
         }
 
-        // JADUAL ADMIN: BUTANG ACTION HANYA BUTANG PRINT RESIT INDIVIDU
+        // JADUAL ADMIN MEMAPARKAN ORDER ID MANUAL
         function renderAdminTable() {
             const tbody = document.getElementById('admin-orders-tbody');
             tbody.innerHTML = '';
@@ -2067,7 +2138,7 @@
             const pageData = filteredOrdersData.slice(startIdx, endIdx);
 
             if (pageData.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="8" class="p-4 text-center text-slate-400">Tiada rekod tempahan ditemui</td></tr>`;
+                tbody.innerHTML = `<tr><td colspan="9" class="p-4 text-center text-slate-400">Tiada rekod tempahan ditemui</td></tr>`;
             } else {
                 pageData.forEach(item => {
                     const dt = formatDateTime(item.tarikhPesanan, item.masa);
@@ -2076,6 +2147,7 @@
                     const tr = document.createElement('tr');
                     tr.className = "hover:bg-slate-50 transition-colors border-b border-slate-200";
                     tr.innerHTML = `
+                        <td class="p-3 font-mono font-bold text-slate-800">${item.orderId || '-'}</td>
                         <td class="p-3 font-semibold text-slate-900">${item.namaPenuh}</td>
                         <td class="p-3 font-mono font-medium">${formattedPhone}</td>
                         <td class="p-3">${dt.date}<br><span class="text-[10px] text-slate-500 font-mono">${dt.time}</span></td>
@@ -2110,7 +2182,6 @@
             renderAdminTable();
         }
 
-        // FUNGSI PRINT RESIT / INVOIS INDIVIDU DENGAN FIX CETAKAN ISOLASI
         function printSingleReceipt(rowId) {
             const item = rawOrdersData.find(i => i.row == rowId);
             if (!item) return;
@@ -2141,7 +2212,7 @@
 
                     <!-- MAKLUMAT TEMPAHAN -->
                     <div class="grid grid-cols-2 gap-2 text-xs py-2 bg-slate-50 p-3 rounded-lg border border-slate-200">
-                        <div><span class="text-slate-500 block">ID Tempahan:</span> <strong class="text-slate-900">#ORD-${item.row}</strong></div>
+                        <div><span class="text-slate-500 block">ID Tempahan:</span> <strong class="text-slate-900">${item.orderId ? item.orderId : '#ORD-' + item.row}</strong></div>
                         <div><span class="text-slate-500 block">Jenis Order:</span> <strong class="text-primary">${item.jenisOrder}</strong></div>
                         <div><span class="text-slate-500 block">Pelanggan:</span> <strong class="text-slate-900">${item.namaPenuh}</strong></div>
                         <div><span class="text-slate-500 block">WhatsApp:</span> <strong class="text-slate-900 font-mono">${formattedPhone}</strong></div>
@@ -2172,13 +2243,11 @@
                 </div>
             `;
 
-            // TANDA KELAS CETAKAN RESIT PADA BODY
             receiptContainer.classList.remove('hidden');
             document.body.classList.add('is-printing-receipt');
 
             window.print();
 
-            // KEMBALIKAN TETAPAN SELEPAS CETAKAN
             setTimeout(() => {
                 receiptContainer.classList.add('hidden');
                 document.body.classList.remove('is-printing-receipt');
@@ -2192,11 +2261,12 @@
             }
 
             let csvContent = "data:text/csv;charset=utf-8,";
-            csvContent += "Nama Penuh,Nombor Telefon,Tarikh,Masa,Jenis Order,Menu,Bilangan,Jumlah (RM),Pax,Catatan\n";
+            csvContent += "Order ID,Nama Penuh,Nombor Telefon,Tarikh,Masa,Jenis Order,Menu,Bilangan,Jumlah (RM),Pax,Catatan\n";
 
             filteredOrdersData.forEach(row => {
                 const formattedPhone = formatPhone(row.nomborTelefon);
                 const r = [
+                    `"${row.orderId || ''}"`,
                     `"${row.namaPenuh || ''}"`,
                     `"${formattedPhone}"`,
                     `"${row.tarikhPesanan || ''}"`,
