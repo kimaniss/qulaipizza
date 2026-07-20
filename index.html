@@ -1260,6 +1260,7 @@
 
         let userCart = [];
         let currentlySelectedPizzaName = "";
+        let currentSection = "home-page";
         const dineInCapacityDatabase = { "2026-08-15_18:00": 75, "2026-08-15_19:00": 85, "2026-08-20_20:00": 88 };
 
         // State Dashboard Admin
@@ -1286,7 +1287,7 @@
             return p;
         }
 
-        // FORMAT TARIKH & MASA
+        // FORMAT TARIKH & MASA (MEMASTIKAN FORMAT DD-MM-YYYY)
         function formatDateTime(dateStr, timeStr) {
             if (!dateStr) return { date: '-', time: '-' };
 
@@ -1368,6 +1369,7 @@
         }
 
         function showSPASection(sectionId) {
+            currentSection = sectionId;
             document.querySelectorAll('.spa-section').forEach(page => {
                 page.classList.add('hidden');
                 page.classList.remove('block');
@@ -1386,6 +1388,9 @@
             if (desktopNavLink) {
                 desktopNavLink.className = "nav-link text-primary hover:text-primary transition-colors py-2 font-bold";
             }
+
+            // Kemaskini paparan troli bergantung pada halaman semasa
+            updateCartUIState();
 
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
@@ -1520,14 +1525,17 @@
             const floatingCart = document.getElementById('floating-cart');
             const floatingCartCount = document.getElementById('floating-cart-count');
             
-            if (totalQty > 0) {
+            // Sembunyikan troli jika BUKAN di page home ATAU tiada item
+            if (totalQty > 0 && currentSection === 'home-page') {
                 floatingCart.classList.remove('scale-0', 'opacity-0', 'pointer-events-none');
                 floatingCartCount.innerText = totalQty;
                 document.getElementById('cart-review-section').classList.remove('hidden');
             } else {
                 floatingCart.classList.add('scale-0', 'opacity-0', 'pointer-events-none');
                 document.getElementById('cart-review-section').classList.add('hidden');
-                document.getElementById('booking-section').classList.add('hidden');
+                if (totalQty === 0) {
+                    document.getElementById('booking-section').classList.add('hidden');
+                }
             }
 
             const itemsListContainer = document.getElementById('cart-items-list');
@@ -1942,22 +1950,26 @@
             });
         }
 
-        // RENDER CHARTS (Y-AXIS WHOLE NUMBERS / NOMBOR BULAT SAHAJA)
+        // RENDER CHARTS (DENGAN FORMAT TARIKH DD-MM-YYYY PADA CARTA HARIAN)
         function renderCharts(dineIn, takeAway) {
             const dateCounts = {};
             rawOrdersData.forEach(o => {
                 if (o.tarikhPesanan) dateCounts[o.tarikhPesanan] = (dateCounts[o.tarikhPesanan] || 0) + 1;
             });
 
-            const labels = Object.keys(dateCounts).sort().slice(-7);
-            const dataVals = labels.map(l => dateCounts[l]);
+            // Susun mengikut tarikh kronologi (YYYY-MM-DD)
+            const rawSortedDates = Object.keys(dateCounts).sort().slice(-7);
+            const dataVals = rawSortedDates.map(l => dateCounts[l]);
+
+            // Tukar format setiap tarikh kepada DD-MM-YYYY untuk paparan pada paksi X carta
+            const formattedLabels = rawSortedDates.map(d => formatDateTime(d).date);
 
             if (chartDailyInstance) chartDailyInstance.destroy();
             const ctxDaily = document.getElementById('dailyChart').getContext('2d');
             chartDailyInstance = new Chart(ctxDaily, {
                 type: 'line',
                 data: {
-                    labels: labels,
+                    labels: formattedLabels,
                     datasets: [{
                         label: 'Pesanan Harian',
                         data: dataVals,
